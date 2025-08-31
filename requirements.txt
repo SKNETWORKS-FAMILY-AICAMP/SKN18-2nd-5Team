@@ -1,0 +1,30 @@
+# 테스트용
+jupyter
+
+# 데이터 처리
+pandas
+numpy
+
+# 머신러닝
+lightgbm
+catboost
+xgboost
+
+# 시각화
+seaborn
+matplotlib
+plotly
+
+# 데이터 전처리
+scikit-learn
+easydict
+category-encoders
+
+# 불균형 데이터 처리
+imbalanced-learn
+
+# 통계 분석
+scipy
+
+# 기타 유틸리티
+tqdm
