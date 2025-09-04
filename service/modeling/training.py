@@ -13,6 +13,7 @@ def do_training(df_train, df_train_target, args) -> bool:
         model, create_cv(), df_train, df_train_target,
         Metrics_Type.roc_auc_score)
     logging.info(f"score_by_cv: {score_by_cv}")
+    logging.info(f"model: {model}")
 
     if score_by_cv >= 0.7:
         result = model

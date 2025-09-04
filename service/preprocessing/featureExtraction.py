@@ -59,7 +59,19 @@ def do_feature_extraction(df_train:pd.DataFrame, df_test:pd.DataFrame):
         adr_filtered_median,
         df_test['adr'])
 
+
     # lead_time_processed
+    # 리드타임 구간별 범주화 (0-30, 30-60, 60-90, 90-180, 180-365, 365+)
+    # NaN 값을 0으로 채우고 정수로 변환
+    df_train['lead_time_processed'] = pd.cut(df_train['lead_time'], 
+                                            bins=[0, 30, 60, 90, 180, 365, float('inf')], 
+                                            labels=[0, 1, 2, 3, 4, 5]).fillna(0).astype(int)
+
+    df_test['lead_time_processed'] = pd.cut(df_test['lead_time'], 
+                                            bins=[0, 30, 60, 90, 180, 365, float('inf')], 
+                                            labels=[0, 1, 2, 3, 4, 5]).fillna(0).astype(int)
+
+    # lead_time
     # 2. # 1단계: 훈련 데이터(X_tr)에서 IQR을 사용하여 이상치 범위 계산
     Q1 = df_train['lead_time'].quantile(0.25)
     Q3 = df_train['lead_time'].quantile(0.75)
@@ -80,6 +92,7 @@ def do_feature_extraction(df_train:pd.DataFrame, df_test:pd.DataFrame):
         (df_test['lead_time'] < 0) | (df_test['lead_time'] > upper_bound),
         lead_time_filtered_median,
         df_test['lead_time'])
+
 
     # is_alone
     ## 준호님꺼

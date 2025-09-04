@@ -26,7 +26,7 @@ def main(args):
 
     # 2. 데이터 전처리 - 인코딩은 타입을 카테고리로만
     x_tr, x_te = do_preprocessing(df_train=x_tr, df_test=x_te
-    , drop_cols=args.drop_cols, transform_cols=args.transform_cols, encoding_cols=args.encoding_cols, args=args)
+    , drop_cols=args.drop_cols, encoding_cols=args.encoding_cols, args=args)
 
     # 3. 모델 학습
     is_model = do_training(df_train=x_tr, df_train_target=y_tr, args=args)
@@ -51,9 +51,8 @@ if __name__ == "__main__":
     args.add_argument("--drop_cols", default=[
         'deposit_type', 'company' ,'agent','reservation_status', 'reservation_status_date'
         , 'assigned_room_type', 'children', 'babies', 'arrival_date_full'], type=list)
-    args.add_argument("--transform_cols", default=['adr', 'lead_time'], type=list)
-    args.add_argument("--encoding_cols", default=['hotel', 'arrival_date_month', 'meal', 'country', 'market_segment',
-'distribution_channel', 'reserved_room_type', 'customer_type', 'total_stays'], type=list)
+    # args.add_argument("--transform_cols", default=['adr', 'lead_time', 'total_stays'], type=list)
+    args.add_argument("--encoding_cols", default=['hotel', 'arrival_date_month', 'meal', 'country', 'market_segment', 'distribution_channel', 'reserved_room_type', 'customer_type', 'market_risk_level'], type=list)
     args.add_argument("--model_name", default="lightgbm", type=str)
     args.add_argument("--hp", default={}, type=dict)
 

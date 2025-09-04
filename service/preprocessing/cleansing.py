@@ -22,8 +22,8 @@ def __fillna(df_train:pd.DataFrame, df_test:pd.DataFrame):
             _value = df_test[col].mode()[0] # 범주형 데이터의 경우 최빈값 넣기
         finally:
             # 결측치에 통계값 넣기
-            df_train[col].fillna(_value, inplace=True)
-            df_test[col].fillna(_value, inplace=True)
+            df_train[col] = df_train[col].fillna(_value)
+            df_test[col] = df_test[col].fillna(_value)
 
     return df_train, df_test
 
@@ -32,21 +32,21 @@ def __dropcols(df_train:pd.DataFrame, df_test:pd.DataFrame, drop_cols:list):
     return df_train.drop(drop_cols, axis=1), df_test.drop(drop_cols, axis=1)
 
 
-# 왜도 / 첨도 처리 : log 변환 > 주피터파일에서 eda 확인후 결정
-def __transform_cols(df_train:pd.DataFrame, df_test:pd.DataFrame, transform_cols:list):
+# # 왜도 / 첨도 처리 : log 변환 > 주피터파일에서 eda 확인후 결정
+# def __transform_cols(df_train:pd.DataFrame, df_test:pd.DataFrame, transform_cols:list):
     
-    for col in transform_cols: # age, fare
-        df_train[col] = df_train[col].map(lambda x : np.log1p(x)) 
-        df_test[col] = df_test[col].map(lambda x : np.log1p(x))
-        ## map은 1차원 데이터(col)만 받아줌. apply는 2차원 데이터(df)도 받아줌.
-        ## lambda x : np.log1p(x) -> x(파라미터)를 np.log1p(x)로 변환하고 x로 반환. 그래서 반환값이 변환된 x(리턴)가 됨.
+#     for col in transform_cols: # age, fare
+#         df_train[col] = df_train[col].map(lambda x : np.log1p(x)) 
+#         df_test[col] = df_test[col].map(lambda x : np.log1p(x))
+#         ## map은 1차원 데이터(col)만 받아줌. apply는 2차원 데이터(df)도 받아줌.
+#         ## lambda x : np.log1p(x) -> x(파라미터)를 np.log1p(x)로 변환하고 x로 반환. 그래서 반환값이 변환된 x(리턴)가 됨.
 
-    return df_train, df_test
+#     return df_train, df_test
 
 
 
 # df_test -> 제출용 데이터. 데이터가 줄어들면 
-def do_cleansing(df_train:pd.DataFrame, df_test:pd.DataFrame, drop_cols:list, transform_cols:list):   
+def do_cleansing(df_train:pd.DataFrame, df_test:pd.DataFrame, drop_cols:list):   
     # 1. row 중복 제거
     #df_train = df_train.drop_duplicates()
     # drop_duplicates() -> 중복된거 알아서 없애줌. 받을 인자 없음
