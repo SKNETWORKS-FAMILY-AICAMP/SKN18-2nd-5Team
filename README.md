@@ -4,6 +4,12 @@ requirements.txt 파일에 필요한 패키지들을 명시했습니다.
 가상환경을 설정하고, `pip install -r requirements.txt` 명령어로 필요한 패키지들을 설치할 수 있습니다.
 hotel_mod에서 main.py를 실행하면 됩니다.
 
+main.py 파일에서 모델 훈련과 평가를 수행합니다.
+service 폴더의 model_service.py 파일에서 모델 훈련과 평가를 위한 함수들을 정의했습니다.
+requirements.txt 파일에 필요한 패키지들을 명시했습니다.
+가상환경을 설정하고, `pip install -r requirements.txt` 명령어로 필요한 패키지들을 설치할 수 있습니다.
+hotel에서 main.py를 실행하면 됩니다.
+
 XGBoost 훈련 성능  
   정확도 (Accuracy): 0.8787  
   정밀도 (Precision): 0.8585  
