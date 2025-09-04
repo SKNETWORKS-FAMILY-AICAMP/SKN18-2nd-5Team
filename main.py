@@ -48,13 +48,13 @@ if __name__ == "__main__":
     #args.add_argument("--path_submission", default="./data/submission.csv", type=str)
     args.add_argument("--target_name", default="is_canceled", type=str) 
     # eda 분석 결과
-    args.add_argument("--drop_cols", default=['passengerid', 'name', 'ticket'], type=list)
-    args.add_argument("--transform_cols", default=['age', 'fare'], type=list)
-    args.add_argument("--encoding_cols", default=['pclass', 'gender','cabin', 'embarked'], type=list)
+    args.add_argument("--drop_cols", default=[
+        'deposit_type', 'company' ,'agent','reservation_status', 'reservation_status_date'
+        , 'assigned_room_type', 'children', 'babies', 'arrival_date_full'], type=list)
+    args.add_argument("--transform_cols", default=[], type=list)
+    args.add_argument("--encoding_cols", default=[], type=list)
     args.add_argument("--model_name", default="lightgbm", type=str)
     args.add_argument("--hp", default={}, type=dict)
-
-
 
 
     main(args.parse_args()) 

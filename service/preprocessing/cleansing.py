@@ -48,7 +48,7 @@ def __transform_cols(df_train:pd.DataFrame, df_test:pd.DataFrame, transform_cols
 # df_test -> 제출용 데이터. 데이터가 줄어들면 
 def do_cleansing(df_train:pd.DataFrame, df_test:pd.DataFrame, drop_cols:list, transform_cols:list):   
     # 1. row 중복 제거
-    df_train = df_train.drop_duplicates()
+    #df_train = df_train.drop_duplicates()
     # drop_duplicates() -> 중복된거 알아서 없애줌. 받을 인자 없음
 
 

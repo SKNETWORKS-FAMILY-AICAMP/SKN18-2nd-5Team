@@ -4,6 +4,7 @@ import logging
 from .cleansing import do_cleansing
 from .encoding import do_encoding
 from .cleansing import do_cleansing
+from .featureExtraction import do_feature_extraction
 
 
 
@@ -12,10 +13,13 @@ def do_preprocessing(df_train:pd.DataFrame, df_test:pd.DataFrame, drop_cols:list
     모델 학습 전 데이터 전처리 함수
     '''
     
-    # 1. cleansing
+    # 1. feature extraction 
+    df_train, df_test = do_feature_extraction(df_train, df_test)
+
+    # 2. cleansing
     df_train, df_test = do_cleansing(df_train, df_test, drop_cols, transform_cols)
 
-    # 2. encoding
+    # 3. encoding
     df_train, df_test = do_encoding(df_train, df_test, encoding_cols)
 
 
