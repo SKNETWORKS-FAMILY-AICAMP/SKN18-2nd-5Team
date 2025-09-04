@@ -26,8 +26,16 @@ def do_training_with_cv(model, cv, df_train, df_train_target
         x_te, y_te = df_train.iloc[valid_index], df_train_target.iloc[valid_index]
         # 모델 학습
         model.fit(x_tr, y_tr)
-        # 평가
-        predictions = model.predict_proba(x_te)[:,1] ## predict_proba: 확률로 리턴 / predict: 정수로 리턴
+        
+        # 지표에 따라 다른 예측값 사용
+        if metrics_type == Metrics_Type.roc_auc_score:
+            # ROC-AUC는 확률값 사용
+            predictions = model.predict_proba(x_te)[:,1]
+        else:
+            # F1-Score, Accuracy는 확률값을 0.5 임계값으로 이진 분류
+            predictions_proba = model.predict_proba(x_te)[:,1]
+            predictions = (predictions_proba >= 0.5).astype(int)
+            
         scores += metrics_type.value[1](y_te, predictions)
 
     return scores / cv.n_splits # 평가지표 점수 평균

@@ -8,30 +8,31 @@
 
 ```
 SKN18-2nd-5Team/
-├── main.py                    # 메인 실행 파일
+├── main.py                    # 메인 실행 파일 (모든 모델 자동 실행)
 ├── requirements.txt           # 패키지 의존성
+├── README.md                  # 프로젝트 설명서
 ├── data/                      # 데이터 폴더
 │   ├── hotel_bookings_train.csv
 │   └── hotel_bookings_test.csv
-├── service/
+├── service/                   # 서비스 모듈
 │   ├── data_setup.py         # 데이터 로드 모듈
-│   ├── preprocessing/        # 전처리 모듈
+│   ├── evaluation.py         # 모델 평가 모듈
+│   ├── preprocessing/        # 데이터 전처리 모듈
 │   │   ├── adata_preprocessing.py
 │   │   ├── cleansing.py
 │   │   ├── encoding.py
 │   │   └── featureExtraction.py
-│   ├── modeling/            # 모델링 모듈
-│   │   ├── model.py
-│   │   ├── training.py
-│   │   ├── cross_validation.py
-│   │   └── metrics.py
-│   └── evaluation.py        # 모델 평가 모듈
-├── eda_image/              # EDA 결과 이미지
+│   └── modeling/            # 모델링 모듈
+│       ├── model.py             # 모델 생성 및 하이퍼파라미터
+│       ├── training.py          # 모델 학습 및 평가
+│       ├── cross_validation.py  # 교차 검증
+│       └── metrics.py           # 평가 지표 정의
 └── reports/                # 성능 보고서 저장 폴더
+    ├── gradient_boosting_report.json
+    ├── extra_trees_report.json
     ├── lightgbm_report.json
-    ├── catboost_report.json
-    ├── xgboost_report.json
-    └── stacking_report.json
+    ├── logistic_regression_report.json
+    └── naive_bayes_report.json
 ```
 
 ## 🚀 실행 방법
@@ -46,25 +47,23 @@ source .venv/bin/activate  # Linux/Mac
 pip install -r requirements.txt
 ```
 
-### 2. 기본 실행
+### 2. 실행 방법
 ```bash
+# 모든 모델 자동 실행 (7개 모델)
 python main.py
 ```
 
-### 3. 모델별 실행
-```bash
-# LightGBM 모델
-python main.py --model_name lightgbm
+**실행되는 모델:**
+- Gradient Boosting
+- Extra Trees  
+- XGBoost
+- Random Forest
+- LightGBM
+- Logistic Regression
+- Naive Bayes
 
-# CatBoost 모델  
-python main.py --model_name catboost
-
-# XGBoost 모델
-python main.py --model_name xgboost
-
-# Stacking 모델 (향후 구현)
-python main.py --model_name stacking
-```
+**제외된 모델 (시간 소요):**
+- SVM, Neural Network, KNN, AdaBoost, catboost
 
 ## 🔧 주요 파라미터
 
@@ -73,7 +72,8 @@ python main.py --model_name stacking
 | `--path_train` | `./data/hotel_bookings_train.csv` | 학습 데이터 경로 |
 | `--path_test` | `./data/hotel_bookings_test.csv` | 테스트 데이터 경로 |
 | `--target_name` | `is_canceled` | 타겟 컬럼명 |
-| `--model_name` | `lightgbm` | 모델 선택 (lightgbm/catboost/xgboost/stacking) |
+| `--drop_cols` | 자동 설정 | 제거할 컬럼 목록 |
+| `--encoding_cols` | 자동 설정 | 인코딩할 범주형 컬럼 |
 
 ## 📊 데이터 처리 파이프라인
 
@@ -87,14 +87,14 @@ python main.py --model_name stacking
 ### 2. 데이터 전처리 (`preprocessing/`)
 - **데이터 정제**: 결측값 처리, 이상치 제거
 - **피처 엔지니어링**: 새로운 특성 생성
-- **인코딩**: 범주형 데이터 변환
-  - LightGBM/CatBoost: `category` 타입 변환
-  - XGBoost: 원-핫 인코딩 적용
+- **모델별 인코딩**: 범주형 데이터 변환
+  - LightGBM: `category` 타입 변환
+  - 기타 모델: 원-핫 인코딩 적용
 
 ### 3. 모델 학습 및 평가 (`modeling/`)
-- **지원 모델**: LightGBM, CatBoost, XGBoost, Stacking
-- **교차 검증**: StratifiedKFold 사용
-- **성능 평가**: 테스트 데이터로 실제 성능 측정
+- **지원 모델**: 7개 모델 (빠른 실행 위해 선별)
+- **교차 검증**: 5-fold StratifiedKFold 사용
+- **실제 테스트**: 별도 테스트 데이터로 실제 성능 측정
 - **평가 지표**: F1-Score, Accuracy, ROC-AUC
 - **보고서 생성**: 각 모델별 성능 보고서 자동 저장 (`reports/` 폴더)
 
@@ -116,57 +116,30 @@ python main.py --model_name stacking
 ```json
 {
   "model_name": "lightgbm",
-  "timestamp": "2024-09-04 10:30:15",
+  "timestamp": "2025-09-04 19:28:58",
   "cross_validation": {
-    "cv_f1_score": 0.8234,
-    "cv_accuracy": 0.8567,
-    "cv_roc_auc": 0.8901,
-    "std_f1": 0.0123,
-    "std_accuracy": 0.0098,
-    "std_roc_auc": 0.0087
+    "cv_f1_score": 0.8104,
+    "cv_accuracy": 0.8942,
+    "cv_roc_auc": 0.961
   },
   "test_performance": {
-    "test_f1_score": 0.8156,
-    "test_accuracy": 0.8489,
-    "test_roc_auc": 0.8834
+    "test_f1_score": 0.674,
+    "test_accuracy": 0.7858,
+    "test_roc_auc": 0.8707
   },
   "model_details": {
-    "hyperparameters": {...},
-    "training_time": "2.34 seconds",
-    "feature_count": 23
+    "training_time": "10.38 seconds"
   }
 }
 ```
 
-### Stacking 모델 보고서
-Stacking 모델의 경우 추가 정보를 포함합니다:
-```json
-{
-  "model_name": "stacking",
-  "base_models": [
-    {
-      "name": "lightgbm",
-      "cv_score": 0.8234,
-      "weight": 0.35
-    },
-    {
-      "name": "catboost", 
-      "cv_score": 0.8198,
-      "weight": 0.32
-    },
-    {
-      "name": "xgboost",
-      "cv_score": 0.8145,
-      "weight": 0.33
-    }
-  ],
-  "meta_learner": "LogisticRegression",
-  "ensemble_performance": {
-    "improvement_over_best_base": 0.0087,
-    "final_test_score": 0.8321
-  }
-}
-```
+### 현재 사용 가능한 보고서
+현재 `reports/` 폴더에는 다음 모델들의 성능 보고서가 저장되어 있습니다:
+- `gradient_boosting_report.json`
+- `extra_trees_report.json`
+- `lightgbm_report.json`
+- `logistic_regression_report.json`
+- `naive_bayes_report.json`
 
 ## 📝 개발 규칙
 
@@ -184,7 +157,7 @@ Stacking 모델의 경우 추가 정보를 포함합니다:
 - 기존 모듈 구조 변경 시 사전 협의 필수
 
 ## 🎯 향후 계획
-- [ ] 하이퍼파라미터 자동 튜닝 (Optuna 활용)
+- [ ] Stacking 모델 구현
 - [ ] 모델 성능 시각화 대시보드
 - [ ] 피처 중요도 분석 및 해석
 - [ ] 모델 앙상블 기법 적용
@@ -199,33 +172,36 @@ Stacking 모델의 경우 추가 정보를 포함합니다:
 
 ### 콘솔 출력 예시
 ```
-=== LightGBM 모델 성능 보고서 ===
+==================================================
+🏨 호텔 예약 취소 예측 모델 - 전체 모델 실행 시작
+실행 시간: 2025-09-04 19:28:45
+==================================================
+📊 데이터 로드 시작...
+✅ 데이터 로드 완료 (소요시간: 0.12초)
+🔧 모델별 데이터 전처리 및 학습 시작...
+🤖 총 7개 빠른 모델 학습 시작...
+⚡ 실행 모델: Gradient Boosting, Extra Trees, XGBoost, Random Forest, LightGBM, Logistic Regression, Naive Bayes
+--------------------------------------------------
+[1/7] GRADIENT_BOOSTING 모델 학습 시작...
+=== GRADIENT_BOOSTING 모델 성능 보고서 ===
 교차 검증 결과:
-- F1-Score: 0.8234 (±0.0123)
-- Accuracy: 0.8567 (±0.0098) 
-- ROC-AUC: 0.8901 (±0.0087)
+- F1-Score: 0.8104
+- Accuracy: 0.8942
+- ROC-AUC: 0.9610
 
-테스트 성능:
-- F1-Score: 0.8156
-- Accuracy: 0.8489
-- ROC-AUC: 0.8834
-
-보고서 저장됨: reports/lightgbm_report.json
-=====================================
-
-=== Stacking 모델 성능 보고서 ===
-Base Models:
-- LightGBM (가중치: 0.35, CV점수: 0.8234)
-- CatBoost (가중치: 0.32, CV점수: 0.8198)  
-- XGBoost (가중치: 0.33, CV점수: 0.8145)
-Meta Learner: LogisticRegression
-
-앙상블 성능:
-- 최고 베이스 모델 대비 개선: +0.87%
-- 최종 테스트 점수: 0.8321
-
-보고서 저장됨: reports/stacking_report.json
-=====================================
+테스트 데이터 성능:
+- F1-Score: 0.6740
+- Accuracy: 0.7858
+- ROC-AUC: 0.8707
+학습 시간: 10.38초
+✅ GRADIENT_BOOSTING 모델 훈련이 끝났습니다 (소요시간: 12.45초)
+------------------------------
+...
+🎉 전체 모델 실행 완료!
+총 소요시간: 125.67초
+성공한 모델: 7개
+📁 성능 보고서는 reports/ 폴더에 저장되었습니다.
+==================================================
 ```
 
 ### 파일 결과물
@@ -236,3 +212,4 @@ Meta Learner: LogisticRegression
 
 ---
 *📧 문의사항이 있으시면 팀 리더에게 연락해주세요.*
+010...

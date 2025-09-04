@@ -7,7 +7,6 @@ numpy==2.3.2
 
 # 머신러닝
 lightgbm==4.6.0
-catboost==1.2.8
 xgboost==3.0.4
 
 # 시각화

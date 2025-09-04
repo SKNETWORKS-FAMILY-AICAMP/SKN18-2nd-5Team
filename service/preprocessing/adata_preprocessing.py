@@ -8,7 +8,7 @@ from .featureExtraction import do_feature_extraction
 
 
 
-def do_preprocessing(df_train:pd.DataFrame, df_test:pd.DataFrame, drop_cols:list, encoding_cols:list, args):
+def do_preprocessing(df_train:pd.DataFrame, df_test:pd.DataFrame, drop_cols:list, encoding_cols:list, model_name:str):
     '''
     모델 학습 전 데이터 전처리 함수
     '''
@@ -20,7 +20,7 @@ def do_preprocessing(df_train:pd.DataFrame, df_test:pd.DataFrame, drop_cols:list
     df_train, df_test = do_cleansing(df_train, df_test, drop_cols)
 
     # 3. encoding
-    df_train, df_test = do_encoding(df_train, df_test, encoding_cols, args)
+    df_train, df_test = do_encoding(df_train, df_test, encoding_cols, model_name)
 
 
     return df_train, df_test
