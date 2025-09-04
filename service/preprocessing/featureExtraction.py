@@ -60,9 +60,6 @@ def do_feature_extraction(df_train:pd.DataFrame, df_test:pd.DataFrame):
         df_test['adr'])
 
     # lead_time_processed
-    # 1. 리드타임 700일 이상 이상치 제거 - 700일 미만 데이터만 유지
-    df_train = df_train[df_train['lead_time'] < 700]
-    df_test = df_test[df_test['lead_time'] < 700]
     # 2. # 1단계: 훈련 데이터(X_tr)에서 IQR을 사용하여 이상치 범위 계산
     Q1 = df_train['lead_time'].quantile(0.25)
     Q3 = df_train['lead_time'].quantile(0.75)
@@ -105,6 +102,9 @@ def do_feature_extraction(df_train:pd.DataFrame, df_test:pd.DataFrame):
     df_train['is_transient'] = (df_train['customer_type'] == 'Transient').astype(int)
     df_test['is_transient'] = (df_test['customer_type'] == 'Transient').astype(int)
 
+    # total_stays
+    df_train['total_stays'] = df_train['stays_in_weekend_nights'] + df_train['stays_in_week_nights']
+    df_test['total_stays'] = df_test['stays_in_weekend_nights'] + df_test['stays_in_week_nights']
 
 
 

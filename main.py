@@ -16,7 +16,7 @@ import argparse # 터미널에서 인자를 입력하는대로 출력하게 하�
 from service.data_setup import do_load_dataset
 from service.preprocessing.adata_preprocessing import do_preprocessing
 from service.modeling.training import do_training
-from service.submission import create_submission_file
+# from service.submission import create_submission_file
 
 def main(args):
     # 1. 데이터 로드
@@ -29,7 +29,7 @@ def main(args):
     , drop_cols=args.drop_cols, transform_cols=args.transform_cols, encoding_cols=args.encoding_cols, args=args)
 
     # 3. 모델 학습
-    is_model = do_training(df_train=x_tr, df_trian_target=y_tr, args=args)
+    is_model = do_training(df_train=x_tr, df_train_target=y_tr, args=args)
     if is_model : # is_model 값이 모델이 있으묜(스코어가 70 이상인 경우에만 모델 적용을 하도록 해뒀으니까..!)
         predictions = is_model.predict_proba(x_te)[:,1]
 
@@ -53,7 +53,7 @@ if __name__ == "__main__":
         , 'assigned_room_type', 'children', 'babies', 'arrival_date_full'], type=list)
     args.add_argument("--transform_cols", default=['adr', 'lead_time'], type=list)
     args.add_argument("--encoding_cols", default=['hotel', 'arrival_date_month', 'meal', 'country', 'market_segment',
-'distribution_channel', 'reserved_room_type', 'customer_type'], type=list)
+'distribution_channel', 'reserved_room_type', 'customer_type', 'total_stays'], type=list)
     args.add_argument("--model_name", default="lightgbm", type=str)
     args.add_argument("--hp", default={}, type=dict)
 

@@ -1,104 +1,238 @@
-# 🏨 호텔 예약 취소 예측 프로젝트
+# 🏨 호텔 예약 취소 예측 모델
 
 ## 📋 프로젝트 개요
-**목적**: 호텔 예약 취소 여부(`is_canceled`)를 예측하여 호텔 수요 예측 및 수익 최적화를 위한 데이터 분석 및 머신러닝/딥러닝 모델 구축
+호텔 및 리조트 예약자 데이터를 분석하여 **예약 취소율을 예측**하는 머신러닝 모델 개발 프로젝트입니다.  
+학습용 데이터로 다양한 모델을 훈련시키고, 테스트 데이터에서 예측 성능을 비교 분석하여 최적의 모델을 선정합니다.
 
-**데이터셋**: `hotel_bookings.csv`
-- **타겟 변수**: `is_canceled` (0: 유지, 1: 취소)
-- **예측 목표**: 예약 취소 확률 예측을 통한 호텔 수요 관리
+## 🏗️ 프로젝트 구조
 
----
-
-## 🔄 데이터 전처리 파이프라인
-
-### 1️⃣ 불필요한 컬럼 제거 (Drop Columns)
-**제거 대상 및 근거:**
-- `arrival_date_year`, `arrival_date_month`, `arrival_date_week_number`, `arrival_date_day_of_month`: 박스플롯 분석 결과 타겟과 상관성 낮음
-- `country`: 과도한 범주 수 (고차원 문제)
-- `reservation_status`, `reservation_status_date`: 타겟 변수와 중복/누수 위험
-- `agent`: 316개 고유값으로 인한 차원의 저주
-- `hotel`: 분석 목적과 무관
-
-### 2️⃣ 결측치 처리 (Missing Value Imputation)
-| 컬럼 | 처리 방법 | 근거 |
-|------|-----------|------|
-| `children` | 0으로 대체 | describe() 분석 결과 75%가 아이 없음 (최빈값) |
-| `company` | 0으로 대체 | 회사 미이용 예약자 구분을 위함 (피처 생성 전 단계) |
-| `agent` | 0으로 대체 | 에이전트 미이용 예약자 구분을 위함 (피처 생성 전 단계) |
-
-### 3️⃣ 피처 엔지니어링 (Feature Engineering)
-**새로운 피처 생성:**
-
-| 피처명 | 생성 로직 | 비즈니스 가설 |
-|--------|-----------|---------------|
-| `has_company` | `company > 0` → 1, else 0 | 회사 예약 시 취소율 차이 |
-| `has_agent` | `agent > 0` → 1, else 0 | 에이전트 예약 시 취소율 차이 |
-| `is_FB_meal` | `meal == 'FB'` → 1, else 0 | Full Board 식사 시 취소율 높음 |
-| `room_type_changed` | `reserved_room_type != assigned_room_type` → 1, else 0 | 방 변경 시 고객 불만으로 취소율 증가 |
-| `market_risk_level` | 시장 세분화 기반 리스크 레벨 | 예약 채널별 취소 패턴 차이 |
-
-**`market_risk_level` 매핑:**
-- **High risk**: Groups, Online_TA
-- **Medium risk**: Offline_TA/TO  
-- **Low risk**: Direct, Corporate, Complementary
-
-### 4️⃣ 데이터 분포 정규화 (Skewness & Kurtosis Treatment)
-**로그 변환 기준**: `|왜도| >= 1` AND `첨도 >= 2`
-
-**변환 대상 피처:**
 ```
-📊 수치형 원본 피처:
-- lead_time, stays_in_weekend_nights, stays_in_week_nights
-- adults, children, babies
-- previous_cancellations, previous_bookings_not_canceled
-- booking_changes, days_in_waiting_list
-- adr, required_car_parking_spaces, total_of_special_requests
-
-🔧 생성된 피처:
-- has_company, has_agent, is_FB_meal, room_type_changed
+SKN18-2nd-5Team/
+├── main.py                    # 메인 실행 파일
+├── requirements.txt           # 패키지 의존성
+├── data/                      # 데이터 폴더
+│   ├── hotel_bookings_train.csv
+│   └── hotel_bookings_test.csv
+├── service/
+│   ├── data_setup.py         # 데이터 로드 모듈
+│   ├── preprocessing/        # 전처리 모듈
+│   │   ├── adata_preprocessing.py
+│   │   ├── cleansing.py
+│   │   ├── encoding.py
+│   │   └── featureExtraction.py
+│   ├── modeling/            # 모델링 모듈
+│   │   ├── model.py
+│   │   ├── training.py
+│   │   ├── cross_validation.py
+│   │   └── metrics.py
+│   └── evaluation.py        # 모델 평가 모듈
+├── eda_image/              # EDA 결과 이미지
+└── reports/                # 성능 보고서 저장 폴더
+    ├── lightgbm_report.json
+    ├── catboost_report.json
+    ├── xgboost_report.json
+    └── stacking_report.json
 ```
 
-### 5️⃣ 범주형 인코딩 (Categorical Encoding)
-**원핫 인코딩 (One-Hot Encoding)**
-- 대상: `object` 및 `category` 데이터 타입
-- 도구: `category_encoders.OneHotEncoder`
-- 메모리 최적화: 사전에 `category` 타입으로 변환
+## 🚀 실행 방법
 
-### 6️⃣ 피처 스케일링 (Feature Scaling)
-**선별적 표준화 적용:**
-- **스케일링 대상**: 연속형 수치 피처만
-- **제외 대상**: 원핫 인코딩된 이진 피처 (0/1)
-- **방법**: `StandardScaler` 적용
-- **적용 순서**: Train 데이터로 학습 → Validation/Test 데이터에 동일 파라미터 적용
+### 1. 환경 설정
+```bash
+# 가상환경 활성화
+.venv\Scripts\activate  # Windows
+source .venv/bin/activate  # Linux/Mac
+
+# 패키지 설치
+pip install -r requirements.txt
+```
+
+### 2. 기본 실행
+```bash
+python main.py
+```
+
+### 3. 모델별 실행
+```bash
+# LightGBM 모델
+python main.py --model_name lightgbm
+
+# CatBoost 모델  
+python main.py --model_name catboost
+
+# XGBoost 모델
+python main.py --model_name xgboost
+
+# Stacking 모델 (향후 구현)
+python main.py --model_name stacking
+```
+
+## 🔧 주요 파라미터
+
+| 파라미터 | 기본값 | 설명 |
+|---------|--------|------|
+| `--path_train` | `./data/hotel_bookings_train.csv` | 학습 데이터 경로 |
+| `--path_test` | `./data/hotel_bookings_test.csv` | 테스트 데이터 경로 |
+| `--target_name` | `is_canceled` | 타겟 컬럼명 |
+| `--model_name` | `lightgbm` | 모델 선택 (lightgbm/catboost/xgboost/stacking) |
+
+## 📊 데이터 처리 파이프라인
+
+### 1. 데이터 로드 (`data_setup.py`)
+- **변수 규칙**: 
+  - 학습용 피처: `x_tr`
+  - 학습용 타겟: `y_tr` 
+  - 테스트용 피처: `x_te`
+  - 테스트용 타겟: `y_te`
+
+### 2. 데이터 전처리 (`preprocessing/`)
+- **데이터 정제**: 결측값 처리, 이상치 제거
+- **피처 엔지니어링**: 새로운 특성 생성
+- **인코딩**: 범주형 데이터 변환
+  - LightGBM/CatBoost: `category` 타입 변환
+  - XGBoost: 원-핫 인코딩 적용
+
+### 3. 모델 학습 및 평가 (`modeling/`)
+- **지원 모델**: LightGBM, CatBoost, XGBoost, Stacking
+- **교차 검증**: StratifiedKFold 사용
+- **성능 평가**: 테스트 데이터로 실제 성능 측정
+- **평가 지표**: F1-Score, Accuracy, ROC-AUC
+- **보고서 생성**: 각 모델별 성능 보고서 자동 저장 (`reports/` 폴더)
+
+## 📈 모델 성능 평가
+
+### 평가 방식
+1. **교차 검증**: 학습 데이터에서 5-fold StratifiedKFold로 모델 안정성 확인
+2. **테스트 평가**: 별도의 테스트 데이터로 실제 성능 측정
+3. **모델 비교**: 여러 알고리즘의 성능을 정량적으로 비교
+4. **성능 보고서**: 각 모델 실행 시마다 콘솔 출력 + JSON 파일 저장
+
+### 평가 지표
+모든 모델에 대해 다음 3가지 지표로 성능을 평가합니다:
+- **F1-Score**: 정밀도와 재현율의 조화평균 (불균형 데이터 고려)
+- **Accuracy**: 전체 정확도 (기본 성능 지표)
+- **ROC-AUC**: ROC 곡선 아래 면적 (임계값 독립적 성능)
+
+### 성능 보고서 형식
+```json
+{
+  "model_name": "lightgbm",
+  "timestamp": "2024-09-04 10:30:15",
+  "cross_validation": {
+    "cv_f1_score": 0.8234,
+    "cv_accuracy": 0.8567,
+    "cv_roc_auc": 0.8901,
+    "std_f1": 0.0123,
+    "std_accuracy": 0.0098,
+    "std_roc_auc": 0.0087
+  },
+  "test_performance": {
+    "test_f1_score": 0.8156,
+    "test_accuracy": 0.8489,
+    "test_roc_auc": 0.8834
+  },
+  "model_details": {
+    "hyperparameters": {...},
+    "training_time": "2.34 seconds",
+    "feature_count": 23
+  }
+}
+```
+
+### Stacking 모델 보고서
+Stacking 모델의 경우 추가 정보를 포함합니다:
+```json
+{
+  "model_name": "stacking",
+  "base_models": [
+    {
+      "name": "lightgbm",
+      "cv_score": 0.8234,
+      "weight": 0.35
+    },
+    {
+      "name": "catboost", 
+      "cv_score": 0.8198,
+      "weight": 0.32
+    },
+    {
+      "name": "xgboost",
+      "cv_score": 0.8145,
+      "weight": 0.33
+    }
+  ],
+  "meta_learner": "LogisticRegression",
+  "ensemble_performance": {
+    "improvement_over_best_base": 0.0087,
+    "final_test_score": 0.8321
+  }
+}
+```
+
+## 📝 개발 규칙
+
+### ⚠️ 필수 준수 사항
+1. **main.py 실행으로만 결과 도출** - 다른 파일 직접 실행 금지
+2. **모듈화 구조 유지** - 기존 폴더/파일 형식 변경 금지
+3. **주석 및 로깅 필수**:
+   ```python
+   # -- 수정 이유: 성능 향상을 위한 하이퍼파라미터 조정
+   logging.info("데이터 전처리 완료")
+   ```
+
+### 📁 파일 관리
+- 추가 파일은 `.gitignore`에 등록
+- 기존 모듈 구조 변경 시 사전 협의 필수
+
+## 🎯 향후 계획
+- [ ] 하이퍼파라미터 자동 튜닝 (Optuna 활용)
+- [ ] 모델 성능 시각화 대시보드
+- [ ] 피처 중요도 분석 및 해석
+- [ ] 모델 앙상블 기법 적용
+
+## 👥 팀 정보
+- **팀명**: SKN18-2nd-5Team
+- **브랜치**: INHA-2
+- **프로젝트 기간**: 2024년 9월
+
+## 📊 예상 결과
+프로젝트 완료 후 다음과 같은 결과를 얻을 수 있습니다:
+
+### 콘솔 출력 예시
+```
+=== LightGBM 모델 성능 보고서 ===
+교차 검증 결과:
+- F1-Score: 0.8234 (±0.0123)
+- Accuracy: 0.8567 (±0.0098) 
+- ROC-AUC: 0.8901 (±0.0087)
+
+테스트 성능:
+- F1-Score: 0.8156
+- Accuracy: 0.8489
+- ROC-AUC: 0.8834
+
+보고서 저장됨: reports/lightgbm_report.json
+=====================================
+
+=== Stacking 모델 성능 보고서 ===
+Base Models:
+- LightGBM (가중치: 0.35, CV점수: 0.8234)
+- CatBoost (가중치: 0.32, CV점수: 0.8198)  
+- XGBoost (가중치: 0.33, CV점수: 0.8145)
+Meta Learner: LogisticRegression
+
+앙상블 성능:
+- 최고 베이스 모델 대비 개선: +0.87%
+- 최종 테스트 점수: 0.8321
+
+보고서 저장됨: reports/stacking_report.json
+=====================================
+```
+
+### 파일 결과물
+- **성능 보고서**: `reports/` 폴더에 JSON 형식으로 저장
+- **모델 비교 분석**: 각 모델의 강점과 약점 분석
+- **피처 중요도**: 예측에 중요한 변수 순위
+- **호텔 도메인 인사이트**: 취소 패턴 및 비즈니스 시사점
 
 ---
-
-## 🤖 모델링 전략  -- (수정 필)
-
-### 주요 모델: **LightGBM**
-**선택 근거:**
-- 범주형 피처 자동 처리
-- 빠른 학습 속도
-- 높은 예측 성능
-- 스케일링에 덜 민감
-
-### 보조 모델: **Logistic Regression**
-**비교 목적:**
-- 스케일링 효과 검증
-- 해석 가능성 제공
-- 베이스라인 성능 측정
-
----
-
-## 📈 예상 성과 및 활용 방안
-
-### 비즈니스 임팩트:
-1. **수요 예측 정확도 향상** → 객실 오버부킹 최적화
-2. **취소 패턴 분석** → 마케팅 전략 수립
-3. **수익 최적화** → 동적 가격 책정 지원
-4. **고객 세분화** → 맞춤형 서비스 제공
-
-### 기술적 성과:
-- 예측 정확도: AUC-ROC 0.85+ 목표
-- 피처 중요도 분석을 통한 비즈니스 인사이트 도출
-- 실시간 예측 시스템 구축 가능한 모델 파이프라인 완성
+*📧 문의사항이 있으시면 팀 리더에게 연락해주세요.*

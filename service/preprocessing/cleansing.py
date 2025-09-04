@@ -60,7 +60,7 @@ def do_cleansing(df_train:pd.DataFrame, df_test:pd.DataFrame, drop_cols:list, tr
 
 
     # 4. 왜도 / 첨도 처리
-    df_train, df_test = __transform_cols(df_train, df_test, transform_cols=transform_cols)
+    # df_train, df_test = __transform_cols(df_train, df_test, transform_cols=transform_cols)
 
     # 5. 검증
     ## train, test 데이터의 컬럼 갯수가 같은지 확인
