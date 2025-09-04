@@ -1,8 +1,8 @@
 /venv
 /data copy
 /test.ipynb
-eda.ipynb
-after_featureExtravtions.ipynb
-__pycache__
-reports
-eda_image
+/eda.ipynb
+/after_featureExtravtions.ipynb
+/__pycache__
+/reports
+/eda_image
