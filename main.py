@@ -1,7 +1,9 @@
 import os
 import sys
 import warnings
+import warnings
 
+import numpy as np
 import pandas as pd
 
 # Suppress ALL warnings and verbose output
@@ -21,6 +23,7 @@ from io import StringIO
 sys.path.insert(0, os.getcwd())
 
 from service.data_setup import load_train_csv, load_test_csv, split_train_validation
+from service.data_setup import load_train_csv, load_test_csv, split_train_validation
 from service.preprocessing.cleansing import fill_missing_values
 from service.preprocessing.featureExtraction import (
     add_total_guests_and_is_alone,
@@ -32,7 +35,6 @@ from service.preprocessing.featureExtraction import (
     map_hotel_type,
 )
 from service.preprocessing.encoding import one_hot_encode_and_align, drop_original_columns
-from service.modeling.training import train_xgb_classifier
 from service.modeling.metrics import evaluate_binary, format_metrics
 
 
