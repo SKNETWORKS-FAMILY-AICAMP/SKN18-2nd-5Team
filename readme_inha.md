@@ -33,7 +33,7 @@ def __init__(self, host: str = "localhost", port: int = 3306,
 
 ## 📋 필요한 DB 테이블
 
-DBeaver에서 미리 생성해야 할 테이블: (1단계 실행!!)
+DBeaver에서 미리 로드해야 할 테이블:
 - `hotel_bookings_train` (학습 데이터)
 - `hotel_bookings_test` (예측 대상 데이터)
 
