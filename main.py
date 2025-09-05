@@ -1,6 +1,7 @@
 import os
 import sys
 import warnings
+from datetime import datetime
 
 import pandas as pd
 
@@ -187,11 +188,15 @@ def predict_test_data(model, X_tr_processed, X_val_processed):
     result_data['predicted_is_canceled'] = y_pred
     result_data['predicted_probability'] = y_pred_proba
     
-    result_path = os.path.join(results_dir, 'hotel_booking_predictions.csv')
+    # 타임스탬프 생성 (월일시분초)
+    timestamp = datetime.now().strftime("%m%d%H%M%S")
+    result_filename = f'hotel_booking_predictions_{timestamp}.csv'
+    result_path = os.path.join(results_dir, result_filename)
     result_data.to_csv(result_path, index=False)
     
     print(f"📁 예측 결과 저장: {result_path}")
     print(f"📊 저장된 데이터 형태: {result_data.shape}")
+    print(f"🕐 생성 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
     # 결과 미리보기
     print("\n=== 예측 결과 미리보기 ===")

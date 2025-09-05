@@ -9,9 +9,13 @@ python db_to_csv.py
 # 2단계: ML 실행
 python main.py
 
-# 3단계: 결과 → DB
+# 3단계: 결과 → DB (최신 파일 자동 인식)
 python csv_to_db.py
 ```
+
+**💡 참고**: 
+- 2단계에서 `hotel_booking_predictions_MMDDHHMMSS.csv` 형식으로 저장됨
+- 3단계에서 가장 최신 파일을 자동으로 찾아서 DB에 저장
 
 
 ## 🔧 DB 연결 설정
@@ -36,6 +40,9 @@ def __init__(self, host: str = "localhost", port: int = 3306,
 DBeaver에서 미리 로드해야 할 테이블:
 - `hotel_bookings_train` (학습 데이터)
 - `hotel_bookings_test` (예측 대상 데이터)
+
+**결과 테이블** (자동 생성):
+- `hotel_booking_predictions` (예측 결과 저장)
 
 
 

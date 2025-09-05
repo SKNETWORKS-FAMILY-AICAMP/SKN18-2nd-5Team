@@ -1,8 +1,6 @@
 """
 MySQL 데이터베이스 연결 관리
 """
-import mysql.connector
-from mysql.connector import Error
 from typing import Optional
 import os
 

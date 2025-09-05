@@ -3,6 +3,7 @@ CSV 예측 결과를 MySQL 데이터베이스로 저장
 3단계: data/results/hotel_booking_predictions.csv → DB
 """
 import os
+import glob
 import pandas as pd
 from service.database.connection import get_db_connection
 import mysql.connector
@@ -10,13 +11,19 @@ import mysql.connector
 def import_predictions_to_db() -> bool:
     """예측 결과 CSV를 MySQL로 저장"""
     
-    # 1. CSV 파일 존재 확인
-    csv_path = os.path.join("data", "results", "hotel_booking_predictions.csv")
+    # 1. 가장 최신 CSV 파일 찾기
+    results_dir = os.path.join("data", "results")
+    csv_pattern = os.path.join(results_dir, "hotel_booking_predictions*.csv")
+    csv_files = glob.glob(csv_pattern)
     
-    if not os.path.exists(csv_path):
-        print(f"❌ 예측 결과 파일이 없습니다: {csv_path}")
+    if not csv_files:
+        print(f"❌ 예측 결과 파일이 없습니다: {csv_pattern}")
         print("💡 먼저 main.py를 실행하여 예측 결과를 생성하세요.")
         return False
+    
+    # 가장 최신 파일 선택 (생성 시간 기준)
+    csv_path = max(csv_files, key=os.path.getctime)
+    print(f"📁 최신 예측 결과 파일 발견: {os.path.basename(csv_path)}")
     
     # 2. CSV 파일 로드
     try:
