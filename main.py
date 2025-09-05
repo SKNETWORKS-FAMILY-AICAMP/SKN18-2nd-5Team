@@ -90,12 +90,12 @@ def main() -> None:
     X_tr_smote, y_tr_smote = smote.fit_resample(X_tr, y_tr)
     print(f"SMOTE 적용 후 훈련 데이터 크기: {X_tr_smote.shape}")
 
-    # 4. 피처 선택 (SelectFromModel)
-    print("피처 선택 수행 중...")
+    # 4. 피처 선택 (SelectFromModel) - 기준 강화
+    print("피처 선택 수행 중 (기준 강화)...")
     selector_model = LGBMClassifier(random_state=42, n_jobs=-1)
     selector = SelectFromModel(
         selector_model, 
-        threshold='median',
+        threshold='1.25*median',
         prefit=False
     ).fit(X_tr_smote, y_tr_smote)
     
@@ -103,38 +103,34 @@ def main() -> None:
     X_val_selected = selector.transform(X_val)
     print(f"피처 선택 후 피처 수: {X_tr_selected.shape[1]}")
     
-    # <<<<<<< 수정된 부분 시작 (최종 모델 변경) >>>>>>>
-    # 5. 스태킹 앙상블 모델 정의 (규제 강화)
-    print("스태킹 앙상블 모델 구성 (최종 모델 변경)...")
-    # 기본 모델들 (과적합 방지를 위해 규제 파라미터 추가)
+    # 5. 스태킹 앙상블 모델 정의 (규제 대폭 강화)
+    print("스태킹 앙상블 모델 구성 (규제 대폭 강화)...")
     estimators = [
         ('rf', RandomForestClassifier(
-            n_estimators=200, max_depth=15, min_samples_leaf=5, random_state=42, n_jobs=1
+            n_estimators=200, max_depth=10, min_samples_leaf=10, max_features='sqrt', random_state=42, n_jobs=1
         )),
         ('et', ExtraTreesClassifier(
-            n_estimators=200, max_depth=15, min_samples_leaf=5, random_state=42, n_jobs=1
+            n_estimators=200, max_depth=10, min_samples_leaf=10, max_features='sqrt', random_state=42, n_jobs=1
         )),
         ('xgb', XGBClassifier(
-            n_estimators=1000, max_depth=7, learning_rate=0.05, subsample=0.8, colsample_bytree=0.8,
+            n_estimators=1200, max_depth=5, learning_rate=0.03, subsample=0.7, colsample_bytree=0.7,
             use_label_encoder=False, eval_metric='logloss', random_state=42, n_jobs=1
         )),
         ('lgbm', LGBMClassifier(
-            n_estimators=1000, max_depth=7, learning_rate=0.05, num_leaves=31,
+            n_estimators=1200, max_depth=5, learning_rate=0.03, num_leaves=20,
             random_state=42, n_jobs=1
         ))
     ]
     
-    # 최종 모델 (Meta-learner)을 LogisticRegression으로 변경하여 과적합 강력 방지
-    final_estimator = LogisticRegression(random_state=42, n_jobs=-1)
+    final_estimator = LogisticRegression(C=0.1, random_state=42, n_jobs=-1)
     
-    # 스태킹 모델 (passthrough=False 유지)
     model = StackingClassifier(
         estimators=estimators,
         final_estimator=final_estimator,
         cv=5,
         stack_method='predict_proba',
         n_jobs=-1,
-        passthrough=False # 원본 피처를 최종 모델에 전달하지 않음
+        passthrough=False
     )
 
     print("스태킹 모델 학습...")
@@ -161,13 +157,11 @@ def main() -> None:
     print(format_metrics('검증 데이터 성능:', evaluate_binary(y_val, y_val_pred, y_val_proba)))
     print("="*25)
     
-    # 8. Test 데이터 예측 수행 여부 결정
-    val_metrics = evaluate_binary(y_val, y_val_pred, y_val_proba)
-    if val_metrics.f1 > 0.8:
-        print(f"목표 달성 (F1-Score: {val_metrics.f1:.3f}). Test 데이터 예측을 수행합니다.")
-        predict_test_data(model, selector, X_tr.columns, best_threshold)
-    else:
-        print(f"목표 미달 (F1-Score: {val_metrics.f1:.3f}). 모델을 개선한 후 다시 실행해주세요.")
+    # <<<<<<< 수정된 부분 시작 (항상 Test 예측 수행) >>>>>>>
+    # 8. Test 데이터 예측 수행
+    # 점수와 상관없이 항상 predict_test_data 함수를 호출하여 예측 파일을 생성합니다.
+    print("Test 데이터 예측을 수행합니다.")
+    predict_test_data(model, selector, X_tr.columns, best_threshold)
     # <<<<<<< 수정된 부분 끝 >>>>>>>
     
     return model
@@ -231,12 +225,15 @@ def predict_test_data(model, selector, train_columns, threshold):
     result_data['predicted_is_canceled'] = y_pred
     result_data['predicted_probability'] = y_pred_proba
     
-    result_path = os.path.join(results_dir, 'hotel_booking_predictions.csv')
+    # <<<<<<< 수정된 부분 시작 (파일명 변경) >>>>>>>
+    result_path = os.path.join(results_dir, 'prediction.csv')
+    # <<<<<<< 수정된 부분 끝 >>>>>>>
     result_data.to_csv(result_path, index=False)
     
     print(f"예측 결과 저장: {result_path}")
     print(f"저장된 데이터 형태: {result_data.shape}")
     
+    # 결과 미리보기
     print("\n=== 예측 결과 미리보기 ===")
     print(result_data.head())
     
