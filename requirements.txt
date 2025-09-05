@@ -6,3 +6,6 @@ seaborn
 xgboost
 jupyter
 easydict
+mysql
+mysql-connector-python
+SQLAlchemy

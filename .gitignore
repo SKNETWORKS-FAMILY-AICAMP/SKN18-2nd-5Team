@@ -1,5 +1,7 @@
 hotel_mod
 ver_01.ipynb
 ver_03.ipynb
-*.venv
-
+.venv
+hotel_booking_predictions.csv
+hotel_bookings_test.csv
+hotel_bookings_train.csv
