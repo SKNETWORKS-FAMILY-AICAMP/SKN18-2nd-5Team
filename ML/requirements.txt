@@ -1,0 +1,11 @@
+matplotlib
+numpy
+pandas
+scikit-learn
+seaborn
+xgboost
+jupyter
+easydict
+mysql
+mysql-connector-python
+SQLAlchemy
