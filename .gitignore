@@ -4,3 +4,5 @@ ver_03.ipynb
 *.venv
 EDA.ipynb
 README.md
+data/
+data
