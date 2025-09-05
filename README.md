@@ -11,15 +11,48 @@ HotelPredict AI는 머신러닝을 활용한 지능형 호텔 예약 관리 시�
 - **📅 달력 기반 인터페이스**: 직관적인 날짜 선택 및 예측
 - **📈 실시간 통계**: 예약 데이터의 실시간 분석 및 시각화
 
-## 🚀 시작하기
+## 🚀 빠른 시작 (5분 설치)
+
+### 🎯 요약
+1. **Python 3.8+, Node.js 16+, Git 설치**
+2. **저장소 클론**: `git clone [URL]`
+3. **백엔드**: `cd backend` → `python -m venv venv` → `venv\Scripts\activate` → `pip install --only-binary=all fastapi uvicorn[standard] pandas numpy scikit-learn joblib pydantic python-multipart python-dotenv` → `uvicorn main:app --reload --host 0.0.0.0 --port 8000`
+4. **프론트엔드**: 새 터미널에서 `cd frontend` → `npm install --legacy-peer-deps` → `npm run dev`
+5. **접속**: http://localhost:5173
+
+---
+
+## 🚀 상세 설치 가이드
 
 ### 필수 요구사항
 
-- Python 3.8 이상
-- Node.js 16 이상
-- npm 또는 yarn
+- **Python 3.8 이상** (권장: 3.10 또는 3.11)
+  - [Python 공식 다운로드](https://www.python.org/downloads/)
+  - 설치 시 "Add Python to PATH" 체크 필수
+- **Node.js 16 이상** (권장: 18 LTS)
+  - [Node.js 공식 다운로드](https://nodejs.org/)
+- **Git**
+  - [Git 공식 다운로드](https://git-scm.com/)
 
 ### 설치 방법
+
+### 🔍 설치 전 확인사항
+
+다음 명령어로 필수 프로그램이 설치되어 있는지 확인하세요:
+
+```bash
+# Python 버전 확인 (3.8 이상이어야 함)
+python --version
+
+# Node.js 버전 확인 (16 이상이어야 함)
+node --version
+
+# npm 버전 확인
+npm --version
+
+# Git 버전 확인
+git --version
+```
 
 #### 1. 저장소 클론
 ```bash
@@ -27,48 +60,95 @@ git clone https://github.com/SKN18-2nd-5Team/hotel-prediction.git
 cd SKN18-2nd-5Team
 ```
 
+> **📁 프로젝트 구조 확인**: 클론 후 다음 폴더들이 있는지 확인하세요
+> - `backend/` (백엔드 코드)
+> - `frontend/` (프론트엔드 코드)  
+> - `ML/data/hotel_bookings.csv` (데이터 파일)
+
 #### 2. 백엔드 설치 및 실행
 
 ```bash
 # 백엔드 디렉토리로 이동
 cd backend
 
-# 가상환경 생성 및 활성화 (선택사항)
+# 가상환경 생성 및 활성화 (강력 권장)
 python -m venv venv
-# Windows
+
+# Windows 사용자
 venv\Scripts\activate
 
-# 의존성 패키지 설치
+# Mac/Linux 사용자
+source venv/bin/activate
+
+# 가상환경 활성화 확인 (프롬프트 앞에 (venv)가 표시되어야 함)
+
+# pip 업그레이드
 python -m pip install --upgrade pip
 
-# Windows 사용자 (권장)
+# 패키지 설치 (Windows 권장 방법)
 pip install --only-binary=all fastapi uvicorn[standard] pandas numpy scikit-learn joblib pydantic python-multipart python-dotenv
+```
 
-# 또는 requirements.txt 사용 (문제 발생 시)
-# pip install -r requirements.txt
+> **⚠️ 설치 중 오류 발생 시**:
+> ```bash
+> # 방법 1: requirements.txt 사용
+> pip install -r requirements.txt
+> 
+> # 방법 2: 개별 설치
+> pip install fastapi uvicorn pandas numpy scikit-learn joblib pydantic python-multipart python-dotenv
+> ```
 
+```bash
 # FastAPI 서버 실행
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-백엔드 서버가 http://localhost:8000 에서 실행됩니다.
+✅ **성공 확인**: 브라우저에서 http://localhost:8000/docs 접속 시 API 문서가 보이면 성공
 
 #### 3. 프론트엔드 설치 및 실행
 
-새 터미널 창에서:
+**새 터미널 창을 열고** (백엔드는 계속 실행 중이어야 함):
 
 ```bash
+# 프로젝트 루트로 이동 (백엔드와 다른 터미널)
+cd SKN18-2nd-5Team
+
 # 프론트엔드 디렉토리로 이동
 cd frontend
 
-# 의존성 패키지 설치 (호환성 문제 해결)
+# 의존성 패키지 설치 (React 19 호환성 해결)
 npm install --legacy-peer-deps
+```
 
+> **⚠️ npm 설치 중 오류 발생 시**:
+> ```bash
+> # 캐시 정리 후 재시도
+> npm cache clean --force
+> rm -rf node_modules package-lock.json
+> npm install --legacy-peer-deps --force
+> ```
+
+```bash
 # React 개발 서버 실행
 npm run dev
 ```
 
-프론트엔드가 http://localhost:5173 에서 실행됩니다.
+✅ **성공 확인**: 
+- 터미널에 "Local: http://localhost:5173" 메시지가 표시되면 성공
+- 브라우저에서 http://localhost:5173 접속하여 웹사이트 확인
+
+## ✅ 설치 완료 체크리스트
+
+다음 항목들을 모두 확인하세요:
+
+- [ ] **백엔드 서버 실행 중**: http://localhost:8000/docs 에서 API 문서 확인
+- [ ] **프론트엔드 서버 실행 중**: http://localhost:5173 에서 웹사이트 접속
+- [ ] **메인 페이지 로딩**: 통계 데이터와 차트가 표시됨
+- [ ] **취소 예측 페이지**: 달력이 표시되고 날짜 클릭 가능
+- [ ] **조식 예측 페이지**: 조식 관련 인터페이스 표시
+- [ ] **데이터 로딩**: 콘솔에 "Loaded xxxxx booking records" 메시지 확인
+
+> **🎉 모든 항목이 체크되면 설치 완료!** 이제 HotelPredict AI를 사용할 수 있습니다.
 
 ## 💡 사용 방법
 
@@ -146,7 +226,51 @@ hotel-prediction/
 
 ```
 
-## 🔧 환경 설정
+## 🔧 문제 해결 가이드
+
+### 자주 발생하는 문제들
+
+#### 1. Python 명령어를 찾을 수 없음
+```bash
+# Windows에서 python 대신 py 사용
+py --version
+py -m venv venv
+```
+
+#### 2. 백엔드 패키지 설치 오류 (Windows)
+```bash
+# Microsoft Visual C++ 14.0이 필요한 경우
+# Visual Studio Build Tools 설치: https://visualstudio.microsoft.com/downloads/
+
+# 또는 미리 컴파일된 패키지 사용
+pip install --only-binary=all pandas numpy scikit-learn
+```
+
+#### 3. 포트 충돌 오류
+```bash
+# 백엔드 포트 변경
+uvicorn main:app --reload --host 0.0.0.0 --port 8001
+
+# 프론트엔드에서 API URL 수정 필요
+# frontend/src 파일들에서 localhost:8000을 localhost:8001로 변경
+```
+
+#### 4. 데이터 파일을 찾을 수 없음
+- `ML/data/hotel_bookings.csv` 파일이 존재하는지 확인
+- 파일 크기가 0이 아닌지 확인 (약 16MB)
+
+#### 5. 가상환경 활성화 문제 (Windows)
+```bash
+# PowerShell 실행 정책 변경이 필요한 경우
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# 또는 cmd 사용
+venv\Scripts\activate.bat
+```
+
+## 🔧 환경 설정 (선택사항)
+
+환경 변수는 자동으로 설정되므로 별도 설정이 불필요하지만, 커스터마이징이 필요한 경우:
 
 ### 백엔드 환경 변수
 백엔드 루트에 `.env` 파일 생성:
@@ -154,9 +278,6 @@ hotel-prediction/
 # API 설정
 HOST=0.0.0.0
 PORT=8000
-
-# 데이터베이스 경로
-DATA_PATH=../ML/data/hotel_bookings.csv
 ```
 
 ### 프론트엔드 환경 변수
