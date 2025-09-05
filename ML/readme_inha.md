@@ -42,5 +42,11 @@ DBeaver에서 미리 로드해야 할 테이블:
 ## 📦 필요한 패키지
 
 ```bash
+cd ML
+python -m venv venv
+venv\Scripts\activate
+python -m pip install --upgrade pip
+python -m pip install -r .\requirements.txt
+
 pip install mysql-connector-python
 ```
