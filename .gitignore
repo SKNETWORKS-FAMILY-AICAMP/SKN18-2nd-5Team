@@ -59,13 +59,7 @@ Thumbs.db
 *.temp
 
 # Data
-ML/data/hotel_bookings.csv
-ML/data/hotel_bookings.csv.gz
-ML/data/hotel_bookings.csv.bz2
-ML/data/hotel_bookings.csv.zip
-ML/data/hotel_bookings.csv.tar
-ML/data/hotel_bookings.csv.tar.gz
-ML/data/hotel_bookings.csv.tar.bz2
-ML/data/hotel_bookings.csv.tar.zip
+ML/data/
 data/
 data
+ML/data/result/
