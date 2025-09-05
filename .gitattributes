@@ -1,0 +1,21 @@
+# Normalize all text files and store as LF in the repo
+* text=auto eol=lf
+
+# Explicit text file types (optional but clearer)
+*.js     text eol=lf
+*.jsx    text eol=lf
+*.ts     text eol=lf
+*.tsx    text eol=lf
+*.css    text eol=lf
+*.html   text eol=lf
+*.json   text eol=lf
+*.md     text eol=lf
+
+# Binary files (don't attempt to normalize)
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.pdf    binary
+*.zip    binary
