@@ -4,3 +4,9 @@ ver_03.ipynb
 *.venv
 EDA.ipynb
 README.md
+hotel_booking_predictions.csv
+hotel_bookings_test.csv
+hotel_bookings_train.csv
+readme_inha.md
+readme_junho.md
+--pycache__

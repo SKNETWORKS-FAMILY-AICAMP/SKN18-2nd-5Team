@@ -36,6 +36,7 @@ from service.preprocessing.featureExtraction import (
 )
 from service.preprocessing.encoding import one_hot_encode_and_align, drop_original_columns
 from service.modeling.metrics import evaluate_binary, format_metrics
+from service.modeling.training import train_xgb_classifier
 
 
 def main() -> None:
