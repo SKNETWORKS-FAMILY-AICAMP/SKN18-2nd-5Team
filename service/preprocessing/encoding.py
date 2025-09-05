@@ -20,7 +20,14 @@ def drop_original_columns(X_tr: pd.DataFrame, X_te: pd.DataFrame) -> Tuple[pd.Da
     columns_to_drop = [
         'hotel', 'lead_time', 'adr', 'stays_in_weekend_nights',
         'stays_in_week_nights', 'total_guests', 'reserved_room_type',
-        'assigned_room_type', 'customer_type'
+        'assigned_room_type', 'customer_type',
+        'reservation_status',       # 예약 상태 (Check-Out, Canceled, No-Show)
+        'reservation_status_date',  # 수천 개의 날짜 컬럼 생성 방지
+        'arrival_date_full',        # 수천 개의 날짜 컬럼 생성 방지
+        'deposit_type',             # 보증금 타입
+        'agent',                    # 에이전트 ID (너무 많은 카테고리)
+        'company',                  # 회사 ID (너무 많은 카테고리)
+        'country',                  # 국가 (너무 많은 카테고리)
     ]
     X_tr.drop(columns=columns_to_drop, errors='ignore', inplace=True)
     X_te.drop(columns=columns_to_drop, errors='ignore', inplace=True)
