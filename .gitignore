@@ -59,10 +59,10 @@ Thumbs.db
 *.temp
 
 # Data
-ML/data/
-data/
-data
-ML/data/result/
-ML/venv
-ML/venv/
+# ML/data/
+# data/
+# data
+# ML/data/result/
+# ML/venv
+# ML/venv/
 *.csv
