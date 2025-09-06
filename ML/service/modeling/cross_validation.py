@@ -32,4 +32,3 @@ def stratified_cv_scores(
     summary = {metric: float(np.mean(vals)) for metric, vals in results.items() if metric.startswith('test_')}
     return summary
 
-

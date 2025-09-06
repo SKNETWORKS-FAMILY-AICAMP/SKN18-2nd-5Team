@@ -3,6 +3,12 @@
 ## 🚀 실행 방법 (3단계)
 
 ```bash
+# 0단계: 가상환경 설정
+uv venv .venv --python 3.13
+.\venv\Scripts\activate
+uv pip install --upgrade pip
+uv pip install  -r .\requirements.txt
+
 # 1단계: DB → CSV
 python db_to_csv.py
 
