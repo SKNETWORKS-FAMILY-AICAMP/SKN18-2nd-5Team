@@ -9,10 +9,7 @@ __pycache__/
 *.so
 .Python
 env/
-venv/
 ENV/
-backend/venv/
-backend/env/
 
 # Build outputs
 build/
@@ -59,9 +56,7 @@ Thumbs.db
 *.temp
 
 # Data
-ML/data/
-data/
-data
-ML/data/result/
-ML/venv
-ML/venv/
+*.csv
+
+# venv
+*venv/

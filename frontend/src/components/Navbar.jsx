@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, TrendingDown, Coffee, Menu, X } from 'lucide-react';
+import { Home, TrendingDown, Coffee, Menu, X, Sidebar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import './Navbar.css';
 
-function Navbar() {
+function Navbar({ onSidebarToggle }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const location = useLocation();
 
@@ -17,6 +17,14 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-container">
+        <button 
+          className="navbar-sidebar-toggle"
+          onClick={onSidebarToggle}
+          aria-label="사이드바 열기"
+        >
+          <Sidebar size={24} />
+        </button>
+        
         <Link to="/" className="navbar-logo">
           <motion.div
             initial={{ rotate: 0 }}

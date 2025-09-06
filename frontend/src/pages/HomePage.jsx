@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { TrendingDown, Coffee, BarChart3, Calendar, Users, Shield } from 'lucide-react';
+import { TrendingDown, Calendar, Users, Building2 } from 'lucide-react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
 import axios from 'axios';
@@ -28,29 +27,6 @@ function HomePage() {
     }
   };
 
-  const features = [
-    {
-      icon: <TrendingDown size={40} color="white" />,
-      title: '취소 예측',
-      description: '머신러닝을 활용한 정확한 예약 취소 확률 예측',
-      link: '/cancellation',
-      color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    },
-    {
-      icon: <Coffee size={40} color="white" />,
-      title: '조식 준비',
-      description: '일별 조식 준비 인원을 정확하게 예측',
-      link: '/breakfast',
-      color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    },
-    {
-      icon: <BarChart3 size={40} color="white" />,
-      title: '실시간 분석',
-      description: '예약 데이터의 실시간 통계 분석',
-      link: '/cancellation',
-      color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-    },
-  ];
 
   const statsCards = [
     {
@@ -103,29 +79,80 @@ function HomePage() {
 
   return (
     <div className="home-page">
-      {/* Hero Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="hero-section glass-card"
-      >
-        <h1>🏨 HotelPredict AI</h1>
-        <p>인공지능 기반 호텔 예약 관리 시스템</p>
-        <p className="hero-subtitle">
-          머신러닝을 활용하여 예약 취소를 예측하고, 조식 준비 인원을 최적화하세요
-        </p>
-        <div className="hero-buttons">
-          <Link to="/cancellation" className="btn btn-primary">
-            <Shield size={20} />
-            지금 시작하기
-          </Link>
-          <Link to="/breakfast" className="btn btn-secondary">
-            <Coffee size={20} />
-            조식 예측하기
-          </Link>
+      {/* Header Section */}
+      <header className="header-section">
+        <div className="header-content">
+          <div className="hotel-image-container">
+            <img 
+              src="/images/hotel_main.jpg"
+              alt="HotelPredict AI" 
+              className="hotel-image"
+            />
+            <div className="hotel-overlay">
+              <h1 className="hotel-title">
+                <span className="hotel-icon">
+                  <Building2 size={48} />
+                </span>
+                HotelPredict AI
+              </h1>
+              <p className="hotel-subtitle">AI 기반 스마트 호텔 관리 시스템</p>
+            </div>
+          </div>
         </div>
-      </motion.div>
+      </header>
+
+      {/* Main Content */}
+      <main className="main-section">
+        <div className="main-content-wrapper">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="main-content-card"
+          >
+            <div className="welcome-section">
+              <h2 className="main-title">HotelPredict AI에 오신 것을 환영합니다</h2>
+              <p className="main-description">
+                HotelPredict AI의 혁신적인 AI 기반 예약 관리 시스템으로 호텔 운영의 효율성을 극대화하세요. 
+                머신러닝 기술을 통해 예측 정확도를 높이고, 운영 비용을 절감하며, 
+                고객 만족도를 향상시키는 스마트한 솔루션을 제공합니다.
+              </p>
+            </div>
+            
+            <div className="services-grid">
+              <div className="service-card">
+                <div className="service-icon">📊</div>
+                <h3>예약 취소 예측</h3>
+                <p>고급 머신러닝 알고리즘을 통해 예약 취소 확률을 정확하게 예측하여 수익 손실을 최소화합니다.</p>
+              </div>
+              
+              <div className="service-card">
+                <div className="service-icon">🍽️</div>
+                <h3>조식 준비 최적화</h3>
+                <p>실제 투숙객 수를 기반으로 조식 준비 인원을 자동 계산하여 식비를 절약하고 낭비를 방지합니다.</p>
+              </div>
+              
+              <div className="service-card">
+                <div className="service-icon">📈</div>
+                <h3>실시간 분석</h3>
+                <p>호텔 운영 데이터를 실시간으로 분석하여 즉각적인 의사결정을 지원하는 대시보드를 제공합니다.</p>
+              </div>
+              
+              <div className="service-card">
+                <div className="service-icon">🎯</div>
+                <h3>맞춤형 서비스</h3>
+                <p>고객 데이터를 분석하여 개인화된 서비스를 제공하고 고객 만족도를 극대화합니다.</p>
+              </div>
+            </div>
+            
+            <div className="cta-section">
+              <h3>지금 시작하세요</h3>
+              <p>HotelPredict AI와 함께 호텔 운영의 새로운 차원을 경험해보세요. 
+                 직관적인 인터페이스와 강력한 AI 기술로 더 스마트한 호텔 관리가 가능합니다.</p>
+            </div>
+          </motion.div>
+        </div>
+      </main>
 
       {/* Statistics Overview */}
       {!loading && statistics && (
@@ -170,37 +197,6 @@ function HomePage() {
         </motion.div>
       )}
 
-      {/* Features Section */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.5 }}
-      >
-        <h2 className="section-title">✨ 주요 기능</h2>
-        <div className="features-grid">
-          {features.map((feature, index) => (
-            <motion.div
-              key={feature.title}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 * index, duration: 0.5 }}
-              whileHover={{ scale: 1.05 }}
-              className="feature-card"
-            >
-              <Link to={feature.link} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <div 
-                  className="feature-icon" 
-                  style={{ background: feature.color }}
-                >
-                  {feature.icon}
-                </div>
-                <h3>{feature.title}</h3>
-                <p>{feature.description}</p>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
 
       {/* Loading State */}
       {loading && (
@@ -208,6 +204,49 @@ function HomePage() {
           <div className="spinner"></div>
         </div>
       )}
+
+      {/* Footer Section */}
+      <footer className="footer-section">
+        <div className="footer-content">
+          <div className="footer-info">
+            <div className="footer-brand">
+              <h3>HotelPredict AI</h3>
+              <p>AI 기반 스마트 호텔 관리 솔루션</p>
+            </div>
+            
+            <div className="footer-contact">
+              <h4>연락처 정보</h4>
+              <div className="contact-item">
+                <span className="contact-label">전화번호:</span>
+                <span className="contact-value">02-1234-5678</span>
+              </div>
+              <div className="contact-item">
+                <span className="contact-label">이메일:</span>
+                <span className="contact-value">info@hotelpredict_ai.com</span>
+              </div>
+              <div className="contact-item">
+                <span className="contact-label">주소:</span>
+                <span className="contact-value">서울특별시 금천구 가산동 123</span>
+              </div>
+            </div>
+            
+            <div className="footer-services">
+              <h4>서비스</h4>
+              <ul>
+                <li>예약 취소 예측</li>
+                <li>조식 준비 최적화</li>
+                <li>실시간 통계 분석</li>
+                <li>고객 관리 시스템</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="footer-bottom">
+            <p>&copy; 2025 HotelPredict AI. All rights reserved.</p>
+            <p>Powered by HotelPredict AI Technology</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

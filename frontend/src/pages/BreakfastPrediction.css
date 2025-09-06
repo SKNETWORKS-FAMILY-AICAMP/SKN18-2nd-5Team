@@ -1,5 +1,6 @@
 .breakfast-page {
   padding: 20px 0;
+  margin-top: 20px;
 }
 
 .view-mode-selector {
@@ -256,5 +257,17 @@
 
   .prep-list {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .breakfast-page {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .breakfast-page {
+    margin-top: 5px;
   }
 }

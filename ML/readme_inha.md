@@ -1,19 +1,16 @@
 # Hotel Booking ML with Database
 
-## 🚀 실행 방법 (3단계)
+## 📦 필요한 패키지
 
 ```bash
-# 1단계: DB → CSV
-python db_to_csv.py
+cd ML
+python -m venv venv
+venv\Scripts\activate
+python -m pip install --upgrade pip
+python -m pip install -r .\requirements.txt
 
-# 2단계: ML 실행
-python main.py
-
-# 3단계: 결과 → DB
-python csv_to_db.py
+pip install mysql-connector-python
 ```
-
-
 ## 🔧 DB 연결 설정
 
 **파일**: `service/database/connection.py`  
@@ -37,16 +34,16 @@ DBeaver에서 미리 로드해야 할 테이블:
 - `hotel_bookings_train` (학습 데이터)
 - `hotel_bookings_test` (예측 대상 데이터)
 
-
-
-## 📦 필요한 패키지
+## 🚀 실행 방법 (3단계)
 
 ```bash
-cd ML
-python -m venv venv
-venv\Scripts\activate
-python -m pip install --upgrade pip
-python -m pip install -r .\requirements.txt
+# 1단계: DB → CSV
+python db_to_csv.py
 
-pip install mysql-connector-python
+# 2단계: ML 실행
+python main.py
+
+# 3단계: 결과 → DB
+python csv_to_db.py
 ```
+
