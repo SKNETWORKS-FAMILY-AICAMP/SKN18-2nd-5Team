@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #B24545 0%, #7B3F3F 100%);
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -15,14 +15,20 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  /* align-items: center; 중앙정렬 - 이거쓰고 확대하면 헤더 깨져서 날라다님 */
+  justify-content: center; /*세로 중앙정렬*/
+  background: linear-gradient(135deg, #B24545 0%, #7B3F3F 100%);
 }
 
 .main-content {
   flex: 1;
   padding: 20px;
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 0 auto;  /* 가로 중앙 정렬 */
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 내부 요소도 중앙 정렬 */
 }
 
 /* Glass morphism effect */
@@ -60,7 +66,7 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #B24545 0%, #7B3F3F 100%);
   color: white;
 }
 

@@ -18,7 +18,8 @@ function Sidebar({ isOpen, onToggle, onFilter }) {
       )}
 
       {/* 사이드바 */}
-      <div className="sidebar" style={{ left: isOpen ? '0px' : '-250px' }}>
+      <div className="sidebar" 
+       style={{ left: isOpen ? '0px' : '-300px' }}>
         {/* 사이드바 오른쪽 토글 버튼 - 사이드바가 열릴 때만 표시 */}
         {isOpen && (
           <button onClick={onToggle} className="sidebar-toggle-relative">

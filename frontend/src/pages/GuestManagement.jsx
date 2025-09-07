@@ -195,10 +195,11 @@ function GuestManagement({ sidebarOpen }) {
             <div className="statistics-grid">
               {/* 좌측 카드: 예약 1개 정보 - 조식관련 */}
               <div className="stat-card left-card">
-                <h4>고객 예약 정보 - 조식</h4>
+                {/* <h4>고객 예약 정보 - 조식</h4> */}
                 <div className="stat-items">
                   <div className="stat-item">
                     <span className="stat-label">어른/아이</span>
+                    <span className="stat-divider"></span>
                     <span className="stat-value">
                       {selectedBooking ? 
                         `${selectedBooking.total_guests - (selectedBooking.babies || 0)}명` : 
@@ -208,18 +209,21 @@ function GuestManagement({ sidebarOpen }) {
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">조식 종류</span>
+                    <span className="stat-divider"></span>
                     <span className="stat-value">
                       {selectedBooking?.meal || '-'}
                     </span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">특별요청사항</span>
+                    <span className="stat-divider"></span>
                     <span className="stat-value">
                       {selectedBooking?.special_requests || '-'}
                     </span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">고객 위험도</span>
+                    <span className="stat-divider"></span>
                     <span className={`stat-value risk-level ${getRiskLevel(selectedBooking?.predicted_probability)}`}>
                       {selectedBooking?.predicted_probability ? 
                         `${(selectedBooking.predicted_probability * 100).toFixed(1)}%` : 
@@ -232,20 +236,23 @@ function GuestManagement({ sidebarOpen }) {
 
               {/* 중앙 카드: 예약 1개 정보 - 숙박관련 */}
               <div className="stat-card center-card">
-                <h4>고객 예약 정보 - 숙박</h4>
+                {/* <h4>고객 예약 정보 - 숙박</h4> */}
                 <div className="stat-items">
                   <div className="stat-item">
                     <span className="stat-label">체크인/체크아웃</span>
+                    <span className="stat-divider"></span>
                     <span className="stat-value">-</span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">투숙중인 층 인원</span>
+                    <span className="stat-divider"></span>
                     <span className="stat-value">
                       {selectedBooking?.total_guests ? `${selectedBooking.total_guests}명` : '-'}
                     </span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">배정 가능 잔여 객실</span>
+                    <span className="stat-divider"></span>
                     <span className="stat-value">-</span>
                   </div>
                 </div>
@@ -253,28 +260,32 @@ function GuestManagement({ sidebarOpen }) {
 
               {/* 우측 카드: 해당일 전체 통계 */}
               <div className="stat-card right-card">
-                <h4>해당일 전체 통계</h4>
+                {/* <h4>해당일 전체 통계</h4> */}
                 <div className="stat-items">
                   <div className="stat-item">
                     <span className="stat-label">날짜</span>
+                    <span className="stat-divider"></span>
                     <span className="stat-value">
                       {searchDate ? format(new Date(searchDate), 'yyyy.MM.dd') : '-'}
                     </span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">모델 예측 신뢰도</span>
+                    <span className="stat-divider"></span>
                     <span className="stat-value">
                       {dailyStatistics?.model_confidence ? `${dailyStatistics.model_confidence}%` : '-'}
                     </span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">예상 투숙 인원</span>
+                    <span className="stat-divider"></span>
                     <span className="stat-value">
                       {dailyStatistics?.total_expected_guests ? `${dailyStatistics.total_expected_guests}명` : '-'}
                     </span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-label">예상 조식 준비 인원수</span>
+                    <span className="stat-label">예상 조식 인원수</span>
+                    <span className="stat-divider"></span>
                     <span className="stat-value">
                       {dailyStatistics?.breakfast_preparation_count ? `${dailyStatistics.breakfast_preparation_count}명` : '-'}
                     </span>
