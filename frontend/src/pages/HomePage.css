@@ -67,28 +67,34 @@
   .header-section {
     height: 70vh;
     min-height: 70vh;
+    min-height: 500px; /* 최소 높이 보장 */
     margin-top: 0;
-    padding-top: 180px;
+    padding-top: 220px; /* 더 큰 여백 */
     z-index: 1;
   }
   
   .hotel-image-container {
     min-height: 70vh;
+    min-height: 500px; /* 최소 높이 보장 */
     background-size: cover;
     background-position: center 20%;
     z-index: 11;
     padding-top: 0;
+    margin-top: 80px; /* 여백 추가 */
   }
   
   .hotel-image {
     height: 100%;
     top: 0;
     min-height: 70vh;
+    min-height: 500px; /* 최소 높이 보장 */
     z-index: 12;
+    margin-top: 80px; /* 여백 추가 */
   }
   
   .hotel-overlay {
-    top: 160px;
+    top: 200px; /* 더 아래로 이동 */
+    z-index: 15; /* 이미지보다 높은 z-index */
   }
 }
 
@@ -103,27 +109,33 @@
   .header-section {
     height: 60vh;
     min-height: 60vh;
+    min-height: 400px; /* 최소 높이 보장 */
     margin-top: 0;
-    padding-top: 160px;
+    padding-top: 200px; /* 더 큰 여백 */
     z-index: 1;
   }
   
   .hotel-image-container {
     min-height: 60vh;
+    min-height: 400px; /* 최소 높이 보장 */
     background-size: cover;
     background-position: center 20%;
     z-index: 11;
+    margin-top: 70px; /* 여백 추가 */
   }
   
   .hotel-image {
     height: 100%;
     top: 0;
     min-height: 60vh;
+    min-height: 400px; /* 최소 높이 보장 */
     z-index: 12;
+    margin-top: 70px; /* 여백 추가 */
   }
   
   .hotel-overlay {
-    top: 140px;
+    top: 180px; /* 더 아래로 이동 */
+    z-index: 15; /* 이미지보다 높은 z-index */
   }
   
   .hotel-title {
@@ -198,31 +210,37 @@
     width: 100%;
     height: 50vh;
     min-height: 50vh;
+    min-height: 350px; /* 최소 높이 보장 */
     position: relative;
     overflow: hidden;
     display: block;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     margin-top: 0;
-    padding-top: 140px;
+    padding-top: 180px; /* 더 큰 여백 */
     z-index: 1;
   }
   
   .hotel-image-container {
     min-height: 50vh;
+    min-height: 350px; /* 최소 높이 보장 */
     background-size: cover;
     background-position: center 20%;
     z-index: 11;
+    margin-top: 60px; /* 여백 추가 */
   }
   
   .hotel-image {
     height: 100%;
     top: 0;
     min-height: 50vh;
+    min-height: 350px; /* 최소 높이 보장 */
     z-index: 12;
+    margin-top: 60px; /* 여백 추가 */
   }
   
   .hotel-overlay {
-    top: 120px;
+    top: 160px; /* 더 아래로 이동 */
+    z-index: 15; /* 이미지보다 높은 z-index */
   }
   
   .hotel-title {
@@ -275,12 +293,13 @@
   width: 100%;
   height: 80vh;
   min-height: 80vh;
+  min-height: 600px; /* 최소 높이 보장 */
   position: relative;
   overflow: visible;
   display: block;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   margin-top: 0;
-  padding-top: 200px;
+  padding-top: 250px; /* navbar 높이 + 충분한 여유분 */
   z-index: 1;
 }
 
@@ -300,17 +319,18 @@
   z-index: 11;
   display: block;
   min-height: 80vh;
+  min-height: 600px; /* 최소 높이 보장 */
   background-size: cover;
   background-position: center 20%;
   background-repeat: no-repeat;
-  background-attachment: scroll;
+  background-attachment: local; /* scroll 대신 local 사용 */
   overflow: visible;
   transition: all 0.3s ease-in-out;
   /* 확대 시 잘림 방지 */
   transform: translateZ(0);
   will-change: transform;
   /* 확대 시 navbar에 가려지지 않도록 여백 추가 */
-  margin-top: 50px;
+  margin-top: 100px; /* 더 큰 여백 */
 }
 
 .hotel-image-container:hover {
@@ -331,6 +351,7 @@
   left: 0;
   z-index: 12;
   min-height: 80vh;
+  min-height: 600px; /* 최소 높이 보장 */
   opacity: 1;
   background-color: #667eea;
   background-image: url('/images/hotel_main.jpg');
@@ -338,14 +359,14 @@
   background-position: center 20%;
   background-repeat: no-repeat;
   visibility: visible;
-  background-attachment: scroll;
+  background-attachment: local; /* scroll 대신 local 사용 */
   transition: all 0.3s ease-in-out;
   transform: scale(1) translateZ(0);
   animation: float 6s ease-in-out infinite;
   /* 확대 시 잘림 방지 */
   will-change: transform;
   /* 확대 시 navbar에 가려지지 않도록 여백 추가 */
-  margin-top: 50px;
+  margin-top: 100px; /* 더 큰 여백 */
 }
 
 @keyframes float {
@@ -371,7 +392,7 @@
 
 .hotel-overlay {
   position: absolute;
-  top: 180px;
+  top: 220px; /* 더 아래로 이동 */
   left: 0;
   right: 0;
   bottom: 0;
@@ -384,7 +405,7 @@
   color: white;
   backdrop-filter: blur(2px);
   padding: clamp(40px, 8vh, 80px) clamp(20px, 4vw, 40px) clamp(40px, 6vh, 60px);
-  z-index: 2;
+  z-index: 15; /* 이미지보다 높은 z-index */
   transition: all 0.3s ease-in-out;
   animation: fadeInUp 1s ease-out;
 }
