@@ -62,16 +62,15 @@ function HomePage() {
             />
           </motion.div>
 
-          {/* Bottom Left - Red Card */}
+          {/* Bottom Left - Blue Card */}
           <motion.div 
             className="corner-card bottom-left-card"
-            onClick={handleCancellationClick}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <img 
-              src="/images/ActionCard.png" 
-              alt="System Management" 
+              src="/images/PropertyCardBlue.png" 
+              alt="Blue Property Card" 
               className="corner-card-image"
             />
           </motion.div>
