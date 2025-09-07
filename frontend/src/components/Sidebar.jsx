@@ -16,13 +16,13 @@ function Sidebar({ isOpen, toggleSidebar }) {
     {
       path: '/cancellation',
       icon: <TrendingDown size={20} />,
-      label: '취소 예측',
+      label: '예약 관리 시스템',
       name: 'cancellation'
     },
     {
       path: '/breakfast',
       icon: <Coffee size={20} />,
-      label: '조식 예측',
+      label: '조식 관리 시스템템',
       name: 'breakfast'
     }
   ];
@@ -49,7 +49,6 @@ function Sidebar({ isOpen, toggleSidebar }) {
       {/* 사이드바 */}
       <div className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
         <div className="sidebar-header">
-          <h2>메뉴</h2>
           <button 
             className="sidebar-close"
             onClick={toggleSidebar}
