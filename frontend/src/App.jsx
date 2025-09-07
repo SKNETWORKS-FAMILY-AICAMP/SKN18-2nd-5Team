@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
 import CancellationPrediction from './pages/CancellationPrediction';
@@ -18,7 +17,6 @@ function App() {
   return (
     <Router>
       <div className="app">
-        <Navbar onSidebarToggle={toggleSidebar} />
         <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
         <main className="main-content">
           <Routes>

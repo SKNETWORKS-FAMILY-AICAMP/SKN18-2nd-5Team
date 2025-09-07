@@ -1,12 +1,27 @@
-/* 사이드바 토글 버튼 - 숨김 처리 */
+/* 사이드바 토글 버튼 */
 .sidebar-toggle {
-  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1001;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  color: #667eea;
 }
 
 .sidebar-toggle:hover {
   background: #667eea;
   color: white;
-  transform: translateY(-50%) scale(1.1);
+  transform: scale(1.1);
 }
 
 /* 오버레이 */
@@ -141,7 +156,10 @@
 /* 반응형 디자인 */
 @media (max-width: 768px) {
   .sidebar-toggle {
-    display: none;
+    width: 45px;
+    height: 45px;
+    top: 15px;
+    left: 15px;
   }
   
   .sidebar {
@@ -168,7 +186,10 @@
 
 @media (max-width: 480px) {
   .sidebar-toggle {
-    display: none;
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    left: 10px;
   }
   
   .sidebar {
