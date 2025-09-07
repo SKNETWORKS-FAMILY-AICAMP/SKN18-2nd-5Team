@@ -93,18 +93,6 @@ function GuestManagement({ sidebarOpen }) {
       <div className="search-header glass-card">
         <div className="search-container">
           <h1 className="page-title">고객 관리 페이지</h1>
-            <div className="search-input-wrapper">
-              <Search size={20} />
-              <input
-                type="date"
-                value={searchDate}
-                onChange={(e) => setSearchDate(e.target.value)}
-                className="date-input"
-              />
-              <button onClick={handleDateSearch} className="search-button">
-                검색
-              </button>
-            </div>
         </div>
       </div>
 
@@ -114,8 +102,18 @@ function GuestManagement({ sidebarOpen }) {
           <div className="table-container glass-card">
             <div className="table-header">
               <h2>
-                {searchDate ? format(new Date(searchDate), 'yyyy년 MM월 dd일', { locale: ko }) : ''}
-                예약 목록
+                <div className="search-input-wrapper">
+                  <Search size={20} />
+                  <input
+                    type="date"
+                    value={searchDate}
+                    onChange={(e) => setSearchDate(e.target.value)}
+                    className="date-input"
+                  />
+                <button onClick={handleDateSearch} className="search-button">
+                검색
+              </button>
+              </div>
               </h2>
               <span className="total-count">총 {totalCount}건</span>
             </div>
