@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Header from '../components/Header';
 import 'react-calendar/dist/Calendar.css';
 import './BreakfastPrediction.css';
 
@@ -18,7 +19,14 @@ function BreakfastPrediction() {
   const [dateRange, setDateRange] = useState({ min: null, max: null });
 
   useEffect(() => {
+    // body 클래스 추가
+    document.body.className = 'breakfast-page-body';
     fetchAvailableDates();
+    
+    // 컴포넌트 언마운트 시 클래스 제거
+    return () => {
+      document.body.className = '';
+    };
   }, []);
 
   useEffect(() => {
@@ -110,24 +118,21 @@ function BreakfastPrediction() {
   return (
     <div className="breakfast-modern-container">
       <div className="background-elements">
-        <div className="floating-element element-1">☕</div>
-        <div className="floating-element element-2">🥐</div>
-        <div className="floating-element element-3">🍳</div>
-        <div className="floating-element element-4">🥛</div>
-        <div className="floating-element element-5">🧈</div>
-        <div className="floating-element element-6">🍓</div>
+        <div className="floating-element element-1">🏠</div>
+        <div className="floating-element element-2">🎩</div>
+        <div className="floating-element element-3">🎲</div>
+        <div className="floating-element element-4">💰</div>
+        <div className="floating-element element-5">🚗</div>
+        <div className="floating-element element-6">🏦</div>
       </div>
 
       <div className="main-content-wrapper">
         <div className="content-section">
-          {/* 헤더 */}
-          <motion.div 
-            className="monopoly-header"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <h1>조회를 원하시는 날짜를 선택해 주세요</h1>
-          </motion.div>
+          {/* 헤더 컴포넌트 */}
+          <Header 
+            title="BREAKFAST PREDICTION"
+            subtitle="조회를 원하시는 날짜를 선택해 주세요"
+          />
 
           {/* 날짜 조회 버튼 */}
           <motion.button 

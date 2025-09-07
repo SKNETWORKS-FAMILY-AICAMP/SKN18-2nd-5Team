@@ -6,6 +6,7 @@ import { ko } from 'date-fns/locale';
 import { AlertCircle, TrendingDown, Users, Coffee, Calendar as CalendarIcon } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Header from '../components/Header';
 import 'react-calendar/dist/Calendar.css';
 import './CancellationPrediction.css';
 
@@ -119,15 +120,10 @@ function CancellationPrediction() {
 
   return (
     <div className="cancellation-page">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="page-header glass-card"
-      >
-        <h1>📊 호텔 예약 취소 예측</h1>
-        <p>날짜를 선택하여 예약 취소율을 예측하고 운영 전략을 수립하세요</p>
-      </motion.div>
+      <Header 
+        title="CANCELLATION PREDICTION"
+        subtitle="날짜를 선택하여 예약 취소율을 예측하고 운영 전략을 수립하세요"
+      />
 
       <div className="content-grid">
         {/* Calendar Section */}

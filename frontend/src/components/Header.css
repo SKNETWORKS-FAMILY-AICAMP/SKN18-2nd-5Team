@@ -1,0 +1,162 @@
+/* 엔틱 호텔 헤더 스타일 */
+.hotel-header {
+  background: linear-gradient(135deg, #8b4513 0%, #a0522d 30%, #daa520 60%, #b8860b 100%);
+  padding: 15px 30px;
+  border-radius: 0;
+  text-align: center;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+  border: 3px solid #654321;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  z-index: 1000;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 호텔 장식 요소들 */
+.hotel-header::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border: 2px solid #daa520;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.3) 0%, transparent 50%);
+  z-index: 1;
+}
+
+.hotel-header::after {
+  content: '🏨';
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  z-index: 3;
+  opacity: 0.7;
+}
+
+/* 호텔 타이틀과 장식 */
+.hotel-header h1 {
+  margin: 0;
+  font-size: 20px;
+  color: #fff;
+  font-weight: bold;
+  font-family: 'Times New Roman', serif;
+  text-shadow: 
+    1px 1px 2px rgba(0, 0, 0, 0.8),
+    0 0 5px rgba(255, 215, 0, 0.5);
+  position: relative;
+  z-index: 2;
+  letter-spacing: 1px;
+}
+
+/* 호텔 이름 추가 */
+.hotel-name {
+  font-size: 10px;
+  color: #daa520;
+  font-family: 'Times New Roman', serif;
+  font-style: italic;
+  margin-top: 2px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 2;
+}
+
+/* 장식 라인 */
+.decorative-line {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #daa520 50%, transparent 100%);
+  margin: 5px auto;
+  position: relative;
+  z-index: 2;
+}
+
+.decorative-line::before,
+.decorative-line::after {
+  content: '◆';
+  position: absolute;
+  top: -6px;
+  color: #daa520;
+  font-size: 10px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.decorative-line::before {
+  left: -15px;
+}
+
+.decorative-line::after {
+  right: -15px;
+}
+
+/* 호텔 아이콘들 */
+.hotel-icons {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 5px;
+  z-index: 3;
+  opacity: 0.7;
+}
+
+.hotel-icons span {
+  font-size: 14px;
+  animation: sparkle 3s ease-in-out infinite;
+}
+
+.hotel-icons span:nth-child(2) {
+  animation-delay: 1s;
+}
+
+.hotel-icons span:nth-child(3) {
+  animation-delay: 2s;
+}
+
+@keyframes sparkle {
+  0%, 100% { 
+    opacity: 0.7; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.1);
+  }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .hotel-header {
+    padding: 30px 20px;
+  }
+  
+  .hotel-header h1 {
+    font-size: 24px;
+  }
+  
+  .hotel-header::after {
+    left: 15px;
+  }
+  
+  .hotel-icons {
+    right: 15px;
+  }
+  
+  .hotel-icons span {
+    font-size: 16px;
+  }
+}

@@ -52,12 +52,13 @@ function HomePage() {
           {/* Top Right - Pink Card */}
           <motion.div 
             className="corner-card top-right-card"
+            onClick={handleCancellationClick}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <img 
               src="/images/PropertyCardPink.png" 
-              alt="Pink Property Card" 
+              alt="Cancellation Prediction" 
               className="corner-card-image"
             />
           </motion.div>
@@ -65,12 +66,13 @@ function HomePage() {
           {/* Bottom Left - Blue Card */}
           <motion.div 
             className="corner-card bottom-left-card"
+            onClick={handleCancellationClick}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <img 
               src="/images/PropertyCardBlue.png" 
-              alt="Blue Property Card" 
+              alt="Cancellation Analysis" 
               className="corner-card-image"
             />
           </motion.div>
@@ -84,7 +86,7 @@ function HomePage() {
           >
             <img 
               src="/images/GroupCard2.png" 
-              alt="Reservation Management" 
+              alt="Breakfast Management" 
               className="corner-card-image"
             />
           </motion.div>
