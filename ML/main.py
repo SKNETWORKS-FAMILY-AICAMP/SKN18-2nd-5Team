@@ -36,7 +36,7 @@ from service.preprocessing.featureExtraction import (
 )
 from service.preprocessing.encoding import one_hot_encode_and_align, drop_original_columns
 from service.modeling.metrics import evaluate_binary, format_metrics
-from service.modeling.training import train_xgb_classifier
+from service.modeling.training import train_xgb_classifier, train_all_models
 
 
 def main() -> None:
@@ -85,8 +85,12 @@ def main() -> None:
     
     print(f"✅ 피처 엔지니어링 완료! 최종 피처 수: {X_tr.shape[1]}")
 
-    # 6. 모델 학습 및 평가
-    print("XGBoost 모델 학습...")
+    # 6. XGBoost 모델 학습 및 평가 (최적화 집중)
+    print("\n" + "🚀"*25)
+    print("🏆 XGBoost 최적화 모델 학습 🏆")
+    print("🚀"*25)
+    
+    print("🌳 XGBoost 최적화 모델 학습 중...")
     model = train_xgb_classifier(X_tr, y_tr, random_state=42)
     
     # 예측 수행
@@ -97,7 +101,7 @@ def main() -> None:
 
     # 결과 출력
     print("\n" + "🎯"*25)
-    print("🏆 모델 성능 평가 결과 🏆")
+    print("🏆 XGBoost 최적화 모델 성능 평가 결과 🏆")
     print("🎯"*25)
     print(format_metrics('📊 훈련 데이터 성능:', evaluate_binary(y_tr, y_tr_pred, y_tr_proba)))
     print()
