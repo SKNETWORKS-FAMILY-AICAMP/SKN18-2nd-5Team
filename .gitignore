@@ -9,9 +9,7 @@ __pycache__/
 *.so
 .Python
 env/
-*venv/
 ENV/
-backend/env/
 
 # Build outputs
 build/

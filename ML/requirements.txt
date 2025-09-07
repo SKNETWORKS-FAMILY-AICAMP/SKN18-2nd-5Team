@@ -1,15 +1,9 @@
-
+matplotlib
 numpy
 pandas
-
 scikit-learn
 seaborn
-matplotlib
-
 xgboost
-lightgbm
-imblearn
-
 jupyter
 easydict
 mysql

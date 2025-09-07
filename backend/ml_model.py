@@ -89,11 +89,7 @@ class CancellationPredictor:
         
         # 특징과 타겟 분리
         X = processed_df[self.feature_columns]
-<<<<<<< HEAD
         y = df['predicted_is_canceled']
-=======
-        y = df['predicted_is_canceled']  # 실제 컬럼명으로 변경
->>>>>>> origin/inha-2
         
         # 학습/검증 데이터 분할
         X_train, X_test, y_train, y_test = train_test_split(

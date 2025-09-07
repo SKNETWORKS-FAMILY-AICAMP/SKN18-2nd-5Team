@@ -11,29 +11,23 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 100%; /*중앙정렬*/
-  height: 100%;
-  padding: 0;
 }
 
 a {
   font-weight: 500;
-  color: #B24545;
+  color: #646cff;
   text-decoration: inherit;
 }
 a:hover {
-  color: #7B3F3F;
+  color: #535bf2;
 }
 
 body {
   margin: 0;
-  /* display: flex;
-  place-items: center; */
+  display: flex;
+  place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  width: 100%; /*중앙정렬*/
-  height: 100%;
-  padding: 0;
 }
 
 h1 {
@@ -53,7 +47,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #B24545;
+  border-color: #646cff;
 }
 button:focus,
 button:focus-visible {
@@ -66,7 +60,7 @@ button:focus-visible {
     background-color: #ffffff;
   }
   a:hover {
-    color: #7B3F3F;
+    color: #747bff;
   }
   button {
     background-color: #f9f9f9;

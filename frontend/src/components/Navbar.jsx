@@ -10,7 +10,7 @@ function Navbar({ onSidebarToggle }) {
 
   const navItems = [
     { path: '/', label: '홈', icon: Home },
-    { path: '/cancellation', label: '고객 관리', icon: TrendingDown },
+    { path: '/cancellation', label: '취소 예측', icon: TrendingDown },
     { path: '/breakfast', label: '조식 예측', icon: Coffee },
   ];
 

@@ -49,7 +49,7 @@
   text-decoration: none;
   font-size: 24px;
   font-weight: bold;
-  background: linear-gradient(135deg, #B24545 0%, #7B3F3F 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -66,7 +66,7 @@
 .navbar-toggle {
   display: none;
   cursor: pointer;
-  color: #d36868;
+  color: #667eea;
 }
 
 .navbar-menu {
@@ -96,11 +96,11 @@
 
 .navbar-link:hover {
   background: rgba(102, 126, 234, 0.1);
-  color: #d36868;
+  color: #667eea;
 }
 
 .navbar-link.active {
-  background: linear-gradient(135deg, #B24545 0%, #7B3F3F 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
 }
 

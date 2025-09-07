@@ -10,12 +10,7 @@ html, body {
   width: 100%;
   height: 100%;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-<<<<<<< HEAD
   background: #f5f5f0; /* Ivory color */
-=======
-  background: linear-gradient(135deg, #B24545 0%, #7B3F3F 100%);
-  min-height: 100vh;
->>>>>>> origin/inha-2
   overflow-x: hidden;
 }
 
@@ -31,34 +26,18 @@ html, body {
   width: 100vw;
   display: flex;
   flex-direction: column;
-<<<<<<< HEAD
   margin: 0;
   padding: 0;
-=======
-  /* align-items: center; 중앙정렬 - 이거쓰고 확대하면 헤더 깨져서 날라다님 */
-  justify-content: center; /*세로 중앙정렬*/
-  background: linear-gradient(135deg, #B24545 0%, #7B3F3F 100%);
->>>>>>> origin/inha-2
 }
 
 .main-content {
   flex: 1;
-<<<<<<< HEAD
   padding: 0;
   margin: 0;
   width: 100%;
   position: relative;
   z-index: 1;
   min-height: 100vh;
-=======
-  padding: 20px;
-  max-width: 1400px;
-  margin: 0 auto;  /* 가로 중앙 정렬 */
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* 내부 요소도 중앙 정렬 */
->>>>>>> origin/inha-2
 }
 
 /* Glass morphism effect */
@@ -97,7 +76,7 @@ html, body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #B24545 0%, #7B3F3F 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
 }
 

@@ -32,3 +32,5 @@ def format_metrics(title: str, m: Metrics) -> str:
         f"  F1-점수 (F1-Score): {m.f1:.4f}\n"
         f"  AUC: {m.auc:.4f}"
     )
+
+

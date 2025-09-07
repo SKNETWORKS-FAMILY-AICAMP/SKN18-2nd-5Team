@@ -10,11 +10,7 @@ class DatabaseConnection:
     """MySQL 데이터베이스 연결 관리 클래스"""
     
     def __init__(self, host: str = "localhost", port: int = 3306, 
-<<<<<<< HEAD
                  database: str = "hotelbookings", user: str = "root", password: str = "root1234"):
-=======
-                 database: str = "exampledb", user: str = "root", password: str = "root1234"):
->>>>>>> origin/inha-2
         self.host = host
         self.port = port
         self.database = database
