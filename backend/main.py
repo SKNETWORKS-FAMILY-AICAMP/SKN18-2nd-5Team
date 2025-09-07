@@ -14,7 +14,12 @@ from pathlib import Path
 
 # ML 모델 관련 임포트
 from ml_model import CancellationPredictor
-from database import load_hotel_data, get_bookings_by_date
+from database import (
+    load_hotel_data, 
+    get_bookings_by_date,
+    get_bookings_by_date_from_db,
+    get_bookings_count_by_date
+)
 
 app = FastAPI(
     title="Hotel Booking Prediction API",
@@ -78,27 +83,13 @@ hotel_data = None
 
 @app.on_event("startup")
 async def startup_event():
-    """서버 시작 시 모델 및 데이터 로드"""
-    global model_predictor, hotel_data
+    """서버 시작 시 데이터베이스 연결 확인"""
+    global hotel_data
     
     print("Loading hotel data...")
     hotel_data = load_hotel_data()
     
-    print("Initializing ML model...")
-    model_predictor = CancellationPredictor()
-    
-    # 모델이 이미 학습되어 있는지 확인
-    model_path = Path("models/cancellation_model.pkl")
-    if model_path.exists():
-        print("Loading pre-trained model...")
-        model_predictor.load_model(str(model_path))
-    else:
-        print("Training new model...")
-        model_predictor.train(hotel_data)
-        model_path.parent.mkdir(exist_ok=True)
-        model_predictor.save_model(str(model_path))
-    
-    print("Server startup complete!")
+    print("Server startup complete! Ready to serve prediction results from MySQL.")
 
 @app.get("/api/dates/available")
 async def get_available_dates():
@@ -159,11 +150,12 @@ async def get_overview_statistics():
 
 @app.post("/api/predict/date", response_model=PredictionResponse)
 async def predict_by_date(request: PredictionRequest):
-    """특정 날짜의 예약 취소 예측 및 조식 준비 인원 계산"""
-    if model_predictor is None or hotel_data is None:
-        raise HTTPException(status_code=500, detail="Model not initialized")
+    """특정 날짜의 예약 취소 예측 및 조식 준비 인원 계산 (MySQL 예측 결과 기반)"""
+    if hotel_data is None:
+        raise HTTPException(status_code=500, detail="Data not loaded")
     
     try:
+<<<<<<< HEAD
         # 날짜로 해당 날짜의 모든 예약 데이터 조회
         date_bookings = hotel_data[hotel_data['arrival_date_full'] == request.date].copy()
         
@@ -173,6 +165,18 @@ async def predict_by_date(request: PredictionRequest):
         
         if len(date_bookings) == 0:
             # 예약 데이터가 없는 경우
+=======
+        # 날짜 파싱
+        target_date = datetime.strptime(request.date, "%Y-%m-%d")
+        year = target_date.year
+        month = target_date.month
+        day = target_date.day
+        
+        # MySQL에서 해당 날짜의 예약 데이터 조회 (예측 결과 포함)
+        bookings = get_bookings_by_date_from_db(year, month, day, 0, 1000)  # 모든 예약 조회
+        
+        if len(bookings) == 0:
+>>>>>>> origin/inha-2
             return PredictionResponse(
                 date=request.date,
                 total_reservations=0,
@@ -181,6 +185,7 @@ async def predict_by_date(request: PredictionRequest):
                 breakfast_recommendation=0,
                 confidence_level=0.0,
                 details={
+<<<<<<< HEAD
                     "method": "no_data",
                     "message": "해당 날짜의 예약 데이터가 없습니다.",
                     "adults": 0,
@@ -276,30 +281,78 @@ async def predict_by_date(request: PredictionRequest):
                 "expected_breakfast_guests": expected_breakfast_guests,
                 "expected_breakfast_adults": expected_breakfast_adults,
                 "expected_breakfast_children": expected_breakfast_children
+=======
+                    "method": "mysql_results",
+                    "message": "해당 날짜에 예약이 없습니다."
+                }
+            )
+        
+        # MySQL에 저장된 예측 결과 집계
+        total_reservations = len(bookings)
+        predicted_cancellations = sum(1 for b in bookings if b.get('predicted_is_canceled', 0) == 1)
+        expected_checkins = total_reservations - predicted_cancellations
+        
+        # 조식 준비 인원 계산 (취소되지 않을 예약 중 조식 포함)
+        breakfast_guests = sum(
+            b.get('total_guests', 0) 
+            for b in bookings 
+            if b.get('predicted_is_canceled', 0) == 0 and b.get('meal', '') == '포함'
+        )
+        
+        # 평균 신뢰도 계산
+        avg_confidence = sum(b.get('predicted_probability', 0.5) for b in bookings) / len(bookings)
+        
+        return PredictionResponse(
+            date=request.date,
+            total_reservations=total_reservations,
+            predicted_cancellations=predicted_cancellations,
+            expected_checkins=expected_checkins,
+            breakfast_recommendation=breakfast_guests,
+            confidence_level=float(avg_confidence),
+            details={
+                "method": "mysql_results",
+                "avg_cancellation_probability": float(avg_confidence),
+                "total_guests": sum(b.get('total_guests', 0) for b in bookings)
+>>>>>>> origin/inha-2
             }
         )
     
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@app.post("/api/predict/booking")
-async def predict_single_booking(features: BookingFeatures):
-    """개별 예약의 취소 확률 예측"""
-    if model_predictor is None:
-        raise HTTPException(status_code=500, detail="Model not initialized")
-    
-    try:
-        # 예측
-        cancellation_prob = model_predictor.predict_single(features.dict())
-        
+# 개별 예약 예측은 ML 폴더에서 이미 처리되어 MySQL에 저장됨
+
+def calculate_daily_statistics(bookings: List[Dict]) -> Dict:
+    """해당 날짜의 통계 정보 계산"""
+    if not bookings:
         return {
-            "cancellation_probability": float(cancellation_prob),
-            "risk_level": "높음" if cancellation_prob > 0.7 else "중간" if cancellation_prob > 0.3 else "낮음",
-            "recommendation": "취소 가능성이 높으니 오버부킹을 고려하세요." if cancellation_prob > 0.7 else "정상적인 예약입니다."
+            "search_date": "",
+            "model_confidence": 0.0,
+            "total_expected_guests": 0,
+            "breakfast_preparation_count": 0
         }
-        
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    
+    # 전체 통계 계산
+    total_guests = sum(booking.get('total_guests', 0) for booking in bookings)
+    
+    # 평균 신뢰도 계산 (predicted_probability의 평균)
+    probabilities = [booking.get('predicted_probability', 0.5) for booking in bookings]
+    avg_confidence = sum(probabilities) / len(probabilities) if probabilities else 0.0
+    
+    # 조식 준비 인원수 계산 (조식 포함 예약의 성인+어린이 수)
+    breakfast_count = 0
+    for booking in bookings:
+        if booking.get('meal') == '포함':
+            # 성인 + 어린이 (아기는 조식 안 먹는다고 가정)
+            adults = booking.get('total_guests', 0) - (booking.get('babies', 0) if 'babies' in booking else 0)
+            breakfast_count += max(0, adults)  # 음수 방지
+    
+    return {
+        "search_date": bookings[0].get('arrival_date', '') if bookings else '',
+        "model_confidence": round(avg_confidence * 100, 1),  # 백분율로 변환
+        "total_expected_guests": total_guests,
+        "breakfast_preparation_count": breakfast_count
+    }
 
 @app.get("/api/calendar/monthly")
 async def get_monthly_calendar(year: int, month: int):
@@ -389,6 +442,88 @@ async def get_weekly_trends():
             })
     
     return {"weekly_trends": weekday_stats}
+
+@app.get("/api/bookings/by-date")
+async def get_bookings_by_date_api(
+    year: int,
+    month: int,
+    day: int,
+    offset: int = 0,
+    limit: int = 10
+):
+    """특정 날짜의 예약 목록 조회 (고객 관리 페이지용)"""
+    try:
+        # MySQL에서 예약 데이터 조회
+        bookings = get_bookings_by_date_from_db(year, month, day, offset, limit)
+        
+        # 전체 예약 수 조회
+        total_count = get_bookings_count_by_date(year, month, day)
+        
+        # 통계 정보 계산
+        statistics = calculate_daily_statistics(bookings)
+        
+        return {
+            "success": True,
+            "data": bookings,
+            "total_count": total_count,
+            "statistics": statistics,
+            "offset": offset,
+            "limit": limit
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/bookings/search")
+async def search_bookings(
+    query: str = "",
+    year: Optional[int] = None,
+    month: Optional[int] = None,
+    day: Optional[int] = None,
+    offset: int = 0,
+    limit: int = 10
+):
+    """예약 검색 API"""
+    try:
+        # 날짜가 지정된 경우 날짜별 조회
+        if year and month and day:
+            bookings = get_bookings_by_date_from_db(year, month, day, offset, limit)
+            total_count = get_bookings_count_by_date(year, month, day)
+        else:
+            # 전체 검색 (추후 구현)
+            bookings = []
+            total_count = 0
+        
+        return {
+            "success": True,
+            "data": bookings,
+            "total_count": total_count,
+            "query": query,
+            "offset": offset,
+            "limit": limit
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/bookings/count")
+async def get_bookings_count(
+    year: int,
+    month: int,
+    day: int
+):
+    """특정 날짜의 전체 예약 수 조회"""
+    try:
+        count = get_bookings_count_by_date(year, month, day)
+        
+        return {
+            "success": True,
+            "count": count,
+            "date": f"{year}-{month:02d}-{day:02d}"
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn

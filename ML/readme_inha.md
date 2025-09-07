@@ -3,11 +3,22 @@
 ## 📦 필요한 패키지
 
 ```bash
+<<<<<<< HEAD
 cd ML
 python -m venv venv
 venv\Scripts\activate
 python -m pip install --upgrade pip
 python -m pip install -r .\requirements.txt
+=======
+# 0단계: 가상환경 설정
+uv venv .venv --python 3.13
+.\venv\Scripts\activate
+uv pip install --upgrade pip
+uv pip install  -r .\requirements.txt
+
+# 1단계: DB → CSV
+python db_to_csv.py
+>>>>>>> origin/inha-2
 
 pip install mysql-connector-python
 ```
@@ -40,10 +51,13 @@ DBeaver에서 미리 로드해야 할 테이블:
 # 1단계: DB → CSV
 python db_to_csv.py
 
+<<<<<<< HEAD
 # 2단계: ML 실행
 python main.py
 
 # 3단계: 결과 → DB
 python csv_to_db.py
+=======
+>>>>>>> origin/inha-2
 ```
 

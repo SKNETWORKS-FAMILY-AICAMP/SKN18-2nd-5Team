@@ -27,4 +27,3 @@ def train_xgb_classifier(
     model.fit(X, y)
     return model
 
-

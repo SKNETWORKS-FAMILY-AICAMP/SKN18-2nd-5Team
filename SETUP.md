@@ -14,7 +14,7 @@ cd backend
 python -m venv venv
 venv\Scripts\activate
 python -m pip install --upgrade pip
-pip install --only-binary=all fastapi uvicorn[standard] pandas numpy scikit-learn joblib pydantic python-multipart python-dotenv
+pip install --only-binary=all fastapi uvicorn[standard] pandas numpy scikit-learn joblib pydantic python-multipart python-dotenv mysql-connector-python
 ```
 
 ### 3단계: 프론트엔드 설치
