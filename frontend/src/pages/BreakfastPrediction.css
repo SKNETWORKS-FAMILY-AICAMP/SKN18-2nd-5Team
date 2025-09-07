@@ -1,188 +1,178 @@
-/* 모노폴리 스타일 컨테이너 */
-.breakfast-monopoly-container {
+/* 현대적 컨테이너 */
+.breakfast-modern-container {
   min-height: calc(100vh - 130px);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   position: relative;
   overflow: hidden;
+  padding: 20px;
 }
 
-.breakfast-monopoly-container::before {
-  content: '';
+/* 배경 요소들 */
+.background-elements {
   position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-  animation: rotate 30s linear infinite;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
 }
 
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.floating-element {
+  position: absolute;
+  font-size: 2rem;
+  opacity: 0.1;
+  animation: float 6s ease-in-out infinite;
+  filter: blur(1px);
 }
 
-.monopoly-board {
-  display: flex;
-  gap: 30px;
-  max-width: 1400px;
+.element-1 {
+  top: 10%;
+  left: 5%;
+  animation-delay: 0s;
+}
+
+.element-2 {
+  top: 20%;
+  right: 10%;
+  animation-delay: 1s;
+}
+
+.element-3 {
+  top: 60%;
+  left: 8%;
+  animation-delay: 2s;
+}
+
+.element-4 {
+  bottom: 30%;
+  right: 15%;
+  animation-delay: 3s;
+}
+
+.element-5 {
+  top: 40%;
+  left: 15%;
+  animation-delay: 4s;
+}
+
+.element-6 {
+  bottom: 20%;
+  left: 20%;
+  animation-delay: 5s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+/* 메인 콘텐츠 래퍼 */
+.main-content-wrapper {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
   margin: 0 auto;
-  height: calc(100vh - 40px);
-}
-
-/* 왼쪽 카드 섹션 */
-.monopoly-left-section {
-  flex: 0 0 300px;
-  display: flex;
-  align-items: center;
-}
-
-.property-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
   width: 100%;
 }
 
-.property-card {
-  background: #f5f5dc;
-  border: 3px solid #2c3e50;
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
-  aspect-ratio: 1;
+.content-section {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  gap: 25px;
 }
 
-.property-card::before {
-  content: '';
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  height: 25%;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 4px 4px 0 0;
-}
-
-.card-icon {
-  font-size: 24px;
-  margin-bottom: 10px;
-  z-index: 1;
-}
-
-.card-title {
-  font-weight: bold;
-  font-size: 12px;
-  margin-bottom: 8px;
-  white-space: pre-line;
-  line-height: 1.2;
-  color: #2c3e50;
-  z-index: 1;
-}
-
-.card-price {
-  font-size: 16px;
-  font-weight: bold;
-  color: #2c3e50;
-  z-index: 1;
-}
-
-/* 오른쪽 메인 섹션 */
-.monopoly-right-section {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 15px;
-  padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  overflow-y: auto;
-}
-
+/* 헤더 스타일 */
 .monopoly-header {
-  background: #ffb6c1;
-  padding: 15px;
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 20px 30px;
+  border-radius: 20px;
   text-align: center;
-  border: 2px solid #d1477a;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .monopoly-header h1 {
   margin: 0;
-  font-size: 24px;
-  color: #2c3e50;
+  font-size: 28px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   font-weight: bold;
 }
 
+/* 날짜 조회 버튼 */
 .date-query-button {
-  background: #ffd700;
-  border: 3px solid #2c3e50;
-  padding: 12px 30px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
   font-size: 18px;
   font-weight: bold;
-  color: #2c3e50;
+  color: white;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
   align-self: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .date-query-button:hover {
-  background: #ffed4e;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
 }
 
-/* 메인 정보 그리드 */
-.main-info-grid {
+/* 현대적 정보 그리드 */
+.modern-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 25px;
+  margin-bottom: 25px;
 }
 
+/* 캘린더 카드 */
 .calendar-card {
-  background: white;
-  border: 3px solid #2c3e50;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.calendar-card:hover {
+  transform: translateY(-5px);
 }
 
 .calendar-header {
-  background: #ffb6c1;
-  padding: 10px;
-  border-radius: 6px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px;
+  border-radius: 15px;
   text-align: center;
   font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 15px;
-  border: 2px solid #d1477a;
+  font-size: 20px;
+  margin-bottom: 20px;
 }
 
 .mini-calendar {
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid rgba(102, 126, 234, 0.1);
 }
 
 .calendar-days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 15px;
 }
 
 .day-header {
@@ -190,63 +180,54 @@
   font-weight: bold;
   font-size: 12px;
   color: #666;
-  padding: 5px;
-  background: #e9e9e9;
-  border-radius: 3px;
+  padding: 8px;
+  background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
+  border-radius: 8px;
 }
 
-/* 모노폴리 스타일 캘린더 */
+/* 캘린더 스타일 */
 .monopoly-calendar {
   background: transparent;
   border: none;
+  width: 100%;
 }
 
 .monopoly-calendar .react-calendar__tile {
   background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 8px;
   margin: 2px;
-  height: 30px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.monopoly-calendar .react-calendar__tile:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: scale(1.05);
 }
 
 .monopoly-calendar .react-calendar__tile--active {
-  background: #ffd700;
-  border: 2px solid #2c3e50;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: 2px solid #fff;
   font-weight: bold;
 }
 
 .monopoly-calendar .react-calendar__tile--now {
-  background: #ffb6c1;
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  color: #2c3e50;
+  font-weight: bold;
 }
 
 .monopoly-calendar .react-calendar__tile:disabled {
   background: #f5f5f5;
   color: #ccc;
   cursor: not-allowed;
-  border: 1px solid #e0e0e0;
-}
-
-.monopoly-calendar .react-calendar__tile:disabled:hover {
-  background: #f5f5f5;
-  transform: none;
-}
-
-.monopoly-calendar .react-calendar__navigation {
-  display: flex;
-  margin-bottom: 10px;
-}
-
-.monopoly-calendar .react-calendar__navigation button {
-  background: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 5px 10px;
-  margin: 0 2px;
-  font-size: 14px;
 }
 
 .calendar-tile-breakfast {
@@ -265,33 +246,35 @@
   font-weight: bold;
 }
 
-.tile-count {
-  font-size: 9px;
-}
-
 /* 예측 카드 */
 .prediction-card {
-  background: white;
-  border: 3px solid #2c3e50;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.prediction-card:hover {
+  transform: translateY(-5px);
 }
 
 .prediction-header {
-  background: #d4a5a5;
-  padding: 10px;
-  border-radius: 6px;
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  color: white;
+  padding: 15px;
+  border-radius: 15px;
   font-weight: bold;
+  text-align: center;
   margin-bottom: 20px;
-  border: 2px solid #a67c7c;
 }
 
 .prediction-details {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
 }
 
 .prediction-main {
@@ -299,46 +282,45 @@
 }
 
 .prediction-value {
-  font-size: 48px;
+  font-size: 42px;
   font-weight: bold;
   color: #2c3e50;
-  background: #f0f0f0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   padding: 20px;
-  border-radius: 8px;
-  border: 2px solid #ddd;
+  border-radius: 15px;
+  border: 2px solid rgba(102, 126, 234, 0.2);
 }
 
 .prediction-sublabel {
   font-size: 14px;
   color: #666;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .guest-breakdown {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-top: 10px;
+  gap: 12px;
 }
 
 .guest-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f8f9fa;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #e9ecef;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
 }
 
 .guest-label {
-  font-size: 12px;
+  font-size: 13px;
   color: #666;
   font-weight: 500;
 }
 
 .guest-count {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: bold;
   color: #2c3e50;
 }
@@ -353,8 +335,8 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
+  border: 4px solid rgba(102, 126, 234, 0.3);
+  border-top: 4px solid #667eea;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -366,40 +348,40 @@
 
 /* 정보 카드 컨테이너 */
 .info-cards-container {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
 .info-card {
-  background: white;
-  border: 3px solid #2c3e50;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
 }
 
 .info-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
 }
 
 .info-label {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   color: #2c3e50;
-  margin-bottom: 12px;
-  border-bottom: 2px solid #e9ecef;
-  padding-bottom: 8px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.2);
 }
 
 .info-main {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: bold;
   color: #2c3e50;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
@@ -415,8 +397,8 @@
 }
 
 .highlight-card {
-  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-  border-color: #f39c12;
+  background: linear-gradient(135deg, rgba(255, 243, 205, 0.95) 0%, rgba(255, 234, 167, 0.95) 100%);
+  border-color: rgba(243, 156, 18, 0.3);
 }
 
 .highlight-card .info-main {
@@ -424,30 +406,31 @@
 }
 
 .final-card {
-  background: linear-gradient(135deg, #d1ecf1 0%, #74b9ff 100%);
-  border-color: #0984e3;
-  border-width: 4px;
+  background: linear-gradient(135deg, rgba(209, 236, 241, 0.95) 0%, rgba(116, 185, 255, 0.95) 100%);
+  border-color: rgba(9, 132, 227, 0.3);
+  grid-column: 1 / -1;
 }
 
 .final-card .info-label {
   color: #0984e3;
-  border-bottom-color: #74b9ff;
+  border-bottom-color: rgba(116, 185, 255, 0.5);
 }
 
 .final-value {
   color: #0984e3 !important;
-  font-size: 36px !important;
+  font-size: 40px !important;
 }
 
 /* 추가 통계 카드 */
 .stats-card {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-color: #6c757d;
+  background: linear-gradient(135deg, rgba(248, 249, 250, 0.95) 0%, rgba(233, 236, 239, 0.95) 100%);
+  border-color: rgba(108, 117, 125, 0.3);
+  grid-column: 1 / -1;
 }
 
 .stats-grid-mini {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 15px;
   margin-top: 15px;
 }
@@ -456,168 +439,135 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.stat-mini:hover {
+  transform: translateY(-2px);
 }
 
 .stat-mini-label {
   font-size: 12px;
   color: #666;
-  margin-bottom: 5px;
-}
-
-.stat-mini-value {
-  font-size: 18px;
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-.split-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-bottom: 8px;
   text-align: center;
 }
 
-.split-section {
-  width: 100%;
-}
-
-.split-label {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 8px;
-}
-
-.split-value.main-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 8px;
-}
-
-.split-breakdown {
-  display: flex;
-  justify-content: space-around;
-  gap: 10px;
-}
-
-.split-breakdown span {
-  font-size: 12px;
-  color: #666;
-  background: #f8f9fa;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-.split-item {
-  flex: 1;
-}
-
-.split-value {
+.stat-mini-value {
   font-size: 20px;
   font-weight: bold;
   color: #2c3e50;
 }
 
-/* 추가 정보 */
-.additional-info {
-  text-align: center;
-  padding: 15px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border: 1px solid #dee2e6;
+/* 컨트롤 섹션 */
+.controls-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 20px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.additional-info p {
-  margin: 0;
-  color: #666;
-  font-size: 14px;
-}
-
-/* 뷰 모드 버튼 */
 .view-mode-buttons {
   display: flex;
   gap: 10px;
-  justify-content: center;
 }
 
 .mode-button {
-  padding: 8px 20px;
-  border: 2px solid #2c3e50;
-  background: white;
-  border-radius: 6px;
+  padding: 12px 24px;
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 25px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .mode-button:hover {
-  background: #f0f0f0;
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
 }
 
 .mode-button.active {
-  background: #ffd700;
-  border-color: #2c3e50;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
 
-/* 호텔 선택 */
 .hotel-selector {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
-.hotel-select-monopoly {
-  padding: 10px 20px;
-  border: 2px solid #2c3e50;
-  border-radius: 6px;
-  background: white;
+.hotel-select-modern {
+  padding: 12px 20px;
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.8);
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hotel-select-modern:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
 /* 반응형 디자인 */
-@media (max-width: 1200px) {
-  .monopoly-board {
+@media (max-width: 1024px) {
+  .modern-info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .info-cards-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-grid-mini {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .controls-section {
     flex-direction: column;
-    height: auto;
-  }
-
-  .monopoly-left-section {
-    flex: none;
-    width: 100%;
-  }
-
-  .property-cards {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .main-info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .stats-grid {
-    grid-template-columns: 1fr;
+    gap: 15px;
   }
 }
 
 @media (max-width: 768px) {
-  .property-cards {
-    grid-template-columns: repeat(2, 1fr);
+  .breakfast-modern-container {
+    padding: 15px;
   }
-
-  .monopoly-header h1 {
-    font-size: 18px;
+  
+  .guest-breakdown {
+    grid-template-columns: 1fr;
   }
-
-  .prediction-value {
-    font-size: 36px;
+  
+  .stats-grid-mini {
+    grid-template-columns: 1fr;
   }
-
-  .stat-value {
-    font-size: 20px;
+  
+  .view-mode-buttons {
+    flex-wrap: wrap;
+  }
+  
+  .info-main {
+    font-size: 28px;
+  }
+  
+  .final-value {
+    font-size: 32px !important;
   }
 }

@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import { motion } from 'framer-motion';
-import { format, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
-import { ko } from 'date-fns/locale';
-import { Coffee, Users, TrendingUp, Calendar as CalendarIcon, Utensils, AlertTriangle, Droplet, Zap, Wine, Package, Palette } from 'lucide-react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement } from 'chart.js';
-import { Pie, Line, Bar } from 'react-chartjs-2';
+import { format } from 'date-fns';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import 'react-calendar/dist/Calendar.css';
 import './BreakfastPrediction.css';
 
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement);
-
 function BreakfastPrediction() {
   const [selectedDate, setSelectedDate] = useState(new Date('2017-04-01'));
   const [prediction, setPrediction] = useState(null);
-  const [weeklyData, setWeeklyData] = useState(null);
   const [monthlyData, setMonthlyData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hotelType, setHotelType] = useState('Resort Hotel');
@@ -30,9 +23,6 @@ function BreakfastPrediction() {
 
   useEffect(() => {
     fetchMonthlyData(selectedDate);
-    if (viewMode === 'weekly') {
-      fetchWeeklyData();
-    }
   }, [selectedDate, viewMode]);
 
   const fetchAvailableDates = async () => {
@@ -60,15 +50,6 @@ function BreakfastPrediction() {
       setMonthlyData(response.data);
     } catch (error) {
       console.error('Error fetching monthly data:', error);
-    }
-  };
-
-  const fetchWeeklyData = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/trends/weekly');
-      setWeeklyData(response.data.weekly_trends);
-    } catch (error) {
-      console.error('Error fetching weekly data:', error);
     }
   };
 
@@ -126,105 +107,19 @@ function BreakfastPrediction() {
     return null;
   };
 
-  const calculateWeeklyBreakfast = () => {
-    if (!monthlyData) return [];
-    
-    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
-    const weekEnd = endOfWeek(selectedDate, { weekStartsOn: 1 });
-    const weekDays = eachDayOfInterval({ start: weekStart, end: weekEnd });
-    
-    return weekDays.map(day => {
-      const dayData = monthlyData.daily_statistics?.find(
-        d => d.day === day.getDate() && 
-        day.getMonth() === selectedDate.getMonth()
-      );
-      return {
-        date: format(day, 'MM/dd'),
-        breakfast: dayData?.breakfast_count || 0,
-        guests: dayData?.total_guests || 0,
-      };
-    });
-  };
-
-  const weeklyBreakfastData = calculateWeeklyBreakfast();
-
-  const breakfastDistribution = prediction && {
-    labels: ['조식 이용', '조식 미이용'],
-    datasets: [
-      {
-        data: [
-          prediction.breakfast_recommendation,
-          prediction.expected_checkins - prediction.breakfast_recommendation,
-        ],
-        backgroundColor: ['#f59e0b', '#e5e7eb'],
-        borderColor: ['#d97706', '#d1d5db'],
-        borderWidth: 2,
-      },
-    ],
-  };
-
-  const getBreakfastRecommendation = () => {
-    if (!prediction) return null;
-    
-    const ratio = prediction.breakfast_recommendation / prediction.expected_checkins;
-    
-    if (ratio > 0.8) {
-      return {
-        level: '높음',
-        color: '#ef4444',
-        message: '많은 조식 인원이 예상됩니다.',
-      };
-    } else if (ratio > 0.5) {
-      return {
-        level: '보통',
-        color: '#f59e0b',
-        message: '평균적인 조식 인원이 예상됩니다.',
-      };
-    } else {
-      return {
-        level: '낮음',
-        color: '#22c55e',
-        message: '조식 인원이 적을 것으로 예상됩니다.',
-      };
-    }
-  };
-
-  // 모노폴리 스타일 카드 데이터
-  const monopolyCards = [
-    { icon: <Droplet />, title: 'WATER\nWORKS', price: 'M150', color: '#87CEEB', id: 'water' },
-    { icon: <Zap />, title: 'ELECTRIC\nCOMPANY', price: 'M150', color: '#FFD700', id: 'electric' },
-    { icon: <Palette />, title: 'CUSTOM', price: 'M100', color: '#98FB98', id: 'custom1' },
-    { icon: <Package />, title: 'IRN BRU', price: 'M150', color: '#FFA500', id: 'irnbru' },
-    { icon: <Wine />, title: 'ALCOHOL', price: 'M150', color: '#DDA0DD', id: 'alcohol' },
-    { icon: <Coffee />, title: 'CUSTOM', price: 'M100', color: '#F0E68C', id: 'custom2' },
-  ];
-
   return (
-    <div className="breakfast-monopoly-container">
-      <div className="monopoly-board">
-        {/* 왼쪽 카드 섹션 */}
-        <div className="monopoly-left-section">
-          <div className="property-cards">
-            {monopolyCards.map((card, index) => (
-              <motion.div
-                key={card.id}
-                className="property-card"
-                style={{ backgroundColor: card.color }}
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05, rotate: 2 }}
-              >
-                <div className="card-icon">{card.icon}</div>
-                <div className="card-title">{card.title}</div>
-                <div className="card-price">{card.price}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+    <div className="breakfast-modern-container">
+      <div className="background-elements">
+        <div className="floating-element element-1">☕</div>
+        <div className="floating-element element-2">🥐</div>
+        <div className="floating-element element-3">🍳</div>
+        <div className="floating-element element-4">🥛</div>
+        <div className="floating-element element-5">🧈</div>
+        <div className="floating-element element-6">🍓</div>
+      </div>
 
-        {/* 오른쪽 메인 콘텐츠 */}
-        <div className="monopoly-right-section">
+      <div className="main-content-wrapper">
+        <div className="content-section">
           {/* 헤더 */}
           <motion.div 
             className="monopoly-header"
@@ -244,8 +139,8 @@ function BreakfastPrediction() {
             날짜 조회
           </motion.button>
 
-          {/* 메인 정보 카드 */}
-          <div className="main-info-grid">
+          {/* 메인 정보 그리드 */}
+          <div className="modern-info-grid">
             {/* 캘린더 카드 */}
             <motion.div 
               className="calendar-card"
@@ -405,50 +300,44 @@ function BreakfastPrediction() {
                 </div>
               </div>
             </motion.div>
+
           </div>
 
-          {/* 추가 정보 */}
-          <motion.div 
-            className="additional-info"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            <p>식재료 추가 준비가 필요합니다.</p>
-          </motion.div>
+          {/* 추가 정보 및 컨트롤 */}
+          <div className="controls-section">
+            {/* 뷰 모드 선택 버튼들 */}
+            <div className="view-mode-buttons">
+              <button 
+                className={`mode-button ${viewMode === 'daily' ? 'active' : ''}`}
+                onClick={() => setViewMode('daily')}
+              >
+                일별
+              </button>
+              <button 
+                className={`mode-button ${viewMode === 'weekly' ? 'active' : ''}`}
+                onClick={() => setViewMode('weekly')}
+              >
+                주간
+              </button>
+              <button 
+                className={`mode-button ${viewMode === 'monthly' ? 'active' : ''}`}
+                onClick={() => setViewMode('monthly')}
+              >
+                월간
+              </button>
+            </div>
 
-          {/* 뷰 모드 선택 버튼들 */}
-          <div className="view-mode-buttons">
-            <button 
-              className={`mode-button ${viewMode === 'daily' ? 'active' : ''}`}
-              onClick={() => setViewMode('daily')}
-            >
-              일별
-            </button>
-            <button 
-              className={`mode-button ${viewMode === 'weekly' ? 'active' : ''}`}
-              onClick={() => setViewMode('weekly')}
-            >
-              주간
-            </button>
-            <button 
-              className={`mode-button ${viewMode === 'monthly' ? 'active' : ''}`}
-              onClick={() => setViewMode('monthly')}
-            >
-              월간
-            </button>
-          </div>
-
-          {/* 호텔 타입 선택 */}
-          <div className="hotel-selector">
-            <select 
-              value={hotelType} 
-              onChange={(e) => setHotelType(e.target.value)}
-              className="hotel-select-monopoly"
-            >
-              <option value="Resort Hotel">리조트 호텔</option>
-              <option value="City Hotel">시티 호텔</option>
-            </select>
+            {/* 호텔 타입 선택 */}
+            <div className="hotel-selector">
+              <select 
+                value={hotelType} 
+                onChange={(e) => setHotelType(e.target.value)}
+                className="hotel-select-modern"
+              >
+                <option value="Resort Hotel">리조트 호텔</option>
+                <option value="City Hotel">시티 호텔</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
