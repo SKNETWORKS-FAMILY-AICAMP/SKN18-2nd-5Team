@@ -59,6 +59,48 @@ pip install -r requirements.txt
 rm -rf node_modules package-lock.json
 npm install --legacy-peer-deps --force
 ```
+## 🔧 npm 의존성 충돌 해결방안
+
+### 문제 상황
+React 19를 사용할 때 다음과 같은 peer dependency 충돌이 발생할 수 있습니다:
+- `lucide-react` vs React 19 타입 충돌
+- `react-calendar` vs @types/react 버전 충돌
+- `react-chartjs-2` vs React 19 호환성 문제
+
+### 해결방법
+
+#### 방법 1: .npmrc 설정 (권장)
+프로젝트에 이미 `.npmrc` 파일이 설정되어 있습니다:
+```bash
+# frontend/.npmrc
+legacy-peer-deps=true
+auto-install-peers=true
+```
+
+#### 방법 2: 수동 설치 시 옵션 사용
+만약 .npmrc가 없다면 다음 명령어를 사용하세요:
+```bash
+npm install --legacy-peer-deps
+```
+
+#### 방법 3: 완전 초기화 (문제가 지속될 경우)
+```bash
+cd frontend
+# 기존 설치 파일 삭제
+Remove-Item -Recurse -Force node_modules  # Windows PowerShell
+Remove-Item -Force package-lock.json
+
+# 재설치
+npm install
+```
+
+### 업데이트된 패키지 버전
+프로젝트에서 사용하는 React 19 호환 패키지들:
+- `react-calendar`: ^5.0.0 (React 19 지원)
+- `react-chartjs-2`: ^5.3.0 (최신 버전)
+- `react-router-dom`: ^7.1.1 (React 19 호환)
+- `lucide-react`: ^0.460.0 (최신 버전)
+
 
 ### 데이터 파일 경로 오류
 - `ML/data/hotel_bookings.csv` 파일이 프로젝트 루트에 있는지 확인

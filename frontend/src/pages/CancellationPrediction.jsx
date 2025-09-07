@@ -10,15 +10,35 @@ import 'react-calendar/dist/Calendar.css';
 import './CancellationPrediction.css';
 
 function CancellationPrediction() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date('2017-04-01'));
   const [prediction, setPrediction] = useState(null);
   const [monthlyData, setMonthlyData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hotelType, setHotelType] = useState('Resort Hotel');
+  const [availableDates, setAvailableDates] = useState([]);
+  const [dateRange, setDateRange] = useState({ min: null, max: null });
+
+  useEffect(() => {
+    fetchAvailableDates();
+  }, []);
 
   useEffect(() => {
     fetchMonthlyData(selectedDate);
   }, [selectedDate]);
+
+  const fetchAvailableDates = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/dates/available');
+      setAvailableDates(response.data.available_dates);
+      setDateRange({
+        min: new Date(response.data.min_date),
+        max: new Date(response.data.max_date)
+      });
+    } catch (error) {
+      console.error('Error fetching available dates:', error);
+      toast.error('사용 가능한 날짜를 불러오는데 실패했습니다.');
+    }
+  };
 
   const fetchMonthlyData = async (date) => {
     try {
@@ -35,12 +55,19 @@ function CancellationPrediction() {
   };
 
   const handleDateClick = async (date) => {
+    const formattedDate = format(date, 'yyyy-MM-dd');
+    
+    // 사용 가능한 날짜인지 확인
+    if (!availableDates.includes(formattedDate)) {
+      toast.error('해당 날짜의 데이터가 없습니다.');
+      return;
+    }
+
     setSelectedDate(date);
     setLoading(true);
     setPrediction(null);
 
     try {
-      const formattedDate = format(date, 'yyyy-MM-dd');
       const response = await axios.post('http://localhost:8000/api/predict/date', {
         date: formattedDate,
         hotel_type: hotelType,
@@ -54,6 +81,15 @@ function CancellationPrediction() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // 캘린더 타일 비활성화 함수
+  const tileDisabled = ({ date, view }) => {
+    if (view === 'month') {
+      const formattedDate = format(date, 'yyyy-MM-dd');
+      return !availableDates.includes(formattedDate);
+    }
+    return false;
   };
 
   const getTileContent = ({ date, view }) => {
@@ -124,6 +160,9 @@ function CancellationPrediction() {
               value={selectedDate}
               locale="ko-KR"
               tileContent={getTileContent}
+              tileDisabled={tileDisabled}
+              minDate={dateRange.min}
+              maxDate={dateRange.max}
               className="custom-calendar"
             />
           </div>

@@ -13,11 +13,11 @@ def load_hotel_data():
     
     # 여러 경로 시도
     possible_paths = [
-        current_dir / "../ML/data/hotel_bookings.csv",
-        current_dir / "../../ML/data/hotel_bookings.csv", 
-        Path("../ML/data/hotel_bookings.csv"),
-        Path("ML/data/hotel_bookings.csv"),
-        Path("./ML/data/hotel_bookings.csv")
+        current_dir / "../ML/data/results/hotel_booking_predictions.csv",
+        current_dir / "../../ML/data/results/hotel_booking_predictions.csv", 
+        Path("../ML/data/results/hotel_booking_predictions.csv"),
+        Path("ML/data/results/hotel_booking_predictions.csv"),
+        Path("./ML/data/results/hotel_booking_predictions.csv")
     ]
     
     data_path = None
@@ -76,8 +76,8 @@ def get_monthly_statistics(df: pd.DataFrame, year: int, month: int):
     
     stats = {
         'total_bookings': len(month_data),
-        'cancellations': int(month_data['is_canceled'].sum()),
-        'cancellation_rate': float(month_data['is_canceled'].mean()),
+        'cancellations': int(month_data['predicted_is_canceled'].sum()),
+        'cancellation_rate': float(month_data['predicted_is_canceled'].mean()),
         'avg_lead_time': float(month_data['lead_time'].mean()),
         'avg_stay_length': float(
             month_data['stays_in_weekend_nights'].mean() + 
@@ -110,7 +110,7 @@ def calculate_breakfast_estimate(df: pd.DataFrame, include_probability: bool = T
     
     if include_probability:
         # 취소되지 않을 예약만 고려 (과거 데이터 기준)
-        active_breakfast_df = breakfast_df[breakfast_df['is_canceled'] == 0]
+        active_breakfast_df = breakfast_df[breakfast_df['predicted_is_canceled'] == 0]
         active_guests = (
             active_breakfast_df['adults'].sum() + 
             active_breakfast_df['children'].sum()

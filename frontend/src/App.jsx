@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
+import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
 import CancellationPrediction from './pages/CancellationPrediction';
 import BreakfastPrediction from './pages/BreakfastPrediction';
 import './App.css';
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -18,23 +17,22 @@ function App() {
   return (
     <Router>
       <div className="app">
-        <Navbar onSidebarToggle={toggleSidebar} />
-        <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-        <main className="main-content">
+        <Layout sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/cancellation" element={<CancellationPrediction />} />
             <Route path="/breakfast" element={<BreakfastPrediction />} />
           </Routes>
-        </main>
+        </Layout>
         <Toaster 
           position="top-right"
           toastOptions={{
             duration: 4000,
             style: {
-              background: '#333',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               color: '#fff',
-              borderRadius: '10px',
+              borderRadius: '15px',
+              boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)',
             },
           }}
         />

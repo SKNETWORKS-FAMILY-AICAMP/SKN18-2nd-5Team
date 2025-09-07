@@ -1,273 +1,623 @@
-.breakfast-page {
-  padding: 20px 0;
-  margin-top: 20px;
+/* 모노폴리 스타일 컨테이너 */
+.breakfast-monopoly-container {
+  min-height: calc(100vh - 130px);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  position: relative;
+  overflow: hidden;
 }
 
-.view-mode-selector {
+.breakfast-monopoly-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: rotate 30s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.monopoly-board {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 30px 0;
-}
-
-.mode-btn {
-  padding: 12px 24px;
-  background: white;
-  border: 2px solid #e0e0e0;
-  border-radius: 25px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.mode-btn:hover {
-  border-color: #f59e0b;
-  background: #fef3c7;
-}
-
-.mode-btn.active {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: white;
-  border-color: transparent;
-}
-
-.breakfast-content-grid {
-  display: grid;
-  grid-template-columns: 450px 1fr;
   gap: 30px;
-  align-items: start;
+  max-width: 1400px;
+  margin: 0 auto;
+  height: calc(100vh - 40px);
+}
+
+/* 왼쪽 카드 섹션 */
+.monopoly-left-section {
+  flex: 0 0 300px;
+  display: flex;
+  align-items: center;
+}
+
+.property-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  width: 100%;
+}
+
+.property-card {
+  background: #f5f5dc;
+  border: 3px solid #2c3e50;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.property-card::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 25%;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px 4px 0 0;
+}
+
+.card-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+  z-index: 1;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 8px;
+  white-space: pre-line;
+  line-height: 1.2;
+  color: #2c3e50;
+  z-index: 1;
+}
+
+.card-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2c3e50;
+  z-index: 1;
+}
+
+/* 오른쪽 메인 섹션 */
+.monopoly-right-section {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.monopoly-header {
+  background: #ffb6c1;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid #d1477a;
+}
+
+.monopoly-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+.date-query-button {
+  background: #ffd700;
+  border: 3px solid #2c3e50;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.date-query-button:hover {
+  background: #ffed4e;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 메인 정보 그리드 */
+.main-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.calendar-card {
+  background: white;
+  border: 3px solid #2c3e50;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+  background: #ffb6c1;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 15px;
+  border: 2px solid #d1477a;
+}
+
+.mini-calendar {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.day-header {
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+  color: #666;
+  padding: 5px;
+  background: #e9e9e9;
+  border-radius: 3px;
+}
+
+/* 모노폴리 스타일 캘린더 */
+.monopoly-calendar {
+  background: transparent;
+  border: none;
+}
+
+.monopoly-calendar .react-calendar__tile {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 2px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.monopoly-calendar .react-calendar__tile--active {
+  background: #ffd700;
+  border: 2px solid #2c3e50;
+  font-weight: bold;
+}
+
+.monopoly-calendar .react-calendar__tile--now {
+  background: #ffb6c1;
+}
+
+.monopoly-calendar .react-calendar__tile:disabled {
+  background: #f5f5f5;
+  color: #ccc;
+  cursor: not-allowed;
+  border: 1px solid #e0e0e0;
+}
+
+.monopoly-calendar .react-calendar__tile:disabled:hover {
+  background: #f5f5f5;
+  transform: none;
+}
+
+.monopoly-calendar .react-calendar__navigation {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.monopoly-calendar .react-calendar__navigation button {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin: 0 2px;
+  font-size: 14px;
 }
 
 .calendar-tile-breakfast {
   position: absolute;
   bottom: 2px;
-  left: 2px;
+  right: 2px;
+  background: #ff6b6b;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
   display: flex;
   align-items: center;
-  gap: 2px;
-  background: #fbbf24;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 10px;
+  justify-content: center;
   font-size: 10px;
   font-weight: bold;
 }
 
-.breakfast-main-card {
-  margin-bottom: 20px;
+.tile-count {
+  font-size: 9px;
 }
 
-.breakfast-header {
+/* 예측 카드 */
+.prediction-card {
+  background: white;
+  border: 3px solid #2c3e50;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.prediction-header {
+  background: #d4a5a5;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  border: 2px solid #a67c7c;
+}
+
+.prediction-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.prediction-main {
+  text-align: center;
+}
+
+.prediction-value {
+  font-size: 48px;
+  font-weight: bold;
+  color: #2c3e50;
+  background: #f0f0f0;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+}
+
+.prediction-sublabel {
+  font-size: 14px;
+  color: #666;
+  margin-top: 8px;
+}
+
+.guest-breakdown {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.guest-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
 }
 
-.breakfast-header h2 {
-  font-size: 28px;
-  color: #333;
+.guest-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
 }
 
-.breakfast-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 25px;
-  font-weight: 600;
-}
-
-.breakfast-highlight {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  padding: 30px;
-  background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
-  border-radius: 15px;
-  margin-bottom: 30px;
-}
-
-.breakfast-highlight svg {
-  color: #f59e0b;
-}
-
-.highlight-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.highlight-label {
-  font-size: 16px;
-  color: #92400e;
-  margin-bottom: 10px;
-}
-
-.highlight-value {
-  font-size: 48px;
+.guest-count {
+  font-size: 14px;
   font-weight: bold;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #2c3e50;
 }
 
-.breakfast-details {
+.loading-spinner {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 정보 카드 컨테이너 */
+.info-cards-container {
+  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 30px;
+  gap: 20px;
 }
 
-.detail-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 15px;
-  background: #f9fafb;
-  border-radius: 10px;
+.info-card {
+  background: white;
+  border: 3px solid #2c3e50;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.info-label {
   font-size: 16px;
-  color: #333;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 8px;
 }
 
-.detail-item svg {
-  color: #f59e0b;
-}
-
-.chart-section {
-  margin-top: 30px;
+.info-main {
+  font-size: 32px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 8px;
   text-align: center;
 }
 
-.chart-section h3 {
-  margin-bottom: 20px;
-  color: #333;
+.info-detail {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  font-style: italic;
 }
 
-.recommendation-card {
-  padding: 25px;
-  margin-bottom: 20px;
+.percentage-value {
+  color: #e74c3c !important;
 }
 
-.recommendation-card h3 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  color: #333;
+.highlight-card {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  border-color: #f39c12;
 }
 
-.recommendation-content {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.highlight-card .info-main {
+  color: #d68910;
 }
 
-.rec-level {
-  font-size: 18px;
-  font-weight: bold;
+.final-card {
+  background: linear-gradient(135deg, #d1ecf1 0%, #74b9ff 100%);
+  border-color: #0984e3;
+  border-width: 4px;
 }
 
-.prep-list {
-  list-style: none;
-  padding: 0;
+.final-card .info-label {
+  color: #0984e3;
+  border-bottom-color: #74b9ff;
+}
+
+.final-value {
+  color: #0984e3 !important;
+  font-size: 36px !important;
+}
+
+/* 추가 통계 카드 */
+.stats-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-color: #6c757d;
+}
+
+.stats-grid-mini {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 15px;
   margin-top: 15px;
 }
 
-.prep-list li {
+.stat-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 10px;
-  background: #f9fafb;
+  background: white;
   border-radius: 8px;
-  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.weekly-view,
-.monthly-view {
-  padding: 30px;
-}
-
-.weekly-view h2,
-.monthly-view h2 {
-  margin-bottom: 30px;
-  text-align: center;
-  color: #333;
-  font-size: 28px;
-}
-
-.monthly-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-top: 30px;
-}
-
-.stat-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
-  border-radius: 15px;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: #92400e;
-  margin-bottom: 10px;
-}
-
-.stat-value {
-  font-size: 32px;
-  font-weight: bold;
-  color: #d97706;
-}
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px;
-  text-align: center;
-}
-
-.empty-state h3 {
-  margin: 20px 0 10px;
-  color: #333;
-}
-
-.empty-state p {
+.stat-mini-label {
+  font-size: 12px;
   color: #666;
+  margin-bottom: 5px;
 }
 
-@media (max-width: 1024px) {
-  .breakfast-content-grid {
+.stat-mini-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.split-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.split-section {
+  width: 100%;
+}
+
+.split-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.split-value.main-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.split-breakdown {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.split-breakdown span {
+  font-size: 12px;
+  color: #666;
+  background: #f8f9fa;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.split-item {
+  flex: 1;
+}
+
+.split-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* 추가 정보 */
+.additional-info {
+  text-align: center;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.additional-info p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* 뷰 모드 버튼 */
+.view-mode-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.mode-button {
+  padding: 8px 20px;
+  border: 2px solid #2c3e50;
+  background: white;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mode-button:hover {
+  background: #f0f0f0;
+}
+
+.mode-button.active {
+  background: #ffd700;
+  border-color: #2c3e50;
+}
+
+/* 호텔 선택 */
+.hotel-selector {
+  display: flex;
+  justify-content: center;
+}
+
+.hotel-select-monopoly {
+  padding: 10px 20px;
+  border: 2px solid #2c3e50;
+  border-radius: 6px;
+  background: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1200px) {
+  .monopoly-board {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .monopoly-left-section {
+    flex: none;
+    width: 100%;
+  }
+
+  .property-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .main-info-grid {
     grid-template-columns: 1fr;
   }
 
-  .monthly-stats {
-    grid-template-columns: 1fr;
-  }
-
-  .prep-list {
+  .stats-grid {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .breakfast-page {
-    margin-top: 10px;
+  .property-cards {
+    grid-template-columns: repeat(2, 1fr);
   }
-}
 
-@media (max-width: 480px) {
-  .breakfast-page {
-    margin-top: 5px;
+  .monopoly-header h1 {
+    font-size: 18px;
+  }
+
+  .prediction-value {
+    font-size: 36px;
+  }
+
+  .stat-value {
+    font-size: 20px;
   }
 }
