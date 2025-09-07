@@ -1,147 +1,263 @@
+/* 기본 페이지 설정 */
 .cancellation-page {
-  padding: 20px 0;
-  margin-top: 100px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #B24545 0%, #7B3F3F 100%);
+  box-sizing: border-box;
+  padding: 20px;
+  margin: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 2;
 }
 
+/* 페이지 헤더 */
 .page-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .page-header h1 {
-  font-size: 36px;
+  font-size: 2.5rem;
   margin-bottom: 10px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #A05252 0%, #8B0000 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.content-grid {
-  display: grid;
-  grid-template-columns: 450px 1fr;
-  gap: 30px;
-  align-items: start;
+.page-header p {
+  color: white;
+  font-size: 1.2rem;
+  margin: 0;
 }
 
-.calendar-section {
-  position: sticky;
-  top: 120px;
+/* 메인 컨텐츠 */
+.main-content {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.section-header {
+/* 테이블 섹션 */
+.table-section {
+  width: 100%;
+}
+
+.table-container {
+  width: 100%;
+}
+
+/* 테이블 헤더 */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.table-header h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.search-input-wrapper {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
-}
-
-.section-header h2 {
-  font-size: 24px;
-  color: #333;
-}
-
-.hotel-type-selector {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.hotel-select {
-  padding: 10px 15px;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 16px;
   background: white;
-  cursor: pointer;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 10px 15px;
   transition: border-color 0.3s;
+  min-width: 280px;
 }
 
-.hotel-select:focus {
-  outline: none;
-  border-color: #667eea;
+.search-input-wrapper:focus-within {
+  border-color: #A05252;
 }
 
-.calendar-wrapper {
-  margin-bottom: 20px;
-}
-
-.custom-calendar {
-  width: 100%;
+.date-input {
   border: none;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  outline: none;
+  font-size: 1rem;
+  padding: 5px;
+  flex: 1;
+  min-width: 150px;
 }
 
-.custom-calendar .react-calendar__tile:disabled {
-  background: #f5f5f5;
-  color: #ccc;
-  cursor: not-allowed;
-  border: 1px solid #e0e0e0;
-}
-
-.custom-calendar .react-calendar__tile:disabled:hover {
-  background: #f5f5f5;
-  transform: none;
-}
-
-.calendar-tile-content {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  display: flex;
-  gap: 5px;
-  font-size: 10px;
-}
-
-.booking-count {
-  background: #667eea;
+.search-button {
+  background: linear-gradient(135deg, #A05252 0%, #8B0000 100%);
   color: white;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-weight: bold;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+  white-space: nowrap;
 }
 
-.cancel-rate {
-  background: #ef4444;
+.search-button:hover {
+  transform: translateY(-2px);
+}
+
+.total-count {
+  background: linear-gradient(135deg, #A05252 0%, #8B0000 100%);
   color: white;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  white-space: nowrap;
 }
 
-.calendar-legend {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 15px;
+/* 테이블 래퍼 */
+.table-wrapper {
+  max-height: 500px;
+  overflow: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  width: 100%;
 }
 
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* 테이블 스타일 */
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  min-width: 800px;
 }
 
-.legend-color {
-  width: 20px;
-  height: 20px;
-  border-radius: 5px;
+.booking-table thead {
+  position: sticky;
+  top: 0;
+  background: #D2B4B4;
+  color: #333;
+  z-index: 10;
 }
 
-.legend-color.booking {
-  background: #667eea;
+.booking-table th {
+  padding: 15px 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  white-space: nowrap;
+  border-right: 1px solid #8B4513;
 }
 
-.legend-color.cancel {
-  background: #ef4444;
+.booking-table th:last-child {
+  border-right: none;
 }
 
-.results-section {
-  min-height: 400px;
+.booking-table tbody tr {
+  border-bottom: 1px solid #8B4513;
+  transition: background-color 0.2s;
 }
 
+.booking-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.booking-table td {
+  padding: 12px 8px;
+  font-size: 0.9rem;
+  color: #333;
+  text-align: center;
+  border-right: 1px solid #b3935e;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.booking-table td:last-child {
+  border-right: none;
+  max-width: 200px;
+}
+
+/* 플레이스홀더 행 */
+.placeholder-row td {
+  color: #999 !important;
+  font-style: italic;
+}
+
+.placeholder-row:hover {
+  background-color: transparent !important;
+}
+
+/* 조식 배지 */
+.meal-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.meal-badge.included {
+  background: #22c55e20;
+  color: #22c55e;
+}
+
+.meal-badge.not-included {
+  background: #ef444420;
+  color: #ef4444;
+}
+
+/* 선택된 행 */
+.booking-row {
+  cursor: pointer;
+}
+
+.booking-row.selected {
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%) !important;
+  border-left: 4px solid #667eea;
+}
+
+.booking-row:hover:not(.selected) {
+  background-color: #f0f0f0;
+}
+
+/* 스크롤바 */
+.table-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 로딩 상태 */
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -150,212 +266,240 @@
   padding: 60px;
 }
 
-.prediction-card {
-  margin-bottom: 20px;
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #A05252;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-.prediction-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-.prediction-header h2 {
-  font-size: 28px;
-  color: #333;
-}
-
-.hotel-type-badge {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 600;
-}
-
-.prediction-metrics {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.metric-card {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 20px;
-  background: #f9fafb;
-  border-radius: 12px;
-  transition: transform 0.3s;
-}
-
-.metric-card:hover {
-  transform: translateY(-2px);
-}
-
-.metric-icon {
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-
-.metric-icon.cancel {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-}
-
-.metric-icon.success {
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-}
-
-.metric-icon.breakfast {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-}
-
-.metric-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.metric-label {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 5px;
-}
-
-.metric-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #333;
-}
-
-.confidence-section {
-  margin-top: 30px;
-}
-
-.confidence-section h3 {
-  margin-bottom: 15px;
-  color: #333;
-}
-
-.confidence-text {
-  display: block;
+/* 스크롤 인디케이터 */
+.scroll-indicator {
   text-align: center;
-  margin-top: 10px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #22c55e;
-}
-
-.risk-card {
-  margin-bottom: 20px;
-}
-
-.risk-card h3 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  color: #333;
-  font-size: 20px;
-}
-
-.risk-details {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.risk-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px;
-  background: #f9fafb;
-  border-radius: 8px;
-}
-
-.risk-value {
-  font-weight: bold;
-  color: #333;
-}
-
-.risk-level {
-  font-weight: bold;
-}
-
-.recommendations-card h3 {
-  margin-bottom: 20px;
-  color: #333;
-  font-size: 20px;
-}
-
-.recommendations-list {
-  list-style: none;
-  padding: 0;
-}
-
-.recommendations-list li {
   padding: 15px;
-  margin-bottom: 10px;
-  background: linear-gradient(to right, #f9fafb, transparent);
-  border-left: 4px solid #667eea;
-  border-radius: 8px;
+  color: #666;
+  font-size: 0.9rem;
+  border-top: 1px solid #e0e0e0;
+  background: #f9fafb;
 }
 
-.empty-state {
+/* 통계 섹션 */
+.statistics-section {
+  width: 100%;
+}
+
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  margin-top: 10px;
+  background: #f8f6f5;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #d7b8b8;
+}
+
+.stat-card {
+  background: #f5eaea;
+  border-radius: 15px;
+  padding: 15px;
+  border: 1px solid #d7b8b8;
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px;
-  text-align: center;
-}
-
-.empty-state h3 {
-  margin: 20px 0 10px;
   color: #333;
 }
 
-.empty-state p {
-  color: #666;
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+.stat-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.stat-item {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 10px 15px;
+  background: #f3dcdc;
+  border-radius: 8px;
+  border: 1px solid #8B4513;
+  gap: 15px;
+}
+
+.stat-divider {
+  width: 4px;
+  height: 35px;
+  background: #5a4a2f;
+  border-radius: 2px;
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: #000;
+  font-weight: 500;
+  text-align: left;
+}
+
+.stat-value {
+  font-size: 1rem;
+  color: #000;
+  font-weight: 600;
+  text-align: center;
+  justify-self: center;
+}
+
+/* 위험도 색상 */
+.risk-level.high {
+  color: #ef4444 !important;
+  background: #fef2f2;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.risk-level.medium {
+  color: #f59e0b !important;
+  background: #fffbeb;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.risk-level.low {
+  color: #22c55e !important;
+  background: #f0fdf4;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+/* Glass 카드 효과 */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 반응형 디자인 */
 @media (max-width: 1024px) {
-  .content-grid {
-    grid-template-columns: 1fr;
+  .cancellation-page {
+    padding: 15px;
   }
-
-  .calendar-section {
-    position: static;
+  
+  .page-header h1 {
+    font-size: 2rem;
   }
-
-  .prediction-metrics {
+  
+  .page-header p {
+    font-size: 1rem;
+  }
+  
+  .statistics-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .table-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-input-wrapper {
+    min-width: auto;
+    width: 100%;
   }
 }
 
 @media (max-width: 768px) {
   .cancellation-page {
-    margin-top: 10px;
+    padding: 10px;
   }
   
-  .calendar-section {
-    top: 100px;
+  .page-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .glass-card {
+    padding: 20px;
+  }
+  
+  .booking-table th,
+  .booking-table td {
+    padding: 8px 4px;
+    font-size: 0.8rem;
+  }
+  
+  .table-wrapper {
+    max-height: 400px;
+  }
+  
+  .stat-item {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 8px;
+  }
+  
+  .stat-divider {
+    display: none;
+  }
+  
+  .stat-label,
+  .stat-value {
+    text-align: center;
+    justify-self: center;
   }
 }
 
 @media (max-width: 480px) {
   .cancellation-page {
-    margin-top: 5px;
+    padding: 5px;
   }
   
-  .calendar-section {
-    top: 90px;
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .page-header p {
+    font-size: 0.9rem;
+  }
+  
+  .glass-card {
+    padding: 15px;
+  }
+  
+  .booking-table {
+    min-width: 600px;
+  }
+  
+  .booking-table th,
+  .booking-table td {
+    padding: 6px 3px;
+    font-size: 0.7rem;
+  }
+  
+  .search-button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .total-count {
+    padding: 6px 12px;
+    font-size: 0.9rem;
   }
 }
