@@ -19,7 +19,7 @@ pip install --only-binary=all fastapi uvicorn[standard] pandas numpy scikit-lear
 
 ### 3단계: 프론트엔드 설치
 ```bash
-cd ../frontend
+cd frontend
 npm install --legacy-peer-deps
 ```
 

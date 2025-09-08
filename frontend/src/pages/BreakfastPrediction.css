@@ -1,17 +1,26 @@
 /* =========================
-   🏨 조식 예측 페이지 전용 스타일
+   🍷 조식 예측 페이지 - 고급 붉은 와인 테마
 ========================= */
 
 /* =========================
-   🎨 본문 컨테이너 - 구체적 선택자 사용
+   🎨 페이지 기본 설정
 ========================= */
+.breakfast-page-body {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: linear-gradient(135deg, #8B0000 0%, #A0522D 25%, #CD853F 50%, #A0522D 75%, #8B0000 100%) !important;
+  min-height: 100vh !important;
+  font-family: 'Times New Roman', serif !important;
+  overflow-x: hidden !important;
+}
+
 .breakfast-modern-container {
-  padding-top: 600px !important;
   min-height: 100vh;
   background: 
-    radial-gradient(ellipse at top, rgba(218, 165, 32, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
-    linear-gradient(135deg, #2c2416 0%, #3d3226 25%, #4a3f2f 50%, #3d3226 75%, #2c2416 100%);
+    radial-gradient(ellipse at top left, rgba(139, 0, 0, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(160, 82, 45, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at center, rgba(205, 133, 63, 0.1) 0%, transparent 70%),
+    linear-gradient(135deg, #2F1B14 0%, #4A1810 25%, #5D2317 50%, #4A1810 75%, #2F1B14 100%);
   position: relative;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -19,236 +28,400 @@
   padding: 0;
 }
 
-/* body 재설정 - 조식 페이지에서만 적용 */
-.breakfast-page-body {
-  margin: 0 !important;
-  padding: 0 !important;
-  display: block !important;
-  place-items: unset !important;
-  background: #2c2416 !important;
-  min-height: 100vh !important;
+/* 장식적 오버레이 */
+.breakfast-modern-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(139, 0, 0, 0.05) 2px,
+      rgba(139, 0, 0, 0.05) 4px
+    );
+  pointer-events: none;
+  z-index: 1;
 }
 
-/* 메인 콘텐츠 래퍼 - 구체적 선택자 */
-.breakfast-modern-container .main-content-wrapper {
+/* =========================
+   📐 메인 레이아웃
+========================= */
+.main-content-wrapper {
   position: relative;
   z-index: 2;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
   width: 100%;
-  padding: 120px 30px 40px;
-  min-height: calc(100vh - 80px);
-  display: flex;
-  flex-direction: column;
+  margin: 0;
+  padding: 130px 60px 60px;
+  min-height: calc(100vh - 90px);
+  display: grid;
+  grid-template-areas: 
+    "calendar results results results"
+    "info-cards info-cards info-cards info-cards";
+  grid-template-columns: 450px 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
   gap: 40px;
   box-sizing: border-box;
 }
 
 /* =========================
-   ✨ 주요 컴포넌트 - 구체적 선택자
+   🗓️ 캘린더 섹션 (왼쪽)
 ========================= */
+.calendar-section {
+  grid-area: calendar;
+  position: sticky;
+  top: 140px;
+  height: fit-content;
+}
 
-/* 럭셔리 버튼 */
-.breakfast-modern-container .date-query-button {
-  background: linear-gradient(135deg, #b8860b 0%, #daa520 50%, #b8860b 100%);
-  border: none;
-  padding: 20px 50px;
-  font-size: 24px;
+.calendar-card {
+  background: 
+    linear-gradient(135deg, rgba(139, 0, 0, 0.15) 0%, rgba(160, 82, 45, 0.15) 100%),
+    rgba(47, 27, 20, 0.95);
+  backdrop-filter: blur(20px);
+  border: 3px solid rgba(139, 0, 0, 0.4);
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    inset 0 1px 3px rgba(139, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calendar-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(139, 0, 0, 0.3);
+  border-color: rgba(139, 0, 0, 0.6);
+}
+
+.calendar-header {
+  font-size: 28px;
   font-weight: bold;
-  color: #1a1a1a;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  box-shadow: 0 12px 30px rgba(218, 165, 32, 0.3);
-  align-self: center;
-  font-family: 'Times New Roman', serif;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  border-radius: 10px;
+  color: #D2691E;
+  text-align: center;
+  margin-bottom: 25px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.2) 0%, rgba(160, 82, 45, 0.2) 100%);
+  border: 2px solid rgba(139, 0, 0, 0.3);
+  border-radius: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 2px;
 }
 
-.breakfast-modern-container .date-query-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(218, 165, 32, 0.4);
-  background: linear-gradient(135deg, #cdaa3d 0%, #ffd700 50%, #cdaa3d 100%);
-}
-
-/* 카드 공통 */
-.breakfast-modern-container .calendar-card, 
-.breakfast-modern-container .prediction-card, 
-.breakfast-modern-container .info-card {
-  background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(45, 45, 45, 0.95) 100%);
-  backdrop-filter: blur(10px);
-  padding: 25px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-  border: 3px solid rgba(218, 165, 32, 0.4);
-  border-radius: 12px;
-  transition: all 0.3s ease;
+/* 호텔 타입 선택기 */
+.hotel-type-selector {
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
+  gap: 15px;
 }
 
-.breakfast-modern-container .calendar-card:hover, 
-.breakfast-modern-container .prediction-card:hover, 
-.breakfast-modern-container .info-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-  border-color: #daa520;
-}
-
-/* 헤더 */
-.breakfast-modern-container .calendar-header, 
-.breakfast-modern-container .prediction-header, 
-.breakfast-modern-container .info-label {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  padding: 12px;
-  background: linear-gradient(135deg, #b8860b 0%, #daa520 100%);
-  color: #1a1a1a;
-  font-family: 'Times New Roman', serif;
-  letter-spacing: 2px;
-  border-radius: 6px;
-  text-align: center;
-}
-
-/* 예측 값 */
-.breakfast-modern-container .prediction-value {
-  font-size: 40px;
-  font-weight: bold;
-  background: linear-gradient(135deg, #daa520 0%, #ffd700 50%, #daa520 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-align: center;
-  margin: 20px 0;
-}
-
-/* 게스트 */
-.breakfast-modern-container .guest-breakdown {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.breakfast-modern-container .guest-label { 
-  font-size: 16px; 
-  color: #b8860b;
+.hotel-type-selector label {
+  font-size: 16px;
+  color: #CD853F;
   font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-.breakfast-modern-container .guest-count { 
-  font-size: 22px; 
-  color: #ffd700;
-  font-weight: bold;
-}
-
-.breakfast-modern-container .guest-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(218, 165, 32, 0.1);
-  padding: 15px 20px;
-  border: 2px solid rgba(218, 165, 32, 0.3);
-  border-radius: 8px;
+.hotel-select {
+  padding: 12px 20px;
+  background: rgba(47, 27, 20, 0.8);
+  border: 2px solid rgba(139, 0, 0, 0.4);
+  border-radius: 10px;
+  color: #D2691E;
+  font-size: 16px;
+  font-family: 'Times New Roman', serif;
   transition: all 0.3s ease;
 }
 
-.breakfast-modern-container .guest-item:hover {
-  background: rgba(218, 165, 32, 0.2);
-  transform: translateX(5px);
-}
-
-/* 정보 카드 */
-.breakfast-modern-container .info-main { 
-  font-size: 20px; 
-  font-weight: bold; 
-  text-align: center;
-  background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.breakfast-modern-container .info-detail { 
-  font-size: 14px; 
-  color: #ccc; 
-  text-align: center; 
-  font-style: italic; 
+.hotel-select:focus {
+  outline: none;
+  border-color: #8B0000;
+  box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
 }
 
 /* 캘린더 스타일 */
-.breakfast-modern-container .monopoly-calendar {
+.monopoly-calendar {
   background: transparent;
   border: none;
   width: 100%;
+  font-family: 'Times New Roman', serif;
 }
 
-.breakfast-modern-container .monopoly-calendar .react-calendar__tile {
-  background: rgba(45, 45, 45, 0.7);
-  border: 2px solid rgba(218, 165, 32, 0.2);
-  color: #daa520;
-  margin: 2px;
-  height: 40px;
+.monopoly-calendar .react-calendar__navigation {
+  margin-bottom: 20px;
+}
+
+.monopoly-calendar .react-calendar__navigation button {
+  background: linear-gradient(135deg, #8B0000 0%, #A0522D 100%);
+  border: 2px solid rgba(139, 0, 0, 0.6);
+  color: #F5DEB3;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.monopoly-calendar .react-calendar__navigation button:hover {
+  background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(139, 0, 0, 0.3);
+}
+
+.monopoly-calendar .react-calendar__tile {
+  background: rgba(47, 27, 20, 0.6);
+  border: 2px solid rgba(139, 0, 0, 0.3);
+  color: #CD853F;
+  margin: 3px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
   transition: all 0.3s ease;
-  font-family: 'Times New Roman', serif;
-  border-radius: 4px;
+  border-radius: 8px;
+  position: relative;
 }
 
-.breakfast-modern-container .monopoly-calendar .react-calendar__tile:hover {
-  background: linear-gradient(135deg, #b8860b 0%, #daa520 100%);
-  color: #1a1a1a;
+.monopoly-calendar .react-calendar__tile:hover {
+  background: linear-gradient(135deg, #8B0000 0%, #A0522D 100%);
+  color: #F5DEB3;
   transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+  box-shadow: 0 8px 20px rgba(139, 0, 0, 0.4);
+  z-index: 2;
 }
 
-.breakfast-modern-container .monopoly-calendar .react-calendar__tile--active {
-  background: linear-gradient(135deg, #daa520 0%, #ffd700 100%);
-  color: #1a1a1a;
-  border: 3px solid #ffd700;
+.monopoly-calendar .react-calendar__tile--active {
+  background: linear-gradient(135deg, #CD853F 0%, #D2691E 100%);
+  color: #2F1B14;
+  border: 3px solid #8B0000;
   font-weight: bold;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  box-shadow: 0 0 25px rgba(205, 133, 63, 0.5);
 }
 
-.breakfast-modern-container .monopoly-calendar .react-calendar__tile--now {
-  background: rgba(218, 165, 32, 0.2);
-  color: #ffd700;
+.monopoly-calendar .react-calendar__tile--now {
+  background: rgba(139, 0, 0, 0.3);
+  color: #F5DEB3;
   font-weight: bold;
-  border: 3px solid rgba(218, 165, 32, 0.5);
+  border: 3px solid rgba(139, 0, 0, 0.6);
 }
 
-/* 그리드 레이아웃 */
-.breakfast-modern-container .modern-info-grid {
+/* 날짜 조회 버튼 */
+.date-query-button {
+  width: 100%;
+  background: linear-gradient(135deg, #8B0000 0%, #A0522D 50%, #8B0000 100%);
+  border: 3px solid rgba(139, 0, 0, 0.6);
+  padding: 18px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #F5DEB3;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  border-radius: 12px;
+  font-family: 'Times New Roman', serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 25px;
+  box-shadow: 0 8px 25px rgba(139, 0, 0, 0.3);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.date-query-button:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
+  box-shadow: 0 12px 35px rgba(139, 0, 0, 0.4);
+  color: #2F1B14;
+}
+
+/* =========================
+   📊 결과 섹션 (오른쪽)
+========================= */
+.results-section {
+  grid-area: results;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
   gap: 30px;
-  margin-bottom: 30px;
+  align-items: start;
 }
 
-.breakfast-modern-container .info-cards-container {
+/* 예측 카드가 3개 컬럼에 걸쳐 표시되도록 */
+.prediction-card {
+  grid-column: 1 / -1;
+}
+
+/* 예측 결과 카드 */
+.prediction-card {
+  background: 
+    linear-gradient(135deg, rgba(139, 0, 0, 0.12) 0%, rgba(160, 82, 45, 0.12) 100%),
+    rgba(47, 27, 20, 0.95);
+  backdrop-filter: blur(20px);
+  border: 3px solid rgba(139, 0, 0, 0.4);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    inset 0 1px 3px rgba(139, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.prediction-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 25px 70px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(139, 0, 0, 0.2);
+  border-color: rgba(139, 0, 0, 0.6);
+}
+
+.prediction-header {
+  font-size: 32px;
+  font-weight: bold;
+  color: #D2691E;
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 25px;
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.2) 0%, rgba(160, 82, 45, 0.2) 100%);
+  border: 2px solid rgba(139, 0, 0, 0.3);
+  border-radius: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 3px;
+}
+
+.prediction-value {
+  font-size: 64px;
+  font-weight: bold;
+  text-align: center;
+  margin: 30px 0;
+  background: linear-gradient(135deg, #CD853F 0%, #D2691E 50%, #CD853F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(205, 133, 63, 0.5);
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* 게스트 분석 */
+.guest-breakdown {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 25px;
+  margin-top: 30px;
 }
 
-/* 로딩 스피너 */
-.breakfast-modern-container .loading-spinner {
-  padding: 50px;
+.guest-item {
+  background: rgba(139, 0, 0, 0.15);
+  border: 2px solid rgba(139, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.guest-item:hover {
+  background: rgba(139, 0, 0, 0.25);
+  border-color: rgba(139, 0, 0, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+}
+
+.guest-label {
+  font-size: 14px;
+  color: #CD853F;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.guest-count {
+  font-size: 28px;
+  color: #D2691E;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* 정보 카드들 */
+.info-cards-container {
+  grid-area: info-cards;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 35px;
+}
+
+.info-card {
+  background: 
+    linear-gradient(135deg, rgba(139, 0, 0, 0.1) 0%, rgba(160, 82, 45, 0.1) 100%),
+    rgba(47, 27, 20, 0.9);
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(139, 0, 0, 0.3);
+  border-radius: 15px;
+  padding: 25px;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(139, 0, 0, 0.5);
+  box-shadow: 0 15px 40px rgba(139, 0, 0, 0.2);
+}
+
+.info-label {
+  font-size: 18px;
+  color: #CD853F;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-main {
+  font-size: 24px;
+  color: #D2691E;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.info-detail {
+  font-size: 14px;
+  color: #A0522D;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* 로딩 상태 */
+.loading-spinner {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding: 60px;
+  text-align: center;
 }
 
-.breakfast-modern-container .spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(218, 165, 32, 0.2);
-  border-top: 4px solid #daa520;
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(139, 0, 0, 0.2);
+  border-top: 4px solid #8B0000;
   border-radius: 50%;
-  animation: luxurySpin 1s linear infinite;
+  animation: luxurySpin 1.2s linear infinite;
+  margin-bottom: 20px;
+}
+
+.loading-text {
+  font-size: 18px;
+  color: #CD853F;
+  font-weight: 600;
 }
 
 @keyframes luxurySpin {
@@ -256,43 +429,166 @@
   100% { transform: rotate(360deg); }
 }
 
-/* 반응형 디자인 */
+/* 빈 상태 */
+.empty-state {
+  text-align: center;
+  padding: 80px 40px;
+  background: 
+    linear-gradient(135deg, rgba(139, 0, 0, 0.1) 0%, rgba(160, 82, 45, 0.1) 100%),
+    rgba(47, 27, 20, 0.9);
+  border: 2px solid rgba(139, 0, 0, 0.3);
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+}
+
+.empty-state h3 {
+  font-size: 24px;
+  color: #CD853F;
+  margin-bottom: 15px;
+}
+
+.empty-state p {
+  font-size: 16px;
+  color: #A0522D;
+  line-height: 1.6;
+}
+
+/* =========================
+   📱 반응형 디자인
+========================= */
+@media (max-width: 1600px) {
+  .main-content-wrapper {
+    padding: 130px 50px 50px;
+    gap: 35px;
+  }
+  
+  .info-cards-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1400px) {
+  .main-content-wrapper {
+    grid-template-columns: 420px 1fr 1fr 1fr;
+    gap: 30px;
+    padding: 120px 40px 40px;
+  }
+  
+  .info-cards-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-content-wrapper {
+    grid-template-areas: 
+      "calendar calendar calendar"
+      "results results results"
+      "info-cards info-cards info-cards";
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+    padding: 120px 30px 40px;
+  }
+  
+  .calendar-section {
+    position: relative;
+    top: auto;
+  }
+  
+  .results-section {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .info-cards-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 1024px) {
-  .breakfast-modern-container .main-content-wrapper { 
-    padding: 100px 20px 30px; 
-    gap: 20px; 
-  }
-  
-  .breakfast-modern-container .date-query-button { 
-    font-size: 20px; 
-    padding: 15px 30px; 
-  }
-  
-  .breakfast-modern-container .prediction-value { 
-    font-size: 30px; 
-  }
-  
-  .breakfast-modern-container .modern-info-grid {
+  .main-content-wrapper {
+    grid-template-areas: 
+      "calendar"
+      "results"
+      "info-cards";
     grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 120px 25px 40px;
   }
   
-  .breakfast-modern-container .info-cards-container {
-    grid-template-columns: 1fr;
+  .prediction-value {
+    font-size: 48px;
+  }
+  
+  .guest-breakdown {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .info-cards-container {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .breakfast-modern-container .guest-breakdown { 
-    grid-template-columns: 1fr; 
+  .main-content-wrapper {
+    padding: 110px 25px 30px;
+    gap: 25px;
   }
   
-  .breakfast-modern-container .date-query-button { 
-    font-size: 18px; 
-    padding: 12px 20px; 
+  .calendar-card,
+  .prediction-card {
+    padding: 25px;
   }
   
-  .breakfast-modern-container .calendar-header, 
-  .breakfast-modern-container .prediction-header { 
-    font-size: 18px; 
+  .calendar-header,
+  .prediction-header {
+    font-size: 24px;
+    padding: 20px;
+  }
+  
+  .prediction-value {
+    font-size: 40px;
+  }
+  
+  .guest-breakdown {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .info-cards-container {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .monopoly-calendar .react-calendar__tile {
+    height: 45px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content-wrapper {
+    padding: 100px 20px 25px;
+    gap: 20px;
+  }
+  
+  .calendar-card,
+  .prediction-card {
+    padding: 20px;
+  }
+  
+  .prediction-value {
+    font-size: 32px;
+  }
+  
+  .guest-breakdown {
+    grid-template-columns: 1fr;
+  }
+  
+  .info-cards-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .monopoly-calendar .react-calendar__tile {
+    height: 40px;
+    font-size: 12px;
+    margin: 2px;
   }
 }

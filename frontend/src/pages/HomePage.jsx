@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
 import './HomePage.css';
 
 function HomePage() {
@@ -16,6 +17,11 @@ function HomePage() {
 
   return (
     <div className="hotel-management-homepage">
+      <Header 
+        title="GRAND HOTEL MONOPOLY"
+        subtitle="AI 기반 스마트 호텔 관리 시스템"
+      />
+      
       {/* Main Container */}
       <div className="main-container">
         {/* Central Board - Full Screen */}

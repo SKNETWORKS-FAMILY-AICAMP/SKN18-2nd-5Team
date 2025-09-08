@@ -4,12 +4,13 @@
   height: 100vh;
   background: #f5f5f0; /* Ivory background */
   margin: 0;
-  padding: 0;
+  padding: 90px 0 0 0; /* 헤더 높이만큼 상단 패딩 추가 */
   overflow: visible; /* Allow animations to be visible */
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .main-container {

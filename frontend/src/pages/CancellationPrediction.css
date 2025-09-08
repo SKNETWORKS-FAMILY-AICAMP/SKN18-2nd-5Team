@@ -1,5 +1,5 @@
 .cancellation-page {
-  padding: 20px;
+  padding: 110px 20px 20px 20px; /* 헤더 높이(90px) + 여백(20px) */
   margin: 0;
   min-height: 100vh;
   box-sizing: border-box;
