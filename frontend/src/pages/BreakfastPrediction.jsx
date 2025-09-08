@@ -11,27 +11,19 @@ import './BreakfastPrediction.css';
 function BreakfastPrediction() {
   const [selectedDate, setSelectedDate] = useState(new Date('2017-04-01'));
   const [prediction, setPrediction] = useState(null);
-  const [monthlyData, setMonthlyData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hotelType, setHotelType] = useState('Resort Hotel');
-  const [viewMode, setViewMode] = useState('daily');
   const [availableDates, setAvailableDates] = useState([]);
   const [dateRange, setDateRange] = useState({ min: null, max: null });
 
   useEffect(() => {
-    // body 클래스 추가
     document.body.className = 'breakfast-page-body';
     fetchAvailableDates();
     
-    // 컴포넌트 언마운트 시 클래스 제거
     return () => {
       document.body.className = '';
     };
   }, []);
-
-  useEffect(() => {
-    fetchMonthlyData(selectedDate);
-  }, [selectedDate, viewMode]);
 
   const fetchAvailableDates = async () => {
     try {
@@ -47,24 +39,9 @@ function BreakfastPrediction() {
     }
   };
 
-  const fetchMonthlyData = async (date) => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/calendar/monthly', {
-        params: {
-          year: date.getFullYear(),
-          month: date.getMonth() + 1,
-        },
-      });
-      setMonthlyData(response.data);
-    } catch (error) {
-      console.error('Error fetching monthly data:', error);
-    }
-  };
-
   const handleDateClick = async (date) => {
     const formattedDate = format(date, 'yyyy-MM-dd');
     
-    // 사용 가능한 날짜인지 확인
     if (!availableDates.includes(formattedDate)) {
       toast.error('해당 날짜의 데이터가 없습니다.');
       return;
@@ -90,7 +67,6 @@ function BreakfastPrediction() {
     }
   };
 
-  // 캘린더 타일 비활성화 함수
   const tileDisabled = ({ date, view }) => {
     if (view === 'month') {
       const formattedDate = format(date, 'yyyy-MM-dd');
@@ -99,252 +75,129 @@ function BreakfastPrediction() {
     return false;
   };
 
-  const getTileContent = ({ date, view }) => {
-    if (view === 'month' && monthlyData) {
-      const day = date.getDate();
-      const dayData = monthlyData.daily_statistics?.find(d => d.day === day);
-      
-      if (dayData && dayData.breakfast_count > 0) {
-        return (
-          <div className="calendar-tile-breakfast">
-            <span className="tile-count">{dayData.breakfast_count}</span>
-          </div>
-        );
-      }
-    }
-    return null;
-  };
-
   return (
-    <div className="breakfast-modern-container">
-      <div className="background-elements">
-        <div className="floating-element element-1">🏠</div>
-        <div className="floating-element element-2">🎩</div>
-        <div className="floating-element element-3">🎲</div>
-        <div className="floating-element element-4">💰</div>
-        <div className="floating-element element-5">🚗</div>
-        <div className="floating-element element-6">🏦</div>
-      </div>
+    <div className="breakfast-page">
+      <Header 
+        title="BREAKFAST PREDICTION"
+        subtitle="날짜를 선택하여 조식 준비량을 예측하세요"
+      />
 
-      <div className="main-content-wrapper">
-        <div className="content-section">
-          {/* 헤더 컴포넌트 */}
-          <Header 
-            title="BREAKFAST PREDICTION"
-            subtitle="조회를 원하시는 날짜를 선택해 주세요"
-          />
-
-          {/* 날짜 조회 버튼 */}
-          <motion.button 
-            className="date-query-button"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => handleDateClick(selectedDate)}
-          >
-            날짜 조회
-          </motion.button>
-
-          {/* 메인 정보 그리드 */}
-          <div className="modern-info-grid">
-            {/* 캘린더 카드 */}
-            <motion.div 
-              className="calendar-card"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              <div className="calendar-header">
-                {prediction ? format(selectedDate, 'yyyy.MM.dd') : '0000.00.00'}
-              </div>
-              <div className="mini-calendar">
-                <div className="calendar-days">
-                  <div className="day-header">S</div>
-                  <div className="day-header">M</div>
-                  <div className="day-header">T</div>
-                  <div className="day-header">W</div>
-                  <div className="day-header">T</div>
-                  <div className="day-header">F</div>
-                  <div className="day-header">S</div>
-                </div>
-                <Calendar
-                  onChange={handleDateClick}
-                  value={selectedDate}
-                  locale="ko-KR"
-                  tileContent={getTileContent}
-                  tileDisabled={tileDisabled}
-                  minDate={dateRange.min}
-                  maxDate={dateRange.max}
-                  className="monopoly-calendar"
-                />
-              </div>
-            </motion.div>
-
-            {/* 예측 결과 카드 */}
-            <motion.div 
-              className="prediction-card"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              <div className="prediction-header">해당일 예약 고객수</div>
-              {loading ? (
-                <div className="loading-spinner">
-                  <div className="spinner"></div>
-                </div>
-              ) : (
-                <div className="prediction-details">
-                  <div className="prediction-main">
-                    <div className="prediction-value">
-                      {prediction ? `${prediction.total_reservations}명` : '00명'}
-                    </div>
-                    <div className="prediction-sublabel">총 예약</div>
-                  </div>
-                  
-                  {prediction && (
-                    <div className="guest-breakdown">
-                      <div className="guest-item">
-                        <span className="guest-label">성인:</span>
-                        <span className="guest-count">{prediction.details.adults}명</span>
-                      </div>
-                      <div className="guest-item">
-                        <span className="guest-label">아동:</span>
-                        <span className="guest-count">{prediction.details.children}명</span>
-                      </div>
-                      <div className="guest-item">
-                        <span className="guest-label">유아:</span>
-                        <span className="guest-count">{prediction.details.babies}명</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </motion.div>
-
-            {/* 상세 정보 카드들 */}
-            <motion.div 
-              className="info-cards-container"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              {/* 예약 고객 수 */}
-              <div className="info-card">
-                <div className="info-label">예약 고객 수</div>
-                <div className="info-main">
-                  {prediction ? `${prediction.total_reservations}명` : '00명'}
-                </div>
-                <div className="info-detail">
-                  {prediction ? `(성인 ${prediction.details.adults}명 + 아이 ${prediction.details.children}명)` : '(성인 00명 + 아이 00명)'}
-                </div>
-              </div>
-
-              {/* 조식 예약 고객 수 */}
-              <div className="info-card">
-                <div className="info-label">조식 예약 고객 수</div>
-                <div className="info-main">
-                  {prediction ? `${prediction.details.breakfast_guests || 0}명` : '00명'}
-                </div>
-                <div className="info-detail">
-                  {prediction ? `(성인 ${prediction.details.breakfast_adults || 0}명 + 아이 ${prediction.details.breakfast_children || 0}명)` : '(성인 00명 + 아이 00명)'}
-                </div>
-              </div>
-
-              {/* AI 취소확률 예측 */}
-              <div className="info-card highlight-card">
-                <div className="info-label">AI 취소확률 예측</div>
-                <div className="info-main percentage-value">
-                  {prediction ? `${(prediction.details.avg_cancellation_probability * 100).toFixed(0)}%` : '00%'}
-                </div>
-                <div className="info-detail">
-                  머신러닝 기반 예측
-                </div>
-              </div>
-
-              {/* 예상 실 체크인 고객 수 */}
-              <div className="info-card">
-                <div className="info-label">예상 실 체크인 고객 수</div>
-                <div className="info-main">
-                  {prediction ? `${prediction.details.expected_total_guests}명` : '00명'}
-                </div>
-                <div className="info-detail">
-                  {prediction ? `(성인 ${prediction.details.expected_adults}명 + 아이 ${prediction.details.expected_children}명)` : '(성인 00명 + 아이 00명)'}
-                </div>
-              </div>
-
-              {/* 예상 조식 준비량 */}
-              <div className="info-card final-card">
-                <div className="info-label">예상 조식 준비량</div>
-                <div className="info-main final-value">
-                  {prediction ? `${prediction.breakfast_recommendation}인분` : '00인분'}
-                </div>
-                <div className="info-detail">
-                  {prediction ? `(성인 ${prediction.details.expected_breakfast_adults || 0}인분 + 아이 ${prediction.details.expected_breakfast_children || 0}인분)` : '(성인 00인분 + 아이 00인분)'}
-                </div>
-              </div>
-
-              {/* 추가 통계 정보 */}
-              <div className="info-card stats-card">
-                <div className="info-label">📊 추가 통계 정보</div>
-                <div className="stats-grid-mini">
-                  <div className="stat-mini">
-                    <span className="stat-mini-label">예약 건수</span>
-                    <span className="stat-mini-value">{prediction ? `${prediction.details.total_bookings}건` : '00건'}</span>
-                  </div>
-                  <div className="stat-mini">
-                    <span className="stat-mini-label">유아 수</span>
-                    <span className="stat-mini-value">{prediction ? `${prediction.details.babies}명` : '00명'}</span>
-                  </div>
-                  <div className="stat-mini">
-                    <span className="stat-mini-label">신뢰도</span>
-                    <span className="stat-mini-value">{prediction ? `${(prediction.confidence_level * 100).toFixed(0)}%` : '00%'}</span>
-                  </div>
-                  <div className="stat-mini">
-                    <span className="stat-mini-label">조식 이용률</span>
-                    <span className="stat-mini-value">{prediction && prediction.details.total_guests > 0 ? `${((prediction.details.breakfast_guests / prediction.details.total_guests) * 100).toFixed(0)}%` : '00%'}</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-          </div>
-
-          {/* 추가 정보 및 컨트롤 */}
-          <div className="controls-section">
-            {/* 뷰 모드 선택 버튼들 */}
-            <div className="view-mode-buttons">
-              <button 
-                className={`mode-button ${viewMode === 'daily' ? 'active' : ''}`}
-                onClick={() => setViewMode('daily')}
-              >
-                일별
-              </button>
-              <button 
-                className={`mode-button ${viewMode === 'weekly' ? 'active' : ''}`}
-                onClick={() => setViewMode('weekly')}
-              >
-                주간
-              </button>
-              <button 
-                className={`mode-button ${viewMode === 'monthly' ? 'active' : ''}`}
-                onClick={() => setViewMode('monthly')}
-              >
-                월간
-              </button>
-            </div>
-
-            {/* 호텔 타입 선택 */}
+      <div className="main-container">
+        {/* 상단 그리드: 호텔선택(좌상단) + 날짜선택(우상단) */}
+        <div className="top-grid">
+          {/* 호텔 선택 - 좌상단 */}
+          <div className="hotel-config-section">
+            <div className="section-title">🏨 호텔 선택</div>
             <div className="hotel-selector">
+              <label>호텔 타입</label>
               <select 
                 value={hotelType} 
                 onChange={(e) => setHotelType(e.target.value)}
-                className="hotel-select-modern"
+                className="hotel-select"
               >
                 <option value="Resort Hotel">리조트 호텔</option>
                 <option value="City Hotel">시티 호텔</option>
               </select>
             </div>
+            <div className="selected-date">
+              <span className="date-label">선택된 날짜</span>
+              <span className="date-value">{format(selectedDate, 'yyyy년 MM월 dd일')}</span>
+            </div>
+          </div>
+
+          {/* 날짜 선택 - 우상단 */}
+          <div className="calendar-section">
+            <div className="section-title" style={{ alignSelf: 'flex-start' }}>🗓️ 날짜 선택</div>
+            <div className="calendar-container">
+              <Calendar
+                onChange={handleDateClick}
+                value={selectedDate}
+                locale="ko-KR"
+                tileDisabled={tileDisabled}
+                minDate={dateRange.min}
+                maxDate={dateRange.max}
+                className="prediction-calendar"
+              />
+            </div>
           </div>
         </div>
+
+        {/* 조식 예측 결과 - 위 두 개 아래에 넓게 */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="prediction-section"
+          style={{ width: '100%', margin: '0 auto', maxWidth: '900px' }}
+        >
+          <div className="section-title">🍳 조식 예측 결과</div>
+          
+          {loading ? (
+            <div className="loading-container">
+              <div className="spinner"></div>
+              <p>예측 중...</p>
+            </div>
+          ) : prediction ? (
+            <div className="prediction-results">
+              {/* 메인 예측 카드 */}
+              <div className="main-result-card">
+                <div className="result-header">조식 준비 권장량</div>
+                <div className="result-value">{prediction.breakfast_recommendation}인분</div>
+                <div className="result-subtitle">
+                  취소율 {(prediction.details.avg_cancellation_probability * 100).toFixed(1)}% 반영
+                </div>
+              </div>
+
+              {/* 상세 정보 */}
+              <div className="details-grid">
+                <div className="detail-card">
+                  <div className="detail-label">총 예약 고객</div>
+                  <div className="detail-value">{prediction.total_reservations}명</div>
+                </div>
+                
+                <div className="detail-card">
+                  <div className="detail-label">예상 체크인</div>
+                  <div className="detail-value">{prediction.expected_checkins}명</div>
+                </div>
+                
+                <div className="detail-card">
+                  <div className="detail-label">조식 신청자</div>
+                  <div className="detail-value">{prediction.details.breakfast_guests}명</div>
+                </div>
+                
+                <div className="detail-card">
+                  <div className="detail-label">예측 신뢰도</div>
+                  <div className="detail-value">{(prediction.confidence_level * 100).toFixed(0)}%</div>
+                </div>
+              </div>
+
+              {/* 고객 구성 */}
+              <div className="guest-composition">
+                <div className="composition-title">고객 구성</div>
+                <div className="composition-grid">
+                  <div className="composition-item">
+                    <span className="comp-label">성인</span>
+                    <span className="comp-value">{prediction.details.adults}명</span>
+                  </div>
+                  <div className="composition-item">
+                    <span className="comp-label">아동</span>
+                    <span className="comp-value">{prediction.details.children}명</span>
+                  </div>
+                  <div className="composition-item">
+                    <span className="comp-label">유아</span>
+                    <span className="comp-value">{prediction.details.babies}명</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="empty-state">
+              <div className="empty-icon">🍳</div>
+              <h3>날짜를 선택해주세요</h3>
+              <p>캘린더에서 날짜를 클릭하면 조식 예측 결과를 확인할 수 있습니다</p>
+            </div>
+          )}
+        </motion.div>
       </div>
     </div>
   );

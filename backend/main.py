@@ -361,6 +361,97 @@ async def get_monthly_calendar(year: int, month: int):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@app.get("/api/bookings/by-date")
+async def get_bookings_by_date_api(year: int, month: int, day: int, offset: int = 0, limit: int = 10):
+    """특정 날짜의 예약 목록 조회"""
+    if hotel_data is None:
+        raise HTTPException(status_code=500, detail="Data not loaded")
+    
+    try:
+        # 월 이름 변환
+        month_name = datetime(year, month, 1).strftime("%B")
+        
+        # 해당 날짜의 데이터 필터링
+        date_bookings = hotel_data[
+            (hotel_data['arrival_date_year'] == year) &
+            (hotel_data['arrival_date_month'] == month_name) &
+            (hotel_data['arrival_date_day_of_month'] == day)
+        ].copy()
+        
+        total_count = len(date_bookings)
+        
+        if total_count == 0:
+            return {
+                "success": True,
+                "data": [],
+                "total_count": 0,
+                "statistics": {
+                    "model_confidence": 0,
+                    "total_expected_guests": 0,
+                    "breakfast_preparation_count": 0
+                }
+            }
+        
+        # 페이지네이션 적용
+        paginated_bookings = date_bookings.iloc[offset:offset + limit]
+        
+        # 예약 데이터 변환
+        booking_list = []
+        for idx, booking in paginated_bookings.iterrows():
+            # 더미 개인정보 생성 - 영국 기준 (실제 서비스에서는 실제 데이터 사용)
+            dummy_names = [
+                "James Smith", "Emily Johnson", "Michael Brown", "Sarah Wilson", 
+                "David Jones", "Emma Davis", "Robert Miller", "Olivia Garcia",
+                "William Rodriguez", "Sophia Martinez", "Thomas Anderson", "Isabella Taylor",
+                "Charles Thomas", "Mia Jackson", "Christopher White", "Charlotte Harris"
+            ]
+            dummy_phones = [
+                "+44 20 7946 0958", "+44 161 496 0345", "+44 113 496 0123", "+44 117 496 0789",
+                "+44 121 496 0234", "+44 131 496 0567", "+44 151 496 0890", "+44 191 496 0345",
+                "+44 29 2018 0123", "+44 28 9018 0456", "+44 1234 567890", "+44 1632 960123",
+                "+44 114 496 0234", "+44 115 496 0567", "+44 116 496 0890", "+44 118 496 0123"
+            ]
+            
+            booking_data = {
+                "reservation_id": f"RES{idx:06d}",
+                "name": dummy_names[idx % len(dummy_names)],
+                "phone": dummy_phones[idx % len(dummy_phones)],
+                "total_guests": int(booking['adults'] + booking['children'] + booking['babies']),
+                "arrival_date": f"{year}-{month:02d}-{day:02d}",
+                "total_nights": int(booking['stays_in_weekend_nights'] + booking['stays_in_week_nights']),
+                "room_type": booking['reserved_room_type'],
+                "meal": "포함" if booking['meal'] in ['BB', 'HB', 'FB'] else "불포함",
+                "special_requests": f"특별 요청 {booking['total_of_special_requests']}건" if booking['total_of_special_requests'] > 0 else "없음",
+                "predicted_probability": float(booking['predicted_probability']) if 'predicted_probability' in booking else float(booking.get('predicted_is_canceled', 0))
+            }
+            booking_list.append(booking_data)
+        
+        # 통계 계산
+        avg_cancellation_prob = float(date_bookings['predicted_probability'].mean()) if 'predicted_probability' in date_bookings.columns else float(date_bookings['predicted_is_canceled'].mean())
+        total_guests = int(date_bookings['adults'].sum() + date_bookings['children'].sum())
+        expected_guests = int(total_guests * (1 - avg_cancellation_prob))
+        
+        # 조식 준비 인원
+        breakfast_bookings = date_bookings[date_bookings['meal'].isin(['BB', 'HB', 'FB'])]
+        breakfast_guests = int(breakfast_bookings['adults'].sum() + breakfast_bookings['children'].sum())
+        expected_breakfast_guests = int(breakfast_guests * (1 - avg_cancellation_prob))
+        
+        statistics = {
+            "model_confidence": round((1 - avg_cancellation_prob) * 100, 1),
+            "total_expected_guests": expected_guests,
+            "breakfast_preparation_count": expected_breakfast_guests
+        }
+        
+        return {
+            "success": True,
+            "data": booking_list,
+            "total_count": total_count,
+            "statistics": statistics
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 @app.get("/api/trends/weekly")
 async def get_weekly_trends():
     """주간 트렌드 분석"""
@@ -368,18 +459,19 @@ async def get_weekly_trends():
         raise HTTPException(status_code=500, detail="Data not loaded")
     
     # 요일별 취소율 분석
-    hotel_data['arrival_date'] = pd.to_datetime(
-        hotel_data['arrival_date_year'].astype(str) + '-' +
-        hotel_data['arrival_date_month'] + '-' +
-        hotel_data['arrival_date_day_of_month'].astype(str),
+    hotel_data_copy = hotel_data.copy()
+    hotel_data_copy['arrival_date'] = pd.to_datetime(
+        hotel_data_copy['arrival_date_year'].astype(str) + '-' +
+        hotel_data_copy['arrival_date_month'] + '-' +
+        hotel_data_copy['arrival_date_day_of_month'].astype(str),
         errors='coerce'
     )
     
-    hotel_data['weekday'] = hotel_data['arrival_date'].dt.day_name()
+    hotel_data_copy['weekday'] = hotel_data_copy['arrival_date'].dt.day_name()
     
     weekday_stats = []
     for weekday in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']:
-        weekday_data = hotel_data[hotel_data['weekday'] == weekday]
+        weekday_data = hotel_data_copy[hotel_data_copy['weekday'] == weekday]
         if len(weekday_data) > 0:
             weekday_stats.append({
                 "day": weekday,

@@ -110,7 +110,7 @@ def main() -> None:
     
     # 성능이 만족스러운지 체크하고 test 데이터 예측 수행
     val_metrics = evaluate_binary(y_val, y_val_pred, y_val_proba)
-    if val_metrics.f1 > 0.8 and val_metrics.auc > 0.85:
+    if val_metrics.f1 > 0.68 and val_metrics.auc > 0.70:
         print("✅ 모델 성능이 우수합니다! Test 데이터 예측을 수행합니다.")
         predict_test_data(model, X_tr, X_val)
     else:

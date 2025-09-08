@@ -9,7 +9,7 @@ function Header({ title, subtitle }) {
 
   const navigationItems = [
     { path: '/', label: '홈', icon: '🏛️' },
-    { path: '/cancellation', label: '취소예측', icon: '📋' },
+    { path: '/cancellation', label: '고객관리 페이지', icon: '📋' },
     { path: '/breakfast', label: '조식예측', icon: '🥂' }
   ];
 

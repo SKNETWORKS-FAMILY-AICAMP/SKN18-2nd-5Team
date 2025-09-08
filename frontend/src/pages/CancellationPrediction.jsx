@@ -4,10 +4,11 @@ import { format } from 'date-fns';
 import { Search } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Header from '../components/Header';
 import './CancellationPrediction.css';
 
 function CancellationPrediction() {
-  const [searchDate, setSearchDate] = useState(new Date().toISOString().split('T')[0]);
+  const [searchDate, setSearchDate] = useState('2017-04-01'); // 데이터가 있는 날짜로 초기화
   const [bookingList, setBookingList] = useState([]);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -16,9 +17,9 @@ function CancellationPrediction() {
   const [currentOffset, setCurrentOffset] = useState(0);
 
   useEffect(() => {
-    // 초기 로드 시 오늘 날짜의 예약 조회
-    const today = new Date();
-    fetchBookingsByDate(today);
+    // 초기 로드 시 데이터가 있는 날짜로 예약 조회
+    const initialDate = new Date('2017-04-01');
+    fetchBookingsByDate(initialDate);
   }, []);
 
   const fetchBookingsByDate = async (date) => {
@@ -28,32 +29,51 @@ function CancellationPrediction() {
       const month = date.getMonth() + 1;
       const day = date.getDate();
 
+      console.log(`Fetching bookings for ${year}-${month}-${day}`);
+
       const response = await axios.get('http://localhost:8000/api/bookings/by-date', {
         params: {
           year,
           month,
           day,
           offset: currentOffset,
-          limit: 10
+          limit: 100
         }
       });
 
       console.log('API Response:', response.data);
 
       if (response.data.success) {
-        setBookingList(response.data.data);
-        setTotalCount(response.data.total_count);
-        setDailyStatistics(response.data.statistics);
+        setBookingList(response.data.data || []);
+        setTotalCount(response.data.total_count || 0);
+        setDailyStatistics(response.data.statistics || {});
         
         // 첫 번째 예약을 기본으로 선택
         if (response.data.data && response.data.data.length > 0) {
           setSelectedBooking(response.data.data[0]);
+        } else {
+          setSelectedBooking(null);
+        }
+        
+        if (response.data.total_count > 0) {
+          toast.success(`${response.data.total_count}건의 예약을 찾았습니다.`);
+        } else {
+          toast.info('해당 날짜에 예약 데이터가 없습니다.');
         }
       }
     } catch (error) {
       console.error('Error fetching bookings:', error);
-      toast.error('예약 정보를 불러오는데 실패했습니다.');
+      if (error.response) {
+        toast.error(`API 오류: ${error.response.data.detail || '서버 오류'}`);
+      } else if (error.request) {
+        toast.error('서버에 연결할 수 없습니다. 백엔드 서버가 실행 중인지 확인해주세요.');
+      } else {
+        toast.error('예약 정보를 불러오는데 실패했습니다.');
+      }
       setBookingList([]);
+      setSelectedBooking(null);
+      setTotalCount(0);
+      setDailyStatistics({});
     } finally {
       setLoading(false);
     }
@@ -78,15 +98,10 @@ function CancellationPrediction() {
 
   return (
     <div className="cancellation-page">
-      {/* <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="page-header glass-card"
-      >
-        <h1>📊 고객 관리 페이지</h1>
-        <p>날짜를 선택하여 고객을 확인하고 하고 운영 전략을 수립하세요</p>
-      </motion.div> */}
+      <Header 
+        title="CUSTOMER MANAGEMENT"
+        subtitle="날짜를 선택하여 고객을 확인하고 운영 전략을 수립하세요"
+      />
 
       <div className="main-content">
         {/* 중앙 테이블 */}

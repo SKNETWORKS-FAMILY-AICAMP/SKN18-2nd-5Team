@@ -38,6 +38,30 @@ def load_hotel_data():
     df['agent'] = df['agent'].fillna(0)
     df['company'] = df['company'].fillna(0)
     
+    # arrival_date_full 컬럼 생성 (YYYY-MM-DD 형식)
+    try:
+        # 월 이름을 숫자로 변환하는 딕셔너리
+        month_mapping = {
+            'January': 1, 'February': 2, 'March': 3, 'April': 4,
+            'May': 5, 'June': 6, 'July': 7, 'August': 8,
+            'September': 9, 'October': 10, 'November': 11, 'December': 12
+        }
+        
+        # 월 이름을 숫자로 변환
+        df['arrival_date_month_num'] = df['arrival_date_month'].map(month_mapping)
+        
+        # arrival_date_full 컬럼 생성
+        df['arrival_date_full'] = (
+            df['arrival_date_year'].astype(str) + '-' + 
+            df['arrival_date_month_num'].astype(str).str.zfill(2) + '-' + 
+            df['arrival_date_day_of_month'].astype(str).str.zfill(2)
+        )
+        
+        print(f"Created arrival_date_full column with date range: {df['arrival_date_full'].min()} to {df['arrival_date_full'].max()}")
+        
+    except Exception as e:
+        print(f"Warning: Could not create arrival_date_full column: {e}")
+    
     print(f"Loaded {len(df)} booking records")
     
     return df
