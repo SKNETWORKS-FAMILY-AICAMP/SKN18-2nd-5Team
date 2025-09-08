@@ -223,7 +223,7 @@ dtype: int64
 
 
 ### 4. 기대 효과
-이 모델을 통해 호텔은 예약 취소 가능성이 높은 투숙객을 사전에 파악하여, 오버부킹(overbooking) 전략을 최적화하고 공실률을 최소화할 수 있습니다. 이는 최종적으로 호텔의 수익성 향상으로 이어질 것입니다.
+본 프로젝트는 호텔 예약 취소 가능성과 조식 수요를 사전에 예측하여 객실 공실 및 식자재 낭비를 최소화합니다. 이를 통해 운영 효율성과 비용 절감을 실현하고, 데이터 기반의 의사결정으로 수익 안정성을 확보할 수 있습니다. 나아가 맞춤형 프로모션과 재확인 정책을 통해 고객 경험을 개선하고 경쟁 우위를 강화합니다.
 
 
 ### 5. 데이터 전처리 및 결측치 처리
@@ -328,7 +328,8 @@ def drop_original_columns(X_tr: pd.DataFrame, X_te: pd.DataFrame) -> Tuple[pd.Da
   <h4>6. Feature Importance</h4>
 </div>
 
-![Feature Importance](README_pic/Feature_importance.png)
+![Feature Importance](README_pic/Feature_importance_1.png)
+![Feature Importance](README_pic/Feature_importance_2.png)
 
 
 ### 상위 엔지니어링 Feature importance
