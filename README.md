@@ -94,23 +94,15 @@
 
 ```mermaid
 graph TD
-    subgraph User Interface
-        A[Frontend (React, Vite)]
-    end
+  A[Frontend (React, Vite)]
+  B[Backend (FastAPI)]
+  C[ML Model (Scikit-learn)]
+  D[Database (MySQL)]
 
-    subgraph Services
-        B[Backend (FastAPI)]
-    end
-
-    subgraph Data & Model
-        C[ML Model (Scikit-learn)]
-        D[Database (MySQL)]
-    end
-
-    A -->|API Requests (Axios)| B;
-    B -->|Invoke Prediction| C;
-    B <-->|CRUD Operations| D;
-    C -->|Load Model & Data| D;
+  A -->|API Requests (Axios)| B
+  B -->|Invoke Prediction| C
+  B <-->|CRUD Operations| D
+  C -->|Load Model & Data| D
 ```
 
 <br>
