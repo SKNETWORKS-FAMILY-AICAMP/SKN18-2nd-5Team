@@ -1,322 +1,291 @@
 import React, { useState, useEffect } from 'react';
-import Calendar from 'react-calendar';
 import { motion } from 'framer-motion';
-import { format, addMonths, subMonths } from 'date-fns';
-import { ko } from 'date-fns/locale';
-import { AlertCircle, TrendingDown, Users, Coffee, Calendar as CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { Search } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import Header from '../components/Header';
-import 'react-calendar/dist/Calendar.css';
 import './CancellationPrediction.css';
 
 function CancellationPrediction() {
-  const [selectedDate, setSelectedDate] = useState(new Date('2017-04-01'));
-  const [prediction, setPrediction] = useState(null);
-  const [monthlyData, setMonthlyData] = useState(null);
+  const [searchDate, setSearchDate] = useState(new Date().toISOString().split('T')[0]);
+  const [bookingList, setBookingList] = useState([]);
+  const [selectedBooking, setSelectedBooking] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [hotelType, setHotelType] = useState('Resort Hotel');
-  const [availableDates, setAvailableDates] = useState([]);
-  const [dateRange, setDateRange] = useState({ min: null, max: null });
+  const [totalCount, setTotalCount] = useState(0);
+  const [dailyStatistics, setDailyStatistics] = useState(null);
+  const [currentOffset, setCurrentOffset] = useState(0);
 
   useEffect(() => {
-    fetchAvailableDates();
+    // 초기 로드 시 오늘 날짜의 예약 조회
+    const today = new Date();
+    fetchBookingsByDate(today);
   }, []);
 
-  useEffect(() => {
-    fetchMonthlyData(selectedDate);
-  }, [selectedDate]);
-
-  const fetchAvailableDates = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/dates/available');
-      setAvailableDates(response.data.available_dates);
-      setDateRange({
-        min: new Date(response.data.min_date),
-        max: new Date(response.data.max_date)
-      });
-    } catch (error) {
-      console.error('Error fetching available dates:', error);
-      toast.error('사용 가능한 날짜를 불러오는데 실패했습니다.');
-    }
-  };
-
-  const fetchMonthlyData = async (date) => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/calendar/monthly', {
-        params: {
-          year: date.getFullYear(),
-          month: date.getMonth() + 1,
-        },
-      });
-      setMonthlyData(response.data);
-    } catch (error) {
-      console.error('Error fetching monthly data:', error);
-    }
-  };
-
-  const handleDateClick = async (date) => {
-    const formattedDate = format(date, 'yyyy-MM-dd');
-    
-    // 사용 가능한 날짜인지 확인
-    if (!availableDates.includes(formattedDate)) {
-      toast.error('해당 날짜의 데이터가 없습니다.');
-      return;
-    }
-
-    setSelectedDate(date);
+  const fetchBookingsByDate = async (date) => {
     setLoading(true);
-    setPrediction(null);
-
     try {
-      const response = await axios.post('http://localhost:8000/api/predict/date', {
-        date: formattedDate,
-        hotel_type: hotelType,
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+
+      const response = await axios.get('http://localhost:8000/api/bookings/by-date', {
+        params: {
+          year,
+          month,
+          day,
+          offset: currentOffset,
+          limit: 10
+        }
       });
-      
-      setPrediction(response.data);
-      toast.success('예측 완료!');
+
+      console.log('API Response:', response.data);
+
+      if (response.data.success) {
+        setBookingList(response.data.data);
+        setTotalCount(response.data.total_count);
+        setDailyStatistics(response.data.statistics);
+        
+        // 첫 번째 예약을 기본으로 선택
+        if (response.data.data && response.data.data.length > 0) {
+          setSelectedBooking(response.data.data[0]);
+        }
+      }
     } catch (error) {
-      toast.error('예측 중 오류가 발생했습니다.');
-      console.error('Error:', error);
+      console.error('Error fetching bookings:', error);
+      toast.error('예약 정보를 불러오는데 실패했습니다.');
+      setBookingList([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // 캘린더 타일 비활성화 함수
-  const tileDisabled = ({ date, view }) => {
-    if (view === 'month') {
-      const formattedDate = format(date, 'yyyy-MM-dd');
-      return !availableDates.includes(formattedDate);
-    }
-    return false;
+  const handleDateSearch = () => {
+    const date = new Date(searchDate);
+    setCurrentOffset(0);
+    fetchBookingsByDate(date);
   };
 
-  const getTileContent = ({ date, view }) => {
-    if (view === 'month' && monthlyData) {
-      const day = date.getDate();
-      const dayData = monthlyData.daily_statistics?.find(d => d.day === day);
-      
-      if (dayData && dayData.bookings > 0) {
-        return (
-          <div className="calendar-tile-content">
-            <div className="booking-count">{dayData.bookings}</div>
-            <div className="cancel-rate">
-              {(dayData.cancellation_rate * 100).toFixed(0)}%
-            </div>
-          </div>
-        );
-      }
-    }
-    return null;
+  const handleBookingClick = (booking) => {
+    setSelectedBooking(booking);
   };
 
-  const getRiskLevel = (cancellationRate) => {
-    if (cancellationRate > 0.5) return { level: '높음', color: '#ef4444' };
-    if (cancellationRate > 0.3) return { level: '중간', color: '#f59e0b' };
-    return { level: '낮음', color: '#22c55e' };
+  const getRiskLevel = (probability) => {
+    if (!probability) return 'unknown';
+    if (probability > 0.7) return 'high';
+    if (probability > 0.4) return 'medium';
+    return 'low';
   };
 
   return (
     <div className="cancellation-page">
-      <Header 
-        title="CANCELLATION PREDICTION"
-        subtitle="날짜를 선택하여 예약 취소율을 예측하고 운영 전략을 수립하세요"
-      />
+      {/* <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="page-header glass-card"
+      >
+        <h1>📊 고객 관리 페이지</h1>
+        <p>날짜를 선택하여 고객을 확인하고 하고 운영 전략을 수립하세요</p>
+      </motion.div> */}
 
-      <div className="content-grid">
-        {/* Calendar Section */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="calendar-section glass-card"
-        >
-          <div className="section-header">
-            <CalendarIcon size={24} />
-            <h2>날짜 선택</h2>
-          </div>
-          
-          <div className="hotel-type-selector">
-            <label>호텔 유형:</label>
-            <select 
-              value={hotelType} 
-              onChange={(e) => setHotelType(e.target.value)}
-              className="hotel-select"
-            >
-              <option value="Resort Hotel">리조트 호텔</option>
-              <option value="City Hotel">시티 호텔</option>
-            </select>
-          </div>
-
-          <div className="calendar-wrapper">
-            <Calendar
-              onChange={handleDateClick}
-              value={selectedDate}
-              locale="ko-KR"
-              tileContent={getTileContent}
-              tileDisabled={tileDisabled}
-              minDate={dateRange.min}
-              maxDate={dateRange.max}
-              className="custom-calendar"
-            />
-          </div>
-
-          <div className="calendar-legend">
-            <div className="legend-item">
-              <div className="legend-color booking"></div>
-              <span>예약 건수</span>
-            </div>
-            <div className="legend-item">
-              <div className="legend-color cancel"></div>
-              <span>취소율 %</span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Prediction Results */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          className="results-section"
-        >
-          {loading && (
-            <div className="loading-state glass-card">
-              <div className="spinner"></div>
-              <p>예측 중...</p>
-            </div>
-          )}
-
-          {prediction && !loading && (
-            <>
-              {/* Main Prediction Card */}
-              <div className="prediction-card glass-card">
-                <div className="prediction-header">
-                  <h2>{format(selectedDate, 'yyyy년 MM월 dd일', { locale: ko })}</h2>
-                  <div className="hotel-type-badge">{hotelType}</div>
-                </div>
-
-                <div className="prediction-metrics">
-                  <div className="metric-card">
-                    <div className="metric-icon">
-                      <CalendarIcon size={20} />
-                    </div>
-                    <div className="metric-info">
-                      <span className="metric-label">총 예약</span>
-                      <span className="metric-value">{prediction.total_reservations}</span>
-                    </div>
-                  </div>
-
-                  <div className="metric-card">
-                    <div className="metric-icon cancel">
-                      <TrendingDown size={20} />
-                    </div>
-                    <div className="metric-info">
-                      <span className="metric-label">예상 취소</span>
-                      <span className="metric-value">{prediction.predicted_cancellations}</span>
-                    </div>
-                  </div>
-
-                  <div className="metric-card">
-                    <div className="metric-icon success">
-                      <Users size={20} />
-                    </div>
-                    <div className="metric-info">
-                      <span className="metric-label">예상 체크인</span>
-                      <span className="metric-value">{prediction.expected_checkins}</span>
-                    </div>
-                  </div>
-
-                  <div className="metric-card">
-                    <div className="metric-icon breakfast">
-                      <Coffee size={20} />
-                    </div>
-                    <div className="metric-info">
-                      <span className="metric-label">조식 준비</span>
-                      <span className="metric-value">{prediction.breakfast_recommendation}인분</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Confidence Meter */}
-                <div className="confidence-section">
-                  <h3>예측 신뢰도</h3>
-                  <div className="confidence-meter">
-                    <div 
-                      className="confidence-fill"
-                      style={{ width: `${prediction.confidence_level * 100}%` }}
-                    ></div>
-                  </div>
-                  <span className="confidence-text">
-                    {(prediction.confidence_level * 100).toFixed(1)}%
-                  </span>
-                </div>
+      <div className="main-content">
+        {/* 중앙 테이블 */}
+        <div className="table-section">
+          <div className="table-container glass-card">
+            <div className="table-header">
+              <span className="page-title">고객 관리 페이지</span>
+              <h2>
+                <div className="search-input-wrapper">
+                  <Search size={20} />
+                  <input
+                    type="date"
+                    value={searchDate}
+                    onChange={(e) => setSearchDate(e.target.value)}
+                    className="date-input"
+                  />
+                <button onClick={handleDateSearch} className="search-button">
+                검색
+              </button>
               </div>
+              </h2>
+              <span className="total-count">총 {totalCount}건</span>
+            </div>
 
-              {/* Risk Assessment */}
-              <div className="risk-card glass-card">
-                <h3>
-                  <AlertCircle size={20} />
-                  리스크 평가
-                </h3>
-                {prediction.details && (
-                  <div className="risk-details">
-                    <div className="risk-item">
-                      <span>취소 확률:</span>
-                      <span className="risk-value">
-                        {(prediction.details.avg_cancellation_probability * 100).toFixed(1)}%
-                      </span>
-                    </div>
-                    <div className="risk-item">
-                      <span>리스크 레벨:</span>
-                      <span 
-                        className="risk-level"
-                        style={{ 
-                          color: getRiskLevel(prediction.details.avg_cancellation_probability).color 
-                        }}
+            {loading ? (
+              <div className="loading-state">
+                <div className="spinner"></div>
+                <p>데이터를 불러오는 중...</p>
+              </div>
+            ) : (
+              <div className="table-wrapper">
+                <table className="booking-table">
+                  <thead>
+                    <tr>
+                      <th>이름</th>
+                      <th>전화번호</th>
+                      <th>인원</th>
+                      <th>예약일자</th>
+                      <th>숙박일수</th>
+                      <th>방 종류</th>
+                      <th>조식 여부</th>
+                      <th>특별요청사항</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* 실제 데이터가 있을 때 */}
+                    {bookingList.map((booking, index) => (
+                      <tr 
+                        key={booking.reservation_id || index}
+                        className={`booking-row ${selectedBooking?.reservation_id === booking.reservation_id ? 'selected' : ''}`}
+                        onClick={() => handleBookingClick(booking)}
                       >
-                        {getRiskLevel(prediction.details.avg_cancellation_probability).level}
-                      </span>
-                    </div>
-                    <div className="risk-item">
-                      <span>총 투숙객:</span>
-                      <span>{prediction.details.total_guests}명</span>
-                    </div>
+                        <td>{booking.name || '-'}</td>
+                        <td>{booking.phone || '-'}</td>
+                        <td>{booking.total_guests || '-'}</td>
+                        <td>{booking.arrival_date || '-'}</td>
+                        <td>{booking.total_nights ? `${booking.total_nights}박` : '-'}</td>
+                        <td>{booking.room_type || '-'}</td>
+                        <td>
+                          <span className={`meal-badge ${booking.meal === '포함' ? 'included' : 'not-included'}`}>
+                            {booking.meal || '-'}
+                          </span>
+                        </td>
+                        <td>{booking.special_requests || '-'}</td>
+                      </tr>
+                    ))}
+                    
+                    {/* 데이터가 부족하거나 없을 때 빈 행으로 채우기 (최소 10개 행 유지) */}
+                    {Array.from({ length: Math.max(0, 10 - bookingList.length) }).map((_, i) => (
+                      <tr className="placeholder-row" key={`empty-${i}`}>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* 더 많은 데이터가 있을 경우 스크롤 안내 */}
+            {totalCount > 10 && (
+              <div className="scroll-indicator">
+                <p>↓ 스크롤하여 더 많은 예약을 확인하세요 ({bookingList.length}/{totalCount})</p>
+              </div>
+            )}
+          </div>
+
+          {/* 하단 통계 영역 */}
+          <div className="statistics-section glass-card">
+            {/* <h3>통계 정보</h3> */}
+            <div className="statistics-grid">
+              {/* 좌측 카드: 예약 1개 정보 - 조식관련 */}
+              <div className="stat-card left-card">
+                {/* <h4>고객 예약 정보 - 조식</h4> */}
+                <div className="stat-items">
+                  <div className="stat-item">
+                    <span className="stat-label">어른/아이</span>
+                    <span className="stat-divider"></span>
+                    <span className="stat-value">
+                      {selectedBooking ? 
+                        `${selectedBooking.total_guests - (selectedBooking.babies || 0)}명` : 
+                        '-'
+                      }
+                    </span>
                   </div>
-                )}
+                  <div className="stat-item">
+                    <span className="stat-label">조식 종류</span>
+                    <span className="stat-divider"></span>
+                    <span className="stat-value">
+                      {selectedBooking?.meal || '-'}
+                    </span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">특별요청사항</span>
+                    <span className="stat-divider"></span>
+                    <span className="stat-value">
+                      {selectedBooking?.special_requests || '-'}
+                    </span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">고객 위험도</span>
+                    <span className="stat-divider"></span>
+                    <span className={`stat-value risk-level ${getRiskLevel(selectedBooking?.predicted_probability)}`}>
+                      {selectedBooking?.predicted_probability ? 
+                        `${(selectedBooking.predicted_probability * 100).toFixed(1)}%` : 
+                        '-'
+                      }
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              {/* Recommendations */}
-              <div className="recommendations-card glass-card">
-                <h3>💡 운영 제안</h3>
-                <ul className="recommendations-list">
-                  {prediction.predicted_cancellations > prediction.total_reservations * 0.4 && (
-                    <li>높은 취소율이 예상됩니다. 오버부킹을 고려해보세요.</li>
-                  )}
-                  {prediction.breakfast_recommendation > 0 && (
-                    <li>조식을 {prediction.breakfast_recommendation}인분 준비하세요.</li>
-                  )}
-                  {prediction.expected_checkins < prediction.total_reservations * 0.5 && (
-                    <li>체크인율이 낮을 것으로 예상됩니다. 확인 전화를 권장합니다.</li>
-                  )}
-                  {prediction.confidence_level > 0.8 && (
-                    <li>높은 신뢰도의 예측입니다. 이 데이터를 기반으로 계획을 수립하세요.</li>
-                  )}
-                </ul>
+              {/* 중앙 카드: 예약 1개 정보 - 숙박관련 */}
+              <div className="stat-card center-card">
+                {/* <h4>고객 예약 정보 - 숙박</h4> */}
+                <div className="stat-items">
+                  <div className="stat-item">
+                    <span className="stat-label">체크인/체크아웃</span>
+                    <span className="stat-divider"></span>
+                    <span className="stat-value">-</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">투숙중 총 인원</span>
+                    <span className="stat-divider"></span>
+                    <span className="stat-value">
+                      {selectedBooking?.total_guests ? `${selectedBooking.total_guests}명` : '-'}
+                    </span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">배정 잔여 객실</span>
+                    <span className="stat-divider"></span>
+                    <span className="stat-value">-</span>
+                  </div>
+                </div>
               </div>
-            </>
-          )}
 
-          {!prediction && !loading && (
-            <div className="empty-state glass-card">
-              <CalendarIcon size={48} color="#999" />
-              <h3>날짜를 선택해주세요</h3>
-              <p>캘린더에서 날짜를 클릭하면 예약 취소 예측을 확인할 수 있습니다</p>
+              {/* 우측 카드: 해당일 전체 통계 */}
+              <div className="stat-card right-card">
+                {/* <h4>해당일 전체 통계</h4> */}
+                <div className="stat-items">
+                  <div className="stat-item">
+                    <span className="stat-label">날짜</span>
+                    <span className="stat-divider"></span>
+                    <span className="stat-value">
+                      {searchDate ? format(new Date(searchDate), 'yyyy.MM.dd') : '-'}
+                    </span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">모델 예측 신뢰도</span>
+                    <span className="stat-divider"></span>
+                    <span className="stat-value">
+                      {dailyStatistics?.model_confidence ? `${dailyStatistics.model_confidence}%` : '-'}
+                    </span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">예상 투숙 인원</span>
+                    <span className="stat-divider"></span>
+                    <span className="stat-value">
+                      {dailyStatistics?.total_expected_guests ? `${dailyStatistics.total_expected_guests}명` : '-'}
+                    </span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">예상 조식 인원수</span>
+                    <span className="stat-divider"></span>
+                    <span className="stat-value">
+                      {dailyStatistics?.breakfast_preparation_count ? `${dailyStatistics.breakfast_preparation_count}명` : '-'}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
-        </motion.div>
+          </div>
+        </div>
       </div>
     </div>
   );
