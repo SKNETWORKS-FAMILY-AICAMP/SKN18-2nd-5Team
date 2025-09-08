@@ -4,8 +4,6 @@ pandas
 scikit-learn
 seaborn
 xgboost
-lightgbm
-catboost
 jupyter
 easydict
 mysql
