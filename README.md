@@ -13,9 +13,11 @@
 
 ---
 
-## 📌 프로젝트 개요
+## 📌 프로젝트 주제 선정 배경
 
-**HotelPredict AI**는 머신러닝을 활용하여 호텔 예약 데이터를 분석하고, **예약 취소율**과 **조식 수요**를 예측하는 지능형 웹 애플리케이션입니다. 호텔 운영자는 이 시스템을 통해 데이터 기반의 의사결정을 내리고, 운영 효율성을 극대화하며, 비용을 절감할 수 있습니다.
+온라인 예약의 보편화로 호텔 산업은 높은 예약 취소율 문제에 직면해 있으며, 이는 단순한 예약 감소를 넘어 객실 재고 관리 불안정, 운영비 증가, 수익 손실 등 경영 리스크로 연결됩니다.
+
+본 프로젝트는 실제 호텔 예약 데이터를 활용해 개별 예약의 취소 여부와 일별 기대 체크인·조식 수요를 사전에 예측하고, 취소 리스크가 높은 고객군에 대해서는 맞춤형 프로모션·재확인 정책을 제안함으로써 공실과 식자재 낭비를 줄이고 운영 효율 및 수익을 극대화하는 것을 목표로 합니다.
 
 <br>
 
@@ -31,7 +33,7 @@
       <br />
       <sub><b>이태호</b></sub>
       <br />
-      <sub>팀장/지배인</sub>
+      <sub>팀장/총지베인</sub>
       <br />
       <a href="https://github.com/william7333" target="_blank">william7333</a>
     </td>
@@ -49,7 +51,7 @@
       <br />
       <sub><b>정인하</b></sub>
       <br />
-      <sub>팀원/유령</sub>
+      <sub>팀원/유령인턴</sub>
       <br />
       <a href="https://github.com/enapeace" target="_blank">enapeace</a>
     </td>
@@ -58,7 +60,7 @@
       <br />
       <sub><b>김담하</b></sub>
       <br />
-      <sub>팀원/도어벨</sub>
+      <sub>팀원/프론트맨</sub>
       <br />
       <a href="https://github.com/DamHA-Kim" target="_blank">DamHA-Kim</a>
     </td>
@@ -67,7 +69,7 @@
       <br />
       <sub><b>조준호</b></sub>
       <br />
-      <sub>팀원/선비</sub>
+      <sub>팀원/바텐더</sub>
       <br />
       <a href="https://github.com/lemondear" target="_blank">lemondear</a>
     </td>
@@ -78,8 +80,8 @@
 ## ✨ 주요 기능
 
 - **📊 예약 취소 예측**: 특정 날짜의 예상 체크인/취소 건수를 예측하여 오버부킹 전략 및 인력 배치를 최적화합니다.
-- **☕ 조식 수요 예측**: 예측된 체크인 인원과 예약 정보를 바탕으로 일별 최적의 조식 준비 인원을 추천하여 음식물 쓰레기를 줄이고 비용을 절감합니다.
-- **📅 인터랙티브 대시보드**: 달력 기반의 직관적인 UI를 통해 일별/월별/요일별 예약 트렌드와 예측 정보를 한눈에 파악할 수 있습니다.
+- **☕ 조식 수요 예측**: 예측된 체크인 인원과 예약 정보를 바탕으로 일별 최적의 조식 준비 인원을 추천합니다.
+- **📅 인터랙티브 대시보드**: 달력 기반의 직관적인 UI를 통해 날짜별 예약 트렌드와 예측 정보를 한눈에 파악할 수 있습니다.
 - **📈 실시간 통계 분석**: 전체 예약 데이터에 대한 통계와 시각화 자료를 제공하여 비즈니스 인사이트를 도출합니다.
 
 <br>
@@ -92,79 +94,17 @@
 
 ## ⚙️ 시스템 아키텍처
 
-```mermaid
-graph TD
-  A[Frontend (React, Vite)]
-  B[Backend (FastAPI)]
-  C[ML Model (Scikit-learn)]
-  D[Database (MySQL)]
-
-  A -->|API Requests (Axios)| B
-  B -->|Invoke Prediction| C
-  B <-->|CRUD Operations| D
-  C -->|Load Model & Data| D
-```
+![시스템 아키텍처처](README_pic/아키텍처.png)
 
 <br>
 
-## 🛠️ 기술 스택
-
-| Category | Tech | Description |
-| :--- | :--- | :--- |
-| **Frontend** | `React`, `Vite` | 동적이고 반응성 높은 사용자 인터페이스 구축 |
-| | `React Router` | 클라이언트 사이드 라우팅 관리 |
-| | `Axios` | 백엔드 API와의 비동기 HTTP 통신 |
-| | `Chart.js` | 데이터 시각화를 위한 차트 라이브러리 |
-| | `Framer Motion` | 부드러운 UI 애니메이션 효과 적용 |
-| **Backend** | `FastAPI` | 고성능 비동기 웹 API 프레임워크 |
-| | `Uvicorn` | ASGI 서버 |
-| **ML / Data** | `Scikit-learn` | 예약 취소 예측 모델 (Gradient Boosting) 개발 및 서빙 |
-| | `Pandas`, `NumPy` | 데이터 전처리 및 분석 |
-| | `Joblib` | 학습된 머신러닝 모델 직렬화/역직렬화 |
-| **Database** | `MySQL` | 예약 데이터 및 예측 결과 저장/관리 |
 
 <br>
 
 ## 🗄️ 데이터베이스 스키마 (ERD)
 
-`hotel_booking.sql`을 기반으로 생성된 주요 테이블 관계도입니다.
+![ERD](README_pic/erd.png)
 
-```mermaid
-erDiagram
-    date {
-        int date_id PK
-        int arrival_date_year
-        int arrival_date_month
-        int arrival_date_day_of_month
-    }
-
-    hotel_booking_predictions {
-        int reservation_id PK
-        varchar hotel
-        varchar meal
-        tinyint predicted_is_canceled
-        float predicted_probability
-    }
-
-    meal_predict_integrate {
-        int reservation_id PK, FK
-        int date_id FK
-        varchar hotel
-        varchar meal
-        tinyint predicted_is_canceled
-        float predicted_probability
-    }
-
-    total_stay {
-        int total_stay_id PK
-        int date_id FK
-        int total_stay
-    }
-
-    meal_predict_integrate }|--|| hotel_booking_predictions : "references"
-    meal_predict_integrate }|--|| date : "references"
-    total_stay }|--|| date : "references"
-```
 
 <br>
 
@@ -271,7 +211,7 @@ dtype: int64
 
 - **데이터 전처리**:
     - **결측치 처리**: 누락된 데이터는 중앙값, 최빈값 등으로 채워 분석의 정확도를 높입니다.
-    - **범주형 변수 인코딩**: 'City', 'Country'와 같은 범주형 데이터는 머신러닝 모델이 이해할 수 있는 수치 형태로 변환합니다.
+    - **범주형 변수 인코딩**: 'City', 'Country'와 같은 범주형 데이터는 머신러닝 모델이 이해할 수 있는 수치형으으로 변환합니다.
     - **Feature Engineering**: lead_time (예약 시점부터 투숙일까지의 기간)과 같은 기존 변수를 활용해 새로운 의미 있는 변수(lead_time의 범주화 등)를 생성하여 모델 성능을 개선합니다.
 
 - **탐색적 데이터 분석 (EDA)**:
@@ -280,6 +220,7 @@ dtype: int64
 - **모델 학습 및 평가**:
     - **모델 선택**: 로지스틱 회귀(Logistic Regression), 랜덤 포레스트(Random Forest), XGBoost 등 다양한 분류 모델을 사용해 최적의 예측 성능을 가진 모델을 찾습니다.
     - **모델 평가**: 정확도(Accuracy), 정밀도(Precision), 재현율(Recall), F1-Score 등 다양한 평가지표를 활용하여 모델의 성능을 종합적으로 평가합니다.
+
 
 ### 4. 기대 효과
 이 모델을 통해 호텔은 예약 취소 가능성이 높은 투숙객을 사전에 파악하여, 오버부킹(overbooking) 전략을 최적화하고 공실률을 최소화할 수 있습니다. 이는 최종적으로 호텔의 수익성 향상으로 이어질 것입니다.
@@ -296,7 +237,8 @@ dtype: int64
 </div>
 
 
-EDA 들어갈 자리
+![EDA_pic](README_pic/EDA_pic.png)
+![EDA_pic2](README_pic/EDA_pic02.png)
 
 
 ```python
@@ -322,12 +264,24 @@ X['is_resort'] = X['hotel'].map({'City Hotel': 0, 'Resort Hotel': 1})
 
 ```
 
+
+| 변수명 | 가설 및 설명 |
+| :--- | :--- |
+| has_company | 회사를 통해 예약하면 취소율이 높을 것이다 |
+| has_agent | 에이전트를 통해 예약하면 취소율이 높을 것이다 |
+| is_FB_meal | 식사 유형이 FB(full board)일 경우 취소율이 높을 것이다 |
+| market_risk_level | 시장 세그먼트에 따른 취소율 위험 정도 |
+| is_High_risk_market | market_risk_level이 'High risk'인 경우 취소율이 높을 것이다 |
+| adr_processed | 예약 객실 가격을 처리한 값 |
+| lead_time_processed | lead_time이 짧으면 취소율이 낮을 것이다 |
+| is_alone | 투숙객이 1명일 경우 취소율이 높을 것이다 |
+| total | 숙박 기간이 길수록 취소율이 높을 것이다. |
+
 <div align="center">
   <h4>4. 인코딩</h4>
 </div>
 
-![EDA_pic](README_pic/EDA_pic.png)
-![EDA_pic2](README_pic/EDA_pic02.png)
+
 
 
 ```python
@@ -362,30 +316,16 @@ def drop_original_columns(X_tr: pd.DataFrame, X_te: pd.DataFrame) -> Tuple[pd.Da
     return X_tr, X_te
 ```
 
-<div align="center">
-  <h4>5. Feature Engineering</h4>
-</div>
 
-| 변수명 | 설명 |
-| :--- | :--- |
-| has_company | 회사를 통해 예약하면 취소율이 높을 것이다 |
-| has_agent | 에이전트를 통해 예약하면 취소율이 높을 것이다 |
-| is_FB_meal | 식사 유형이 FB(full board)일 경우 취소율이 높을 것이다 |
-| market_risk_level | 시장 세그먼트에 따른 취소율 위험 정도 |
-| is_High_risk_market | market_risk_level이 'High risk'인 경우 취소율이 높을 것이다 |
-| adr_processed | 예약 객실 가격을 처리한 값 |
-| lead_time_processed | lead_time이 짧으면 취소율이 낮을 것이다 |
-| is_alone | 투숙객이 1명일 경우 취소율이 높을 것이다 |
-| total | 총 숙박 기간 |
   
 <div align="center">
-  <h4>6. 상관관계 히트맵</h4>
+  <h4>5. 상관관계 히트맵</h4>
 </div>
 
 ![Correlation Heatmap](README_pic/heatmap.png)
 
 <div align="center">
-  <h4>7. Feature Importance</h4>
+  <h4>6. Feature Importance</h4>
 </div>
 
 ![Feature Importance](README_pic/Feature_importance.png)
@@ -409,15 +349,11 @@ def drop_original_columns(X_tr: pd.DataFrame, X_te: pd.DataFrame) -> Tuple[pd.Da
 
 
 
-
-
 <div align="center">
-  <h4>8. 모델 성능 개선</h4>
+  <h4>7. 모델 성능 개선</h4>
 </div>
 
 ![f1_score_param_changes](README_pic/f1_score_param_changes.png)
-
-
 
 ### 최종 모델 성능
 | 지표 | 훈련 데이터 | 검증 데이터 |
@@ -429,7 +365,7 @@ def drop_original_columns(X_tr: pd.DataFrame, X_te: pd.DataFrame) -> Tuple[pd.Da
 | AUC | 0.9852 | 0.8986 |
 
 <div align="center">
-  <h4>10. 솔루션 프로토타입: React vite 기반 추천 시스템</h4>
+  <h4> 8. 솔루션 프로토타입: React vite 기반 추천 시스템</h4>
 </div>
 
 🍳 서비스 프로토타입: 호텔 조식 준비 및 고객 예측 시스템
@@ -444,9 +380,8 @@ def drop_original_columns(X_tr: pd.DataFrame, X_te: pd.DataFrame) -> Tuple[pd.Da
 
 **일자별 고객 유형 및 특성 분석**
 
-고객 유형 시각화: 특정 날짜를 선택하면, 해당 일에 투숙 예정인 고객들의 주요 특성(예: 연령대, 국적, 예약 채널)을 한눈에 파악할 수 있도록 시각화하여 보여줍니다.
+고객 유형 시각화: 특정 날짜를 선택하면, 해당 일에 투숙 예정인 고객들의 주요 특성을 한눈에 파악할 수 있도록 시각화하여 보여줍니다.
 
-맞춤형 서비스 제공: 관리자는 이 정보를 바탕으로 특정 국적 고객을 위한 맞춤형 서비스를 준비하거나, 가족 단위 고객이 많은 날에는 패밀리 서비스를 강화하는 등 사전 마케팅 및 운영 전략을 수립할 수 있습니다.
 
 **대시보드 기능**
 
@@ -458,9 +393,41 @@ def drop_original_columns(X_tr: pd.DataFrame, X_te: pd.DataFrame) -> Tuple[pd.Da
 - 비용 절감: 조식 준비 수량을 최적화하여 식자재 낭비를 줄이고, 운영 비용을 절감할 수 있습니다.
 - Feature importance 분석을 통하여 취소율에 영향을 미치는 주요 요인을 파악하고, 이를 바탕으로 예약 취소 마케팅 전략을 새롭게 수립할 수 있다.
 
+---
+
+![f1_score_param_changes](README_pic/insight.png)
+
+## 🔍 주요 인사이트
+
+본 프로젝트에서는 호텔 예약 취소 여부를 예측하기 위해 다양한 머신러닝 모델을 비교·분석한 결과, **XGBoost 모델이 가장 우수한 성능**을 보였다. 
+
+데이터 분석 결과, **리드타임(lead_time_processed), 식사 옵션(is_FB_meal), 동행 여부(is_alone)** 세 가지 변수가 취소율 예측에 가장 큰 영향을 미치는 핵심 요인으로 나타났다.
+
+- 리드타임이 길수록 취소율이 높아지는 경향
+- FB 식사를 포함한 고객은 취소율이 상대적으로 높음
+- 1인 투숙객(is_alone=1)은 오히려 취소 가능성이 낮음
+
+또한, 데이터 분포 분석에서 일부 변수(lead_time 등)에서 불균형이 확인되었으며, 훈련 데이터 대비 검증 데이터 성능 차이가 존재해 모델의 일반화 성능에 제약이 있을 가능성이 나타났다.
 
 
-## 후기
+## ⚠️ 한계점
+
+- **데이터 편향**: 특정 변수(리드타임, 주말 숙박일수 등)가 치우친 분포를 보여 일반화 성능에 제약 가능성 존재
+- **과적합 가능성**: 훈련 데이터와 검증 데이터 간의 F1 Score, AUC 차이가 커 과적합 위험이 있음
+- **변수 제한**: 결제 정보 등 실제 취소에 직접적 영향을 줄 수 있는 요인이 데이터에 충분히 반영되지 않음
+- **외부 요인 미반영**: 경기 상황, 항공편 취소, 날씨 등 외부 요인이 취소율에 영향을 줄 수 있으나 데이터에는 포함되지 않음
+
+
+## 💡 제안 방안
+
+- **리드타임 기반 마케팅**: 장기 예약 고객에게 체크인 전 맞춤형 혜택(포인트 적립, 조식 바우처 등) 제공 → 취소율 감소
+- **식사 옵션 개선**: FB 식사 고객을 대상으로 예약 변경/환불 옵션 확대 → 가격 부담 완화 및 취소 방지
+- **1인 고객 타깃 전략**: 1인 고객층을 충성 고객으로 확보하기 위한 싱글룸 업그레이드, 전용 패키지 제공
+- **모델 개선**: 교차 검증 강화, 정규화 기법, 하이퍼파라미터 튜닝을 통해 과적합 완화 및 일반화 성능 향상
+
+---
+
+## 소감
 
 **이태호**
 - 모델 하나로 끝나는 게 아니라 전처리·검증·UI 연결에 데이터베이스까지 끝까지 구현해보니 실무에서의 연결 고리들이 얼마나 중요한지 깨달았습니다.
@@ -470,10 +437,12 @@ def drop_original_columns(X_tr: pd.DataFrame, X_te: pd.DataFrame) -> Tuple[pd.Da
 - 이번 기회에  팀원의 도움을 받아서 git으로 프로젝트를 제대로 활용해볼 수 있었고, 처음으로 React로 페이지를 구현하게 되어  걱정이 많았는데 끝까지 팀원 서로가 도와줬기에 순조롭게 마무리할 수 있었습니다. 5조 최고 !! 👍
 
 **정인하**
-- 
+- 이번 프로젝트를 통해 머신러닝에 대한 이해를 한층 깊게 할 수 있어 뜻깊은 경험이었습니다.
+특히 실력과 인품을 겸비한 팀장님과 팀원들 덕분에 데이터베이스 구현과 React 기반 프론트엔드 개발까지 직접 경험할 수 있었습니다.
+좋은 분들과 함께할 수 있었음에 진심으로 감사드리며, 앞으로도 이번 프로젝트에서 배운 내용을 체계적으로 정리·구체화하여 실력을 더욱 성장시켜 나가겠습니다.
 
 **김담하**
--
+- 데이터 분석과 머신러닝 모델 선정이 예측 모델에 미치는 영향을 좀 더 자세히 알 수 있게 되었던 계기가 된거 같습니다. 웹페이지를 구성하는 새로운 방법과 개념들도 알게 되었고 협업하는 과정을 직접 경험해서 유익한 시간이였습니다.
 
 **조준호**
 - 이번 기회에 미숙하지나마 머신러닝을 여러번 다뤄보고 스스로 feature도 생성해보면서 모델 성능을 개선해 보는 경험을 통해 머신러닝에 대해 한층 더 깊이 이해 할 수 있어서 좋았습니다. 새로운 분야인 react에 대해 배울 수 있는 좋은 기회 였습니다.
