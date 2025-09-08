@@ -29,7 +29,7 @@
 <table align="center">
   <tr>
     <td align="center" valign="top">
-      <img src="README_pic/이태호.png" width="150" height="150" style="object-fit: cover;" alt="이태호"/>
+      <img src="README_pic/임연희.png" width="150" height="150" style="object-fit: cover;" alt="이태호"/>
       <br />
       <sub><b>이태호</b></sub>
       <br />
@@ -38,7 +38,7 @@
       <a href="https://github.com/william7333" target="_blank">william7333</a>
     </td>
     <td align="center" valign="top">
-      <img src="README_pic/임연희.png" width="150" height="150" style="object-fit: cover;" alt="임연희"/>
+      <img src="README_pic/이태호.png" width="150" height="150" style="object-fit: cover;" alt="임연희"/>
       <br />
       <sub><b>임연희</b></sub>
       <br />
