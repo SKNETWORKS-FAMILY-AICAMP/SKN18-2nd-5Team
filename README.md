@@ -29,7 +29,7 @@
 <table align="center">
   <tr>
     <td align="center" valign="top">
-      <img src="README_pic/이태호.png" width="150" height="150" style="object-fit: cover;" alt="이태호"/>
+      <img src="README_pic/임연희.png" width="150" height="150" style="object-fit: cover;" alt="이태호"/>
       <br />
       <sub><b>이태호</b></sub>
       <br />
@@ -38,7 +38,7 @@
       <a href="https://github.com/william7333" target="_blank">william7333</a>
     </td>
     <td align="center" valign="top">
-      <img src="README_pic/임연희.png" width="150" height="150" style="object-fit: cover;" alt="임연희"/>
+      <img src="README_pic/이태호.png" width="150" height="150" style="object-fit: cover;" alt="임연희"/>
       <br />
       <sub><b>임연희</b></sub>
       <br />
@@ -322,7 +322,8 @@ def drop_original_columns(X_tr: pd.DataFrame, X_te: pd.DataFrame) -> Tuple[pd.Da
   <h4>5. 상관관계 히트맵</h4>
 </div>
 
-![Correlation Heatmap](README_pic/heatmap.png)
+![Correlation Heatmap](README_pic/Heatmap.png)
+
 
 <div align="center">
   <h4>6. Feature Importance</h4>
@@ -395,8 +396,6 @@ def drop_original_columns(X_tr: pd.DataFrame, X_te: pd.DataFrame) -> Tuple[pd.Da
 - Feature importance 분석을 통하여 취소율에 영향을 미치는 주요 요인을 파악하고, 이를 바탕으로 예약 취소 마케팅 전략을 새롭게 수립할 수 있다.
 
 ---
-
-![f1_score_param_changes](README_pic/insight.png)
 
 ## 🔍 주요 인사이트
 
