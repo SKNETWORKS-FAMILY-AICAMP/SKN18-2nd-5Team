@@ -28,52 +28,43 @@ function CancellationPrediction() {
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
       const day = date.getDate();
+      const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
-      console.log(`Fetching bookings for ${year}-${month}-${day}`);
+      // 예약 목록과 예측 통계 병렬 호출
+      const [bookingsResponse, predictionResponse] = await Promise.all([
+        axios.get('http://localhost:8000/api/bookings/by-date', {
+          params: {
+            year,
+            month,
+            day,
+            offset: currentOffset,
+            limit: 100
+          }
+        }),
+        axios.post('http://localhost:8000/api/predict/date', {
+          date: formattedDate,
+          hotel_type: 'Resort Hotel',
+        })
+      ]);
 
-      const response = await axios.get('http://localhost:8000/api/bookings/by-date', {
-        params: {
-          year,
-          month,
-          day,
-          offset: currentOffset,
-          limit: 100
-        }
-      });
-
-      console.log('API Response:', response.data);
-
-      if (response.data.success) {
-        setBookingList(response.data.data || []);
-        setTotalCount(response.data.total_count || 0);
-        setDailyStatistics(response.data.statistics || {});
-        
-        // 첫 번째 예약을 기본으로 선택
-        if (response.data.data && response.data.data.length > 0) {
-          setSelectedBooking(response.data.data[0]);
-        } else {
-          setSelectedBooking(null);
-        }
-        
-        if (response.data.total_count > 0) {
-          toast.success(`${response.data.total_count}건의 예약을 찾았습니다.`);
+      if (bookingsResponse.data.success) {
+        setBookingList(bookingsResponse.data.data || []);
+        setTotalCount(bookingsResponse.data.total_count || 0);
+        setSelectedBooking(bookingsResponse.data.data && bookingsResponse.data.data.length > 0 ? bookingsResponse.data.data[0] : null);
+        // 예측 통계 저장
+        setDailyStatistics(predictionResponse.data);
+        if (bookingsResponse.data.total_count > 0) {
+          toast.success(`${bookingsResponse.data.total_count}건의 예약을 찾았습니다.`);
         } else {
           toast.info('해당 날짜에 예약 데이터가 없습니다.');
         }
       }
     } catch (error) {
-      console.error('Error fetching bookings:', error);
-      if (error.response) {
-        toast.error(`API 오류: ${error.response.data.detail || '서버 오류'}`);
-      } else if (error.request) {
-        toast.error('서버에 연결할 수 없습니다. 백엔드 서버가 실행 중인지 확인해주세요.');
-      } else {
-        toast.error('예약 정보를 불러오는데 실패했습니다.');
-      }
       setBookingList([]);
       setSelectedBooking(null);
       setTotalCount(0);
-      setDailyStatistics({});
+      setDailyStatistics(null);
+      toast.error('예약 정보를 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -197,103 +188,46 @@ function CancellationPrediction() {
 
           {/* 하단 통계 영역 */}
           <div className="statistics-section glass-card">
-            {/* <h3>통계 정보</h3> */}
             <div className="statistics-grid">
-              {/* 좌측 카드: 예약 1개 정보 - 조식관련 */}
+              {/* 좌측 카드: 총 인원 */}
               <div className="stat-card left-card">
-                {/* <h4>고객 예약 정보 - 조식</h4> */}
                 <div className="stat-items">
                   <div className="stat-item">
-                    <span className="stat-label">어른/아이</span>
+                    <span className="stat-label">총 인원</span>
                     <span className="stat-divider"></span>
                     <span className="stat-value">
-                      {selectedBooking ? 
-                        `${selectedBooking.total_guests - (selectedBooking.babies || 0)}명` : 
-                        '-'
-                      }
-                    </span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-label">조식 종류</span>
-                    <span className="stat-divider"></span>
-                    <span className="stat-value">
-                      {selectedBooking?.meal || '-'}
-                    </span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-label">특별요청사항</span>
-                    <span className="stat-divider"></span>
-                    <span className="stat-value">
-                      {selectedBooking?.special_requests || '-'}
-                    </span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-label">고객 위험도</span>
-                    <span className="stat-divider"></span>
-                    <span className={`stat-value risk-level ${getRiskLevel(selectedBooking?.predicted_probability)}`}>
-                      {selectedBooking?.predicted_probability ? 
-                        `${(selectedBooking.predicted_probability * 100).toFixed(1)}%` : 
-                        '-'
-                      }
+                      {dailyStatistics?.details?.total_guests ? `${dailyStatistics.details.total_guests}명` : '-'}
                     </span>
                   </div>
                 </div>
               </div>
-
-              {/* 중앙 카드: 예약 1개 정보 - 숙박관련 */}
+              {/* 중앙 카드: 투숙중 총 인원, 예상 투숙 인원 */}
               <div className="stat-card center-card">
-                {/* <h4>고객 예약 정보 - 숙박</h4> */}
                 <div className="stat-items">
-                  <div className="stat-item">
-                    <span className="stat-label">체크인/체크아웃</span>
-                    <span className="stat-divider"></span>
-                    <span className="stat-value">-</span>
-                  </div>
                   <div className="stat-item">
                     <span className="stat-label">투숙중 총 인원</span>
                     <span className="stat-divider"></span>
                     <span className="stat-value">
-                      {selectedBooking?.total_guests ? `${selectedBooking.total_guests}명` : '-'}
-                    </span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-label">배정 잔여 객실</span>
-                    <span className="stat-divider"></span>
-                    <span className="stat-value">-</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* 우측 카드: 해당일 전체 통계 */}
-              <div className="stat-card right-card">
-                {/* <h4>해당일 전체 통계</h4> */}
-                <div className="stat-items">
-                  <div className="stat-item">
-                    <span className="stat-label">날짜</span>
-                    <span className="stat-divider"></span>
-                    <span className="stat-value">
-                      {searchDate ? format(new Date(searchDate), 'yyyy.MM.dd') : '-'}
-                    </span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-label">모델 예측 신뢰도</span>
-                    <span className="stat-divider"></span>
-                    <span className="stat-value">
-                      {dailyStatistics?.model_confidence ? `${dailyStatistics.model_confidence}%` : '-'}
+                      {dailyStatistics?.details?.total_guests ? `${dailyStatistics.details.total_guests}명` : '-'}
                     </span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">예상 투숙 인원</span>
                     <span className="stat-divider"></span>
                     <span className="stat-value">
-                      {dailyStatistics?.total_expected_guests ? `${dailyStatistics.total_expected_guests}명` : '-'}
+                      {dailyStatistics?.expected_checkins ? `${dailyStatistics.expected_checkins}명` : '-'}
                     </span>
                   </div>
+                </div>
+              </div>
+              {/* 우측 카드: 예상 조식 인원수 */}
+              <div className="stat-card right-card">
+                <div className="stat-items">
                   <div className="stat-item">
                     <span className="stat-label">예상 조식 인원수</span>
                     <span className="stat-divider"></span>
                     <span className="stat-value">
-                      {dailyStatistics?.breakfast_preparation_count ? `${dailyStatistics.breakfast_preparation_count}명` : '-'}
+                      {dailyStatistics?.breakfast_recommendation ? `${dailyStatistics.breakfast_recommendation}명` : '-'}
                     </span>
                   </div>
                 </div>
