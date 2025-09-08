@@ -78,7 +78,7 @@ function CancellationPrediction() {
 
   return (
     <div className="cancellation-page">
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -86,13 +86,14 @@ function CancellationPrediction() {
       >
         <h1>📊 고객 관리 페이지</h1>
         <p>날짜를 선택하여 고객을 확인하고 하고 운영 전략을 수립하세요</p>
-      </motion.div>
+      </motion.div> */}
 
       <div className="main-content">
         {/* 중앙 테이블 */}
         <div className="table-section">
           <div className="table-container glass-card">
             <div className="table-header">
+              <span className="page-title">고객 관리 페이지</span>
               <h2>
                 <div className="search-input-wrapper">
                   <Search size={20} />
@@ -234,14 +235,14 @@ function CancellationPrediction() {
                     <span className="stat-value">-</span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-label">투숙중인 층 인원</span>
+                    <span className="stat-label">투숙중 총 인원</span>
                     <span className="stat-divider"></span>
                     <span className="stat-value">
                       {selectedBooking?.total_guests ? `${selectedBooking.total_guests}명` : '-'}
                     </span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-label">배정 가능 잔여 객실</span>
+                    <span className="stat-label">배정 잔여 객실</span>
                     <span className="stat-divider"></span>
                     <span className="stat-value">-</span>
                   </div>
