@@ -1,6 +1,8 @@
 .cancellation-page {
-  padding: 20px 0;
-  margin-top: 100px;
+  padding: 20px;
+  margin: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .page-header {
@@ -72,6 +74,18 @@
   border: none;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.custom-calendar .react-calendar__tile:disabled {
+  background: #f5f5f5;
+  color: #ccc;
+  cursor: not-allowed;
+  border: 1px solid #e0e0e0;
+}
+
+.custom-calendar .react-calendar__tile:disabled:hover {
+  background: #f5f5f5;
+  transform: none;
 }
 
 .calendar-tile-content {
@@ -330,7 +344,8 @@
 
 @media (max-width: 768px) {
   .cancellation-page {
-    margin-top: 10px;
+    margin-top: 0;
+    padding: 15px;
   }
   
   .calendar-section {
@@ -340,7 +355,8 @@
 
 @media (max-width: 480px) {
   .cancellation-page {
-    margin-top: 5px;
+    margin-top: 0;
+    padding: 10px;
   }
   
   .calendar-section {
