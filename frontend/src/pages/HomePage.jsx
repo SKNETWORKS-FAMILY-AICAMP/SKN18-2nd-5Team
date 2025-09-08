@@ -15,6 +15,11 @@ function HomePage() {
     navigate('/cancellation');
   };
 
+  // 페이지 이동 수정!!
+  const handleReservationClick = () => {
+    navigate('/cancellation');
+  };
+
   return (
     <div className="hotel-management-homepage">
       <Header 
@@ -86,7 +91,7 @@ function HomePage() {
           {/* Bottom Right - Yellow Card */}
           <motion.div 
             className="corner-card bottom-right-card"
-            onClick={handleBreakfastClick}
+            onClick={handleReservationClick}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
